@@ -2,9 +2,10 @@
 # -*- coding:utf-8 -*-
 
 from tornado import gen, httpclient, ioloop
+import os
 import time
 from requests import get
-
+path = '/home/wnn/program/collection_python/crawler/jb51/'
 
 class AsyncSpider(object):
     def __init__(self, urls):
@@ -21,8 +22,8 @@ class AsyncSpider(object):
         raise gen.Return(response.body)
 
     def handle_page(self, url, html):
-        filename = url.rsplit('/')[1]
-        print('save filename')
+        filename = path + url.rsplit('/', 1)[1]
+        print('save file ', filename)
         with open(filename, 'w+') as f:
             f.write(html)
 
