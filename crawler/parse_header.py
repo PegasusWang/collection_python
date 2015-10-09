@@ -5,7 +5,7 @@
 作为requests的参数"""
 
 
-def header_to_dict(s):
+def headers_to_dict(s):
     arg_list = [line.strip() for line in s.split('\n')]
     d = {}
     for i in arg_list:
@@ -20,7 +20,7 @@ def cookies_to_dict(s):
     arg_list = [line.strip() for line in s.split(';')]
     d = {}
     for i in arg_list:
-        if i.isalnum:
+        if i:
             k = i.split('=')[0].strip()
             v = i.split('=')[1].strip()
             d[k] = v
@@ -31,7 +31,7 @@ def form_to_dict(s):
     arg_list = s.rstrip('&').split('&')
     d = {}
     for i in arg_list:
-        if i.isalnum:
+        if i:
             k = i.split('=')[0].strip()
             v = i.split('=')[1].strip()
             d[k] = v
@@ -44,12 +44,19 @@ def to_dict(s, s_type):
         'cookies': ';',
         'form': '&',
     }
-    arg_list = s.rstrip('&').split(type_to_delimiter[s_type])
+    type_to_split = {
+        'headers': ':',
+        'cookies': '=',
+        'form': '=',
+    }
+
+    arg_list = [i.strip() for i in
+                s.split(type_to_delimiter[s_type])]
     d = {}
     for i in arg_list:
         if i:
-            k = i.split(':')[0].strip()
-            v = i.split(':')[1].strip()
+            k = i.split(type_to_split[s_type])[0].strip()
+            v = i.split(type_to_split[s_type])[1].strip()
             d[k] = v
     return d
 
@@ -88,7 +95,7 @@ first=false&pn=1&sortField=0&havemark=0
 """
 
 def test_headers_to_dict():
-    d = header_to_dict(headers_string)
+    d = headers_to_dict(headers_string)
     print_li(d)
 
 
@@ -101,6 +108,16 @@ def test_form_to_dict():
     d = form_to_dict(form_string)
     print_li(d)
 
-test_headers_to_dict()
+
+def test_to_dict():
+    print_li(to_dict(headers_string, 'headers'))
+    print('-------')
+    print_li(to_dict(cookies_string, 'cookies'))
+    print('-------')
+    print_li(to_dict(form_string, 'form'))
+
+
+#test_headers_to_dict()
 #test_cookies_to_dict()
 #test_form_to_dict()
+test_to_dict()
