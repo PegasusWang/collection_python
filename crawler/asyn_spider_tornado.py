@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
 import time
 from datetime import timedelta
 from tornado import httpclient, gen, ioloop, queues
@@ -6,6 +9,7 @@ from tornado import httpclient, gen, ioloop, queues
 class AsySpider(object):
 
     def __init__(self, urls, concurrency):
+        urls.reverse()
         self.urls = urls
         self.concurrency = concurrency
         self._q = queues.Queue()
@@ -13,9 +17,7 @@ class AsySpider(object):
         self._fetched = set()
 
     def handle_page(self, url, html):
-        filename = url.rsplit('/', 1)[1]
-        with open(filename, 'w+') as f:
-            f.write(html)
+        print(url, html)
 
     @gen.coroutine
     def get_page(self, url):
@@ -76,5 +78,5 @@ def main():
     s = AsySpider(urls, 10)
     s.run()
 
-main()
-
+if __name__ == '__main__':
+    main()

@@ -39,6 +39,9 @@ def form_to_dict(s):
 
 
 def to_dict(s, s_type):
+    """ s is string,
+    s_type is one of ["headers", "cookies", "form"].
+    """
     type_to_delimiter = {
         'headers': '\n',
         'cookies': ';',
