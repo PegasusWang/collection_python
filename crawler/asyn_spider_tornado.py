@@ -7,7 +7,7 @@ from tornado import httpclient, gen, ioloop, queues
 
 
 class AsySpider(object):
-
+    """A simple class of asynchronous spider."""
     def __init__(self, urls, concurrency):
         urls.reverse()
         self.urls = urls
