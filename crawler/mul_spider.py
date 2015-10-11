@@ -76,18 +76,31 @@ class AsySpider(object):
 def run_spider(beg, end):
     urls = []
     for page in range(beg, end):
-        urls.append('http://www.jb51.net/article/%s.htm' % page)
+        urls.append('http://www.baidu.com?&page=%d' % page)
     s = AsySpider(urls, 10)
     s.run()
 
 
 def main():
+    _st = time.time()
     p = Pool()
-    page_list = [(1, 20), (21, 30), (31, 40), (41, 50)]
-    for i in page_list:
+    all_num = 73000
+    num = 4    # number of cpu cores
+    per_num, left = divmod(all_num, num)
+    s = range(0, all_num, per_num)
+    res = []
+    for i in range(len(s)-1):
+        res.append((s[i], s[i+1]))
+    res.append((s[len(s)-1], all_num))
+    print res
+
+    '''
+    for i in res:
         p.apply_async(run_spider, args=(i[0], i[1],))
     p.close()
     p.join()
+    '''
+    print time.time()-_st
 
 
 if __name__ == '__main__':
