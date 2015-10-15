@@ -8,7 +8,7 @@ from tornado import httpclient, gen, ioloop, queues
 
 class AsySpider(object):
     """A simple class of asynchronous spider."""
-    def __init__(self, urls, concurrency):
+    def __init__(self, urls, concurrency=10):
         urls.reverse()
         self.urls = urls
         self.concurrency = concurrency
@@ -17,16 +17,19 @@ class AsySpider(object):
         self._fetched = set()
 
     def handle_page(self, url, html):
+        """inherit and rewrite this method"""
         print(url, html)
 
     @gen.coroutine
-    def get_page(self, url):
+    def get_page(self, url, **kwargs):
         try:
-            response = yield httpclient.AsyncHTTPClient().fetch(url)
+            response = yield httpclient.AsyncHTTPClient().fetch(url, **kwargs)
             print('######fetched %s' % url)
         except Exception as e:
             print('Exception: %s %s' % (e, url))
-            raise gen.Return('')
+            if e.code == 599:    # timeout or no response
+                self._q.put(url)
+            raise gen.Return(None)
         raise gen.Return(response.body)
 
     @gen.coroutine
@@ -44,7 +47,8 @@ class AsySpider(object):
                 html = yield self.get_page(current_url)
                 self._fetched.add(current_url)
 
-                self.handle_page(current_url, html)
+                if html is not None:
+                    self.handle_page(current_url, html)
 
                 for i in range(self.concurrency):
                     if self.urls:
@@ -73,7 +77,7 @@ class AsySpider(object):
 
 def main():
     urls = []
-    for page in range(1, 100):
+    for page in range(-1, 0):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = AsySpider(urls, 10)
     s.run()
