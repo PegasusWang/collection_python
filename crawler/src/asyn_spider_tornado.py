@@ -4,6 +4,7 @@
 import time
 from datetime import timedelta
 from tornado import httpclient, gen, ioloop, queues
+import traceback
 
 
 class AsySpider(object):
@@ -43,11 +44,12 @@ class AsySpider(object):
                 print('fetching****** %s' % current_url)
                 self._fetching.add(current_url)
                 response = yield self.get_page(current_url)
-                self._fetched.add(current_url)
-
                 if response.code == 200:
                     self.handle_page(current_url, response.body)
-                elif response.code == 599:    # timeout or empty response
+                self._fetched.add(current_url)
+
+                if response.code == 599:    # timeout or empty response
+                    self._fetching.remove(current_url)
                     yield self._q.put(current_url)
 
                 for i in range(self.concurrency):
@@ -68,6 +70,8 @@ class AsySpider(object):
         for _ in range(self.concurrency):
             worker()
         yield self._q.join(timeout=timedelta(seconds=300000))
+        print self._fetching - self._fetched
+        print self._fetched - self._fetching
         assert self._fetching == self._fetched
 
     def run(self):
@@ -77,7 +81,7 @@ class AsySpider(object):
 
 def main():
     urls = []
-    for page in range(-1, 0):
+    for page in range(1, 3000):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = AsySpider(urls, 10)
     s.run()
