@@ -27,10 +27,8 @@ class AsySpider(object):
             print('######fetched %s' % url)
         except Exception as e:
             print('Exception: %s %s' % (e, url))
-            if e.code == 599:    # timeout or no response
-                self._q.put(url)
-            raise gen.Return(None)
-        raise gen.Return(response.body)
+            raise gen.Return(e)
+        raise gen.Return(response)
 
     @gen.coroutine
     def _run(self):
@@ -44,11 +42,13 @@ class AsySpider(object):
 
                 print('fetching****** %s' % current_url)
                 self._fetching.add(current_url)
-                html = yield self.get_page(current_url)
+                response = yield self.get_page(current_url)
                 self._fetched.add(current_url)
 
-                if html is not None:
-                    self.handle_page(current_url, html)
+                if response.code == 200:
+                    self.handle_page(current_url, response.body)
+                elif response.code == 599:    # timeout or empty response
+                    yield self._q.put(current_url)
 
                 for i in range(self.concurrency):
                     if self.urls:
