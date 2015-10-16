@@ -4,7 +4,11 @@
 """
 some functions extract html tag,
 more faster than bs4
+使用之前最好用
+html = "".join(s.split())
+去除所有换行符、空格、tag等
 """
+
 
 import re
 
