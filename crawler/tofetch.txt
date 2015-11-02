@@ -9,3 +9,5 @@ http://www.tutorialspoint.com/index.htm
 http://www.bogotobogo.com/python/python_generators.php
 http://www.webtag123.com/javascript/22907.html
 http://www.runoob.com/
+http://www.ziqiangxuetang.com/python/att-dictionary-setdefault.html
+http://www.yiibai.com/python/dictionary_setdefault.html

@@ -5,6 +5,13 @@
 作为requests的参数"""
 
 
+# 如果不用cookies参数，使用headers参数也可以这样加上cookie，注意不是cookie(s)
+headers = {
+    'cookie': cookies_str
+}
+r = requests.get(url, headers=headers).content
+
+
 def headers_to_dict(s):
     arg_list = [line.strip() for line in s.split('\n')]
     d = {}
