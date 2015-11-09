@@ -11,3 +11,6 @@ http://www.webtag123.com/javascript/22907.html
 http://www.runoob.com/
 http://www.ziqiangxuetang.com/python/att-dictionary-setdefault.html
 http://www.yiibai.com/python/dictionary_setdefault.html
+http://www.chinaunix.net/
+http://www.kancloud.cn/explore
+http://www.pythoner.com/205.html
