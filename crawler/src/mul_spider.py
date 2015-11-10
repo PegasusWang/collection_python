@@ -94,12 +94,11 @@ def main():
     res.append((s[len(s)-1], all_num))
     print res
 
-    '''
     for i in res:
         p.apply_async(run_spider, args=(i[0], i[1],))
     p.close()
     p.join()
-    '''
+
     print time.time()-_st
 
 
