@@ -15,4 +15,6 @@ def html2txt(html=''):
 
 # method 2
 from html2text import html2text
-html2text(html)
+
+def html2makrdown(html=''):
+    html2text(html)
