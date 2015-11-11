@@ -5,6 +5,7 @@ import time
 from datetime import timedelta
 from tornado import httpclient, gen, ioloop, queues
 import traceback
+from extract import extract
 
 
 class AsySpider(object):
@@ -80,6 +81,8 @@ class AsySpider(object):
             worker()
 
         yield self._q.join(timeout=timedelta(seconds=300000))
+        print(self._fetching-self._fetched)
+        print(self._fetched-self._fetching)
         assert self._fetching == self._fetched
 
     def run(self):
@@ -97,17 +100,18 @@ class MySpider(AsySpider):
             'cookie': cookies_str
         }
         return super(MySpider, self).fetch(
-            url, headers=headers, request_timeout=1
+            url, headers=headers
         )
 
     def handle_html(self, url, html):
-        print(url, html)
+        title = extract('<title>', '</title>', html)
+        print url, title.decode('gb18030').encode('utf-8')
 
 
 def main():
     urls = []
-    for page in range(1, 10):
-        urls.append('http://jinritu.com?page=%s' % page)
+    for page in range(70000, 80000):
+        urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = MySpider(urls)
     s.run()
 
