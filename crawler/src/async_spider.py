@@ -20,7 +20,7 @@ class AsySpider(object):
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')
-        return fetch(url, **kwargs)
+        return fetch(url, raise_error=False, **kwargs)
 
     def handle_html(self, url, html):
         """handle html page"""
@@ -81,9 +81,11 @@ class AsySpider(object):
             worker()
 
         yield self._q.join(timeout=timedelta(seconds=300000))
-        print(self._fetching-self._fetched)
-        print(self._fetched-self._fetching)
-        assert self._fetching == self._fetched
+        try:
+            assert self._fetching == self._fetched
+        except AssertionError:
+            print(self._fetching-self._fetched)
+            print(self._fetched-self._fetching)
 
     def run(self):
         io_loop = ioloop.IOLoop.current()
@@ -110,7 +112,7 @@ class MySpider(AsySpider):
 
 def main():
     urls = []
-    for page in range(70000, 80000):
+    for page in range(1, 70000):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = MySpider(urls)
     s.run()
