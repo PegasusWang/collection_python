@@ -14,3 +14,6 @@ http://www.yiibai.com/python/dictionary_setdefault.html
 http://www.chinaunix.net/
 http://www.kancloud.cn/explore
 http://www.pythoner.com/205.html
+http://download.csdn.net/detail/doomlord/8449655
+http://network.51cto.com/art/201511/496268.htm
+http://blog.knownsec.com/2015/11/analysis-of-redis-unauthorized-of-expolit/

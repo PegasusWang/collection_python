@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+
 import Queue
 import sys
 import requests
@@ -7,13 +8,13 @@ import os
 import threading
 import time
 
+
 class Worker(threading.Thread):    # 处理工作请求
     def __init__(self, workQueue, resultQueue, **kwds):
         threading.Thread.__init__(self, **kwds)
         self.setDaemon(True)
         self.workQueue = workQueue
         self.resultQueue = resultQueue
-
 
     def run(self):
         while 1:
@@ -23,6 +24,7 @@ class Worker(threading.Thread):    # 处理工作请求
                 self.resultQueue.put(res)    # put result
             except Queue.Empty:
                 break
+
 
 class WorkManager:    # 线程池管理,创建
     def __init__(self, num_of_workers=10):
@@ -36,7 +38,6 @@ class WorkManager:    # 线程池管理,创建
             worker = Worker(self.workQueue, self.resultQueue)    # 创建工作线程
             self.workers.append(worker)    # 加入到线程队列
 
-
     def start(self):
         for w in self.workers:
             w.start()
@@ -49,7 +50,6 @@ class WorkManager:    # 线程池管理,创建
                 self.workers.append(worker)    # 重新加入线程池中
         print 'All jobs were complete.'
 
-
     def add_job(self, callable, *args, **kwds):
         self.workQueue.put((callable, args, kwds))    # 向工作队列中加入请求
 
@@ -59,14 +59,14 @@ class WorkManager:    # 线程池管理,创建
 
 def download_file(url):
     #print 'beg download', url
-    requests.get(url).text
+    print requests.get(url).text
 
 
 def main():
     try:
         num_of_threads = int(sys.argv[1])
     except:
-        num_of_threads = 2
+        num_of_threads = 10
     _st = time.time()
     wm = WorkManager(num_of_threads)
     print num_of_threads
