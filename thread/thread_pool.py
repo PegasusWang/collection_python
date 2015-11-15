@@ -58,6 +58,7 @@ class WorkManager:    # 线程池管理,创建
 
 
 def download_file(url):
+    """这里可以请求并保存网页"""
     #print 'beg download', url
     print requests.get(url).text
 
@@ -70,7 +71,7 @@ def main():
     _st = time.time()
     wm = WorkManager(num_of_threads)
     print num_of_threads
-    urls = ['http://www.baidu.com'] * 100
+    urls = ['http://www.baidu.com'] * 100    # 待爬的url
     for i in urls:
         wm.add_job(download_file, i)
     wm.start()

@@ -10,20 +10,22 @@ from extract import extract
 
 class AsySpider(object):
     """A simple class of asynchronous spider."""
-    def __init__(self, urls, concurrency=10, **kwargs):
+    def __init__(self, urls, concurrency=10, results=None, **kwargs):
         urls.reverse()
         self.urls = urls
         self.concurrency = concurrency
         self._q = queues.Queue()
         self._fetching = set()
         self._fetched = set()
+        if results is None:
+            self.results = []
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')
         return fetch(url, raise_error=False, **kwargs)
 
     def handle_html(self, url, html):
-        """handle html page"""
+        """handle html page, you may rewrite this method"""
         print(url)
 
     def handle_response(self, url, response):
@@ -107,15 +109,17 @@ class MySpider(AsySpider):
 
     def handle_html(self, url, html):
         title = extract('<title>', '</title>', html)
-        print url, title.decode('gb18030').encode('utf-8')
+        print(url, title.decode('gb18030').encode('utf-8'))
 
 
 def main():
+    st = time.time()
     urls = []
-    for page in range(1, 70000):
+    for page in range(1, 1000):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = MySpider(urls)
     s.run()
+    print(time.time()-st)
 
 
 if __name__ == '__main__':
