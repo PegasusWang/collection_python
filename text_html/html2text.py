@@ -2,19 +2,20 @@
 # -*- coding:utf-8 -*-
 
 
-# method 1
 from bs4 import BeautifulSoup
-html = None
-
-
-def html2txt(html=''):
+def html2txt(html=u''):
     print html
     soup = BeautifulSoup(html)
     print soup.get_text()
 
 
-# method 2
-from html2text import html2text
-
-def html2makrdown(html=''):
+from html2text import html2text    # to markdown not plain text
+def html2makrdown(html=u''):
     html2text(html)
+
+
+import re
+def remove_html_tags(html=u''):
+    TAG_RE = re.compile(r'<[^>]+>')
+    def remove_tags(text):
+        return TAG_RE.sub('', text)
