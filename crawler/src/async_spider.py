@@ -8,7 +8,7 @@ import traceback
 from extract import extract
 
 
-class AsySpider(object):
+class AsyncSpider(object):
     """A simple class of asynchronous spider."""
     def __init__(self, urls, concurrency=10, results=None, **kwargs):
         urls.reverse()
@@ -94,7 +94,7 @@ class AsySpider(object):
         io_loop.run_sync(self._run)
 
 
-class MySpider(AsySpider):
+class MySpider(AsyncSpider):
 
     def fetch(self, url, **kwargs):
         """重写父类fetch方法可以添加cookies，headers，timeout等信息"""
