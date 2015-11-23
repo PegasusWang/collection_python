@@ -11,7 +11,8 @@ def html2txt(html=u''):
 
 from html2text import html2text    # to markdown not plain text
 def html2makrdown(html=u''):
-    html2text(html)
+    markdown = html2text(html)
+    return markdown
 
 
 import re
@@ -19,3 +20,7 @@ def remove_html_tags(html=u''):
     TAG_RE = re.compile(r'<[^>]+>')
     def remove_tags(text):
         return TAG_RE.sub('', text)
+
+import xml.etree
+def remove_html_tags(text):
+    return ''.join(xml.etree.ElementTree.fromstring(text).itertext())
