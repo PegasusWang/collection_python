@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+# py2
 from urllib import urlencode, quote, unquote
+
+# py3
+#from urllib.parse import urlparse, quote, urlencode, unquote
 data = {
     'a': u'中文',
     'b': 2
