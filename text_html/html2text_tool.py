@@ -9,9 +9,9 @@ def html2txt(html=u''):
     print soup.get_text()
 
 
-from html2text import html2text    # to markdown not plain text
+import html2text    # to markdown not plain text
 def html2makrdown(html=u''):
-    markdown = html2text(html)
+    markdown = html2text.html2text(html)    # html must unicode
     return markdown
 
 
@@ -24,3 +24,12 @@ def remove_html_tags(html=u''):
 import xml.etree
 def remove_html_tags(text):
     return ''.join(xml.etree.ElementTree.fromstring(text).itertext())
+
+
+def test():
+    s = u"""哈哈<br>"""
+    print(html2makrdown(s))
+
+
+if __name__ == '__main__':
+    test()
