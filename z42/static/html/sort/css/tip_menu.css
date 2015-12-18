@@ -1,0 +1,50 @@
+.tip-inner.tip-bg-image .tip-menu {
+background: none repeat scroll 0 0 #fff;
+margin-left: -148px;
+margin-top: 10px;
+box-shadow: 0 0 1px 1px #ccc;
+text-align: center;
+width: 194px;
+}
+.tip-menu {
+padding: 6px 0;
+overflow: hidden;
+padding-bottom: 20px;
+}
+.tip-menu a {
+	display: inline-block;
+	padding: 12px 0;
+	width: 100%;
+margin-left: 10px;
+}
+.tip-menu .user:hover{
+	background: url(_img/icon-menu.png) no-repeat 18px 15px #ebf0fc;
+}
+.tip-menu .user {
+background: url(_img/icon-menu.png) no-repeat 18px 15px;
+}
+
+.tip-menu .setting:hover{
+	background: url(_img/icon-menu.png) no-repeat 18px -56px #ebf0fc;
+}
+.tip-menu .setting {
+background: url(_img/icon-menu.png) no-repeat 18px -56px;
+}
+
+.tip-menu .fav:hover{
+	background: url(_img/icon-menu.png) no-repeat 18px -117px #ebf0fc;
+}
+.tip-menu .fav {
+background: url(_img/icon-menu.png) no-repeat 18px -117px;
+}
+
+.tip-menu .rss:hover{
+	background: url(_img/icon-menu.png) no-repeat 20px -188px #ebf0fc;
+}
+.tip-menu .rss {
+background: url(_img/icon-menu.png) no-repeat 20px -188px;
+}
+
+.tip-menu .logout:hover{
+	background: #ebf0fc;
+}

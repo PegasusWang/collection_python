@@ -1,0 +1,72 @@
+/*! define alice/table/1.1.0/table-debug.css */
+/* alice/table 样式模块 */
+.ui-table {
+    border-collapse:collapse;
+    border:1px solid #ccc;
+    width:100%;
+    font-size: 12px;
+    text-align: left;
+}
+
+.ui-table-layout-fixed {
+    table-layout:fixed;
+}
+
+.ui-table tr:nth-child(even),
+.ui-table-split, /* 隔行换色效果 */
+.ui-table-hover /* 用作表格行hover效果 */ {
+    background-color:#FBFBFB;
+}
+
+.ui-table tr {
+    color:#808080;
+}
+
+.ui-table thead tr {
+    color:#666;
+}
+
+.ui-table thead {
+    color:#666;
+    background-color: #F6F6F6;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F8F8F8', endColorstr='#F2F2F2');
+    background: -webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#F2F2F2));
+    background: -moz-linear-gradient(top, #F8F8F8, #F2F2F2);
+    background: -o-linear-gradient(top, #F8F8F8, #F2F2F2);
+    background: linear-gradient(top, #F8F8F8, #F2F2F2);
+}
+
+.ui-table th {
+    padding:7px 9px;
+    border-bottom:1px solid #d9d9d9;
+    text-align: left;
+}
+
+.ui-table td {
+    padding:8px 9px 7px;
+    border-bottom:1px solid #d9d9d9;
+}
+
+.ui-table th {
+    padding:7px 9px;
+}
+
+.ui-table tfoot td {
+    border-bottom:none;
+}
+
+/* 无边框table加上ui-table-noborder */
+.ui-table-noborder, .ui-table-noborder td, .ui-table-noborder tr, .ui-table-noborder th {
+    border:none;
+    outline:none;
+}
+
+.ui-table-noborder .ui-table-split, .ui-table-noborder .ui-table-hover {
+    background-color:#f7f7f7;
+}
+
+/* 当table放在一个有边框的容器中时，比如ui-box，需要添加类名ui-table-inbox去掉本身的外框 */
+.ui-table-inbox {
+    border:none;
+    outline:none;
+}

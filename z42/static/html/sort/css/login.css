@@ -1,0 +1,167 @@
+#login {
+width: 476px;
+margin: 0 auto;
+text-align: center;
+}
+#login .logo {
+background: url(_img/logo.png) no-repeat;
+width: 200px;
+height: 50px;
+display: inline-block;
+margin: 40px 0;
+}
+#login .wrap {
+border: 1px solid #ddd;
+box-shadow: 0px 1px 1px #a5a5a5;
+}
+body {
+width: 100%;
+min-height: 100%;
+background: url(_img/LoginBg.png) repeat;
+}
+#login .login {
+background: rgba(255,255,255,0.5);
+}
+#login .otherway {
+background: #fff;
+padding-bottom: 32px;
+border-bottom: 1px solid #ddd;
+}
+#login .otherway h3 {
+display: inline-block;
+height: 20px;
+width: 100%;
+margin: 40px 0;
+background: url(_img/LoginText.png) no-repeat;
+}
+#login .otherway a {
+display: inline-block;
+width: 153px;
+height: 45px;
+background: url(_img/snsIcon.png) no-repeat;
+margin-right: 8px;
+margin-top: 10px;
+}
+#login .otherway .other {
+margin-left: 13px;
+margin-top: -18px;
+}
+#login .otherway a.weibo {
+background: url(_img/snsIcon.png) no-repeat 0 0;
+}
+#login .otherway a.weibo:hover {
+background: url(_img/snsIcon.png) no-repeat 0px -54px;
+}
+#login .otherway a.weibo:active {
+background: url(_img/snsIcon.png) no-repeat 0px -108px;
+}
+#login .otherway a.QQwb {
+background: url(_img/snsIcon.png) no-repeat -303px 0;
+}
+#login .otherway a.QQwb:hover {
+background: url(_img/snsIcon.png) no-repeat -303px -54px;
+}
+#login .otherway a.QQwb:active {
+background: url(_img/snsIcon.png) no-repeat -303px -108px;
+}
+#login .otherway a.QQ {
+background: url(_img/snsIcon.png) no-repeat -152px 0;
+}
+#login .otherway a.QQ:hover {
+background: url(_img/snsIcon.png) no-repeat -152px -54px;
+}
+#login .otherway a.QQ:active {
+background: url(_img/snsIcon.png) no-repeat -152px -108px;
+}
+#login .otherway a.douban {
+background: url(_img/snsIcon.png) no-repeat -455px 0;
+}
+#login .otherway a.douban:hover {
+background: url(_img/snsIcon.png) no-repeat -455px -54px;
+}
+#login .otherway a.douban:active {
+background: url(_img/snsIcon.png) no-repeat -455px -108px;
+}
+#login .login {
+border-top: 1px solid #fff;
+padding-bottom: 20px;
+}
+#login .login h2 {
+font-weight: normal;
+font-size: 17px;
+margin: 18px 0;
+}
+#login .login input {
+display: inline-block;
+width: 250px;
+padding-left: 30px;
+height: 22px;
+margin-bottom: 10px;
+}
+#login .login input.name {
+background: #fff url(_img/LoginFormIcon.png) no-repeat 10px -78px;
+}
+#login .login input.email {
+background: #fff url(_img/LoginFormIcon.png) no-repeat 10px 18px;
+}
+#login .login input.password {
+background: #fff url(_img/LoginFormIcon.png) no-repeat 10px -37px;
+}
+#login .login a.submit {
+display: inline-block;
+width: 153px;
+height: 45px;
+background: url(_img/snsIcon.png) no-repeat -764px 2px;
+float: left;
+}
+#login .login a.submit:hover {
+	background: url(_img/snsIcon.png) no-repeat -764px -48px;
+}
+#login .login a.submit:active {
+	background: url(_img/snsIcon.png) no-repeat -764px -100px;
+}
+#login .login .loginItem ,
+#login .login .signupItem {
+width: 296px;
+height: 40px;
+display: inline-block;
+}
+#login .login .checkItem {
+height: inherit;
+}
+#login .login .back {
+float: right;
+font-size: 12px;
+padding-top: 12px;
+color: #36c;
+padding-right: 3px;
+}
+#login .login input#save {
+width: initial;
+height: initial;
+vertical-align: -webkit-baseline-middle;
+}
+#login .login .signupItem {
+	font-size: 12px;
+}
+#login .login .signupItem .checkboxItem {
+display: inline-block;
+float: left;
+margin-left: 2px;
+}
+#login .login .signupItem .forget{
+	float: right;
+	margin-right: 2px;
+}
+#login .login .signupItem .forget:hover{
+	color: #36c
+}
+#login .login .signupItem a.submit {
+background: url(_img/snsIcon.png) no-repeat -606px 2px;
+}
+#login .login .signupItem a.submit:hover {
+	background: url(_img/snsIcon.png) no-repeat -606px -48px;
+}
+#login .login .signupItem a.submit:active {
+	background: url(_img/snsIcon.png) no-repeat -606px -100px;
+}

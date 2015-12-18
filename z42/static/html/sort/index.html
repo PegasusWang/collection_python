@@ -1,0 +1,165 @@
+<!DOCTYPE html><meta charset="utf-8">
+<head>
+<link rel="stylesheet" href="css/reset.css">
+
+<style>
+body{margin:0;padding:0 28px;overflow-x:hidden}
+textarea{color:#ff0;
+background:#000;
+box-sizing:border-box;
+resize:none;
+border:0;padding:14px;
+width:100%;height:400px;
+box-shadow:none;font-size:16px;
+margin-bottom:14px;}
+td{border:1px solid #ccc;padding:14px}
+</style>
+
+<script src="js/coffee.js"></script>
+<script src="js/jquery-1.4.2.min.js"></script>
+<script src="js/avalon.js"></script>
+<script src="js/z42.js"></script>
+</head>
+<body>
+<div>
+	<p>请按以下格式录入内容，一行一个</p>
+	<p>项目名	投资人	意愿金额</p>
+</div>
+<div ms_view="txt">
+<textarea ms_duplex="txt"></textarea>
+<div ms_if="ignore.length"><p>无效的行</p><p ms_repeat="ignore">{{el}}</p></div>
+<table class="table" ms_if="tr.length&&tr[0].length">
+	<tr ms_repeat="tr">
+		<td ms_repeat="el">{{el}}</td>
+	</tr>
+</table>
+
+</div>
+
+<script type="text/coffeescript">
+
+find_next_angel = (exist_in_this_line,aim,line) ->
+	newaim = aim[...line]
+	newaim.push ''
+	for i in aim[line..]
+		if (undefined != exist_in_this_line[i[0]]) or newaim[line]
+			newaim.push i
+		else
+			newaim[line] = i
+	return [newaim[line], newaim]
+
+def_view(
+	"txt"
+	(v)->
+		v.txt = ''
+		v.tr = []
+		v.ignore = []
+
+		v.$watch('txt', (nv, ov)->
+			v.txt.replace(/\r/g,"\n")
+			txt = v.txt.split("\n")
+			tr = [[]]
+			ignore = []
+			app_angel = {}
+
+			for l in txt
+				l = $.trim l
+				i = l.split(" ")
+				if not i.length
+					continue
+
+				if i.length != 3
+					if l.length
+						ignore.push l
+					continue
+				[app, angel, amount]= i
+
+				if not app_angel[app]
+					tr[0].push(app)
+					app_angel[app] = []
+
+				app_angel[app].push([angel,amount-0])
+
+			for app_name, angel_list of app_angel
+				angel_list.sort((a,b)->b[1]-a[1])
+
+			line = 0
+			while 1
+				new_tr = []
+				count = 0
+				exist_in_this_line = {}
+
+				for pos,i of tr[0]
+					_ = app_angel[i][line]
+					if _
+						[name,amount] = _
+						count += 1
+
+						if exist_in_this_line[name] == undefined
+							new_tr.push(_)
+							exist_in_this_line[name] = pos
+						else
+							prepos = exist_in_this_line[name]
+							prename = tr[0][prepos]
+							if app_angel[prename][line][1] > amount
+								aim = app_angel[i]
+
+								[new_tr[pos], newx] = find_next_angel(exist_in_this_line,aim,line)
+
+								exist_in_this_line[new_tr[pos][0]] = pos
+								app_angel[i] = newx
+
+							else
+								aim = app_angel[prename]
+								[new_tr[prepos], newx] = find_next_angel(exist_in_this_line,aim,line)
+
+								app_angel[prename] = newx
+
+
+								exist_in_this_line[new_tr[prepos][0]] = prepos
+								exist_in_this_line[name] = pos
+
+								new_tr.push _
+					else
+						new_tr.push ''
+
+				if not count
+					break
+				else
+					line+=1
+					tr.push(new_tr)
+
+			for k,item of tr[1..]
+				_item = []
+				for i in item
+					if i
+						i =  i.join(' ')
+					_item.push i
+				k -= 0
+				tr[k+1] = _item
+
+			v.tr = tr
+			v.ignore = ignore
+		)
+)
+
+V.txt.txt = """
+项目1 A 100
+
+项目2 B 95
+
+项目3 A 140
+项目3 B 90
+项目3 C 30
+
+项目4 B 200
+项目4 D 50
+项目4 C 200
+
+项目5 B 200
+项目5 D 50
+项目5 C 20
+"""
+</script>
+
+</body>

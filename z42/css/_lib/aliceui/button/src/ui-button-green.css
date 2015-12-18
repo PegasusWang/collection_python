@@ -1,0 +1,57 @@
+.ui-button-lgreen,
+.ui-button-mgreen,
+.ui-button-sgreen {
+    color: #fff;
+    border:1px solid #379000;
+    background-color: #4BB402;
+}
+
+.ui-button-lgreen:hover,
+.ui-button-mgreen:hover,
+.ui-button-sgreen:hover {
+    background-color: #66BC2A;
+}
+
+a.ui-button-lgreen,
+a.ui-button-mgreen,
+a.ui-button-sgreen,
+a.ui-button-lgreen:hover,
+a.ui-button-mgreen:hover,
+a.ui-button-sgreen:hover,
+a.ui-button-lgreen:active,
+a.ui-button-mgreen:active,
+a.ui-button-sgreen:active {
+    color:#fff;
+}
+
+.ui-button-lgreen {
+    line-height:32px;
+    height:32px;
+}
+
+.ui-button-mgreen {
+    line-height:28px;
+    height:28px;
+}
+
+.ui-button-sgreen {
+    padding: 0 12px;
+    line-height:24px;
+    height:24px;
+    font-size:12px;
+}
+
+a.ui-button-lgreen {
+    line-height:30px;
+    height:30px;
+}
+
+a.ui-button-mgreen {
+    line-height:26px;
+    height:26px;
+}
+
+a.ui-button-sgreen {
+    line-height:22px;
+    height:22px;
+}

@@ -1,0 +1,27 @@
+<%!
+from email.Utils import formatdate
+from datetime import datetime
+%>\
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>\
+<language>zh-cn</language>\
+<title>${rss_title}</title>\
+<link>${rss_link}</link>\
+%if pubdate:
+<pubDate>${pubdate}</pubDate>\
+%endif
+%for i in items:
+<item>\
+<title>${i['title']}</title>\
+<link>${i['link']}</link>\
+%if 'author' in i:
+<dc:creator>${i['author']}</dc:creator>\
+%endif
+<description>${i['txt']}</description>\
+<pubDate>${formatdate(float(i['pubdate']))}</pubDate>\
+<guid isPermaLink="true">${i['link']}</guid>\
+</item>\
+%endfor
+</channel>\
+</rss>

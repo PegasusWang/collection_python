@@ -1,0 +1,46 @@
+#HEAD .L input:focus {
+outline: 0;
+}
+#HEAD .L input {
+border: 0;
+background: url(_img/bg.png) no-repeat 105px -163px #eee;
+display: inline-block;
+vertical-align: 15px;
+height: 12px;
+width: 95px;
+padding-right: 30px;
+border-radius: 18px;
+}
+#HEAD .L .logo {
+width: 150px;
+height: 40px;
+display: inline-block;
+background: url(_img/bg.png) no-repeat -16px -315px;
+}
+#HEAD .R {
+margin-top: 12px;
+}
+#HEAD .R a {
+margin-left: 29px;
+text-decoration: none;
+}
+#HEAD {
+margin-top: 13px;
+padding-bottom: 15px;
+border-bottom: 1px solid #ddd;
+}
+#HEAD .L input:focus{
+transition: width 0.6s,background 0.6s;
+-moz-transition: width 0.6s,background 0.6s ;
+-webkit-transition: width 0.6s, background 0.6s;
+-o-transition: width 0.6s, background 0.6s;
+background: url(_img/bg.png) no-repeat 210px -163px #eee;
+width: 200px;
+}
+a.menu img {
+width: 30px;
+height: 30px;
+background: red;
+vertical-align: -8px;
+border-radius: 50px;
+}

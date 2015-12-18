@@ -1,0 +1,14 @@
+<%!
+from z42.config import TITLE 
+%>\
+<!DOCTYPE html>\
+<meta charset="utf-8">\
+<link rel="stylesheet" href="${css.init}">\
+<script src="${js.init}"></script>\
+<%block name="head"></%block>\
+<title><%block name="title">${TITLE}</%block></title>\
+<body>${next.body()}\
+<%block name="foot"></%block>\
+<%block name="script"></%block>\
+</body>\
+

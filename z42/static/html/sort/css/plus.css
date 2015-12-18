@@ -1,0 +1,12 @@
+.span-add {
+	position: absolute;
+animation:myfirst 1.3s;
+-moz-animation:myfirst 1.3s; /* Firefox */
+-webkit-animation:myfirst 1.3s; /* Safari and Chrome */
+-o-animation:myfirst 1.3s; /* Opera */
+}
+@-webkit-keyframes myfirst
+{
+0%   {margin-top: 0;color:red;display: inline;}
+100% {margin-top: -40px;opacity:0;font-size:40px;margin-left:10px;}
+}

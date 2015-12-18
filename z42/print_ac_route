@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+#coding:utf-8
+
+import zapp.ANGELCRUNCH.view._url
+from zapp.ANGELCRUNCH.view._route import ROUTE_LIST
+from zapp.ANGELCRUNCH.model.const import CID
+
+CID2NAME = dict((k,v) for v,k in CID.__dict__.iteritems() if v[0]!="_") 
+
+for route in reversed(ROUTE_LIST):
+    if isinstance(route.host, basestring): 
+        print route.host.replace("\\.",".")
+    else:
+        print CID2NAME[route.host.cid]
+    for i in route.handlers:
+        path , cls, params = i 
+        print "\t %s %s.%s"%(path.ljust(35), cls.__module__, cls.__name__)
+    print ""

@@ -1,0 +1,33 @@
+#upload_ico_preview{
+    border: 1px solid #d2d2d2;
+    float: right;
+    position: relative;
+    overflow: hidden;
+    width: 285px;
+    height: 285px;
+}
+
+#upload_ico_photo_w{
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 1px solid #d2d2d2;
+    float: left;
+    width: 600px;
+    height: 400px;
+}
+
+#upload_ico_photo{
+    width: 600px;
+}
+
+.dialog-wrapper{
+    padding: 20px;
+}
+
+
+.dialog-wrapper .dialog-item{
+    padding-top: 20px;
+}
+.dialog-wrapper .dialog-item button{
+    outline: none;
+}

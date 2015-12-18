@@ -1,0 +1,31 @@
+.btnOrange {
+color: rgb(254, 244, 233);
+border: 1px solid rgb(218, 124, 12);
+background:#f78911;
+background: -moz-linear-gradient(center top , rgb(250, 165, 26), rgb(244, 122, 32)) repeat scroll 0% 0% transparent;
+background: -webkit-linear-gradient(rgb(250, 165, 26), rgb(244, 122, 32)) repeat scroll 0% 0% transparent;
+background: -o-linear-gradient(rgb(250, 165, 26), rgb(244, 122, 32)) repeat scroll 0% 0% transparent;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47b12');
+display:inline-block;
+outline: 0;
+text-shadow: 0 1px 0 #DA7C0C;
+font-size: 14px;
+margin-left: -1px;
+padding: 3px 28px;
+margin-top: 0;
+}
+.btnOrange:hover{
+color: rgb(254,244,233);
+background: -moz-linear-gradient(center top , rgb(248, 142, 17), rgb(240, 96, 21)) repeat scroll 0% 0% transparent;
+background: -webkit-linear-gradient(rgb(248, 142, 17), rgb(240, 96, 21)) repeat scroll 0% 0% transparent;
+background: -o-linear-gradient(rgb(248, 142, 17), rgb(240, 96, 21)) repeat scroll 0% 0% transparent;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F88E11', endColorstr='#F06015');
+text-shadow: 0 1px 0 #DA7C0C;
+}
+.btnOrange:active { color: rgb(252, 211, 165);
+background: -moz-linear-gradient(center top , rgb(244, 122, 32), rgb(250, 165, 26)) repeat scroll 0% 0% transparent;
+background: -webkit-linear-gradient(rgb(244, 122, 32), rgb(250, 165, 26)) repeat scroll 0% 0% transparent;
+background: -o-linear-gradient(rgb(244, 122, 32), rgb(250, 165, 26)) repeat scroll 0% 0% transparent;
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F47A20', endColorstr='#FAA51A');
+text-shadow: 0 1px 0 #DA7C0C;
+}

@@ -1,0 +1,27 @@
+<%!
+from z42.config import TITLE,SLOGO
+from time import time
+%>
+<%
+now = time()
+%>
+<!DOCTYPE HTML>
+<html>\
+<head>\
+<meta charset="utf-8">\
+</head>\
+<body>\
+<input type="hidden" value="${now}">
+<div style="padding:0 27px;font-size:14px;font-family:"Segoe UI","Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;">\
+<tr><td>${next.body()}</td></tr>
+<tr><td><div style="padding:27px 0;">
+<a href="http://42btc.com?${now}" 
+target="_blank"
+style="font-family:Trebuchet MS;background:#d20;color:#fff; font-size: 18px;  padding: 7px 14px;text-decoration:none">${TITLE}</a>
+<span style="padding-left:16px;font-size:16px;font-weight:bold;font-color:#000">${SLOGO}</span>\
+</div></td></tr>
+</table>\
+##欢迎关注我们<a href="http://weibo.com/42btc?${now}" style="color:#999;border-bottom:1px dotted #ccc;padding-bottom:3px;text-decoration:none">新浪微博</a>
+</div>\
+</body>\
+</html>\

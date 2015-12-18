@@ -1,0 +1,61 @@
+.ui-button-lwhite,
+.ui-button-mwhite,
+.ui-button-swhite {
+    border:1px solid #afafaf;
+    background-color: #f3f3f3;
+    color: #777;
+}
+
+.ui-button-lwhite:hover,
+.ui-button-mwhite:hover,
+.ui-button-swhite:hover {
+    border: 1px solid #8e8e8e;
+    background-color: #fcfbfb;
+    color: #676d70;
+}
+
+a.ui-button-lwhite,
+a.ui-button-mwhite,
+a.ui-button-swhite,
+a.ui-button-lwhite:active,
+a.ui-button-mwhite:active,
+a.ui-button-swhite:active {
+    color: #777;
+}
+a.ui-button-lwhite:hover,
+a.ui-button-mwhite:hover,
+a.ui-button-swhite:hover {
+    color:#676d70;
+}
+
+.ui-button-lwhite {
+    line-height:32px;
+    height:32px;
+}
+
+.ui-button-mwhite {
+    line-height:28px;
+    height:28px;
+}
+
+.ui-button-swhite {
+    line-height:24px;
+    height:24px;
+    padding:0 12px;
+    font-size:12px;
+}
+
+a.ui-button-lwhite {
+    line-height:30px;
+    height:30px;
+}
+
+a.ui-button-mwhite {
+    line-height:26px;
+    height:26px;
+}
+
+a.ui-button-swhite {
+    line-height:22px;
+    height:22px;
+}

@@ -1,0 +1,521 @@
+1. 替换 ms- 为 ms_
+2. 替换 controller 为 view
+3. 修改 callback
+4. 修改 loadJS
+5. 修改cleanUrl
+6. 修改 rmsAttr
+7. 修改 ms_attr- 为 ms_attr_
+diff -r 9468dbf8131b js/_lib/avalon.js
+--- a/js/_lib/avalon.js	Thu Oct 09 14:13:09 2014 +0800
++++ b/js/_lib/avalon.js	Thu Oct 09 14:46:37 2014 +0800
+@@ -11,7 +11,7 @@
+     /*********************************************************************
+      *                    全局变量及方法                                  *
+      **********************************************************************/
+-    var prefix = "ms_"
++    var prefix = "ms-"
+     var expose = new Date - 0
+     var subscribers = "$" + expose
+     //http://addyosmani.com/blog/understanding-mvvm-a-guide-for-javascript-developers/
+@@ -262,19 +262,8 @@
+                     fn = hook.deel(el, fn)
+                 }
+             }
+-            var callback = function (e){
+-                var ex = e || fixEvent(window.event);
+-                var ret = fn.call(el, ex);
+-                if (ret === false) {
+-                    try{
+-                        ex.stopPropagation();
+-                    }catch(e){}
+-                    try{
+-                        ex.preventDefault();
+-                    }catch(e){}
+- 
+-                }
+-                return ret;
++            var callback = W3C ? fn : function(e) {
++                fn.call(el, fixEvent(e));
+             }
+             if (W3C) {
+                 el.addEventListener(type, callback, !!phase)
+@@ -620,7 +609,7 @@
+         accessor[subscribers] = [] //订阅者数组
+         accessingProperties[name] = accessor
+     }
+-    //ms_with, ms_repeat绑定生成的代理对象储存池
++    //ms-with, ms-repeat绑定生成的代理对象储存池
+     var withProxyPool = {}
+     var withProxyCount = 0
+     var rebindings = {}
+@@ -654,7 +643,7 @@
+                     (function(el) {
+                         if (el.type) { //重新绑定
+                             avalon.nextTick(function() {
+-                                el.rollback && el.rollback() //还原 ms_with ms_on
++                                el.rollback && el.rollback() //还原 ms-with ms-on
+                                 bindingHandlers[el.type](el, el.vmodels)
+                             })
+                         }
+@@ -1048,7 +1037,7 @@
+                     c = escapeRegExp(closeTag)
+             rexpr = new RegExp(o + "(.*?)" + c)
+             rexprg = new RegExp(o + "(.*?)" + c, "g")
+-            rbind = new RegExp(o + ".*?" + c + "|\\sms_")
++            rbind = new RegExp(o + ".*?" + c + "|\\sms-")
+         }
+     }
+ 
+@@ -1307,7 +1296,7 @@
+     }
+     //=============================css相关=======================
+     var cssHooks = avalon.cssHooks = {}
+-    var prefixes = ["", "-webkit-", "-o-", "-moz-", "-ms_"]
++    var prefixes = ["", "-webkit-", "-o-", "-moz-", "-ms-"]
+     var cssMap = {
+         "float": "cssFloat",
+         background: "backgroundColor"
+@@ -1936,15 +1925,15 @@
+ 
+ 
+     function scanTag(elem, vmodels, node) {
+-        //扫描顺序  ms_skip(0) --> ms_important(1) --> ms_view(2) --> ms_if(10) --> ms_repeat(100) 
+-        //--> ms_if-loop(110) --> ms_attr(970) ...--> ms_each(1400)-->ms_with(1500)--〉ms_duplex(2000)垫后
++        //扫描顺序  ms-skip(0) --> ms-important(1) --> ms-controller(2) --> ms-if(10) --> ms-repeat(100) 
++        //--> ms-if-loop(110) --> ms-attr(970) ...--> ms-each(1400)-->ms-with(1500)--〉ms-duplex(2000)垫后
+         var a = elem.getAttribute(prefix + "skip")
+         //#360 在旧式IE中 Object标签在引入Flash等资源时,可能出现没有getAttributeNode,innerHTML的情形
+         if (!elem.getAttributeNode) {
+             return log("warning " + elem.tagName + " no getAttributeNode method")
+         }
+         var b = elem.getAttributeNode(prefix + "important")
+-        var c = elem.getAttributeNode(prefix + "view")
++        var c = elem.getAttributeNode(prefix + "controller")
+         if (typeof a === "string") {
+             return
+         } else if (node = b || c) {
+@@ -1952,10 +1941,10 @@
+             if (!newVmodel) {
+                 return
+             }
+-            //ms_important不包含父VM，ms_view相反
++            //ms-important不包含父VM，ms-controller相反
+             vmodels = node === b ? [newVmodel] : [newVmodel].concat(vmodels)
+             var name = node.name
+-            elem.removeAttribute(name) //removeAttributeNode不会刷新[ms_view]样式规则
++            elem.removeAttribute(name) //removeAttributeNode不会刷新[ms-controller]样式规则
+ 
+             elem.setAttribute("avalonctrl", node.value)
+             newVmodel.$events.expr = elem.tagName + '[avalonctrl="' + node.value + '"]'
+@@ -2034,7 +2023,7 @@
+         }
+     }
+ 
+-    var rmsAttr = /ms_([a-zA-Z]+)_?(.*)/
++    var rmsAttr = /ms-(\w+)-?(.*)/
+     var priorityMap = {
+         "if": 10,
+         "repeat": 90,
+@@ -2067,16 +2056,16 @@
+                     if (events[type]) {
+                         param = type
+                         type = "on"
+-                    } else if (type === "enabled") {//吃掉ms_enabled绑定,用ms_disabled代替
++                    } else if (type === "enabled") {//吃掉ms-enabled绑定,用ms-disabled代替
+                         type = "disabled"
+                         value = "!(" + value + ")"
+                     }
+-                    //吃掉以下几个绑定,用ms_attr-*绑定代替
++                    //吃掉以下几个绑定,用ms-attr-*绑定代替
+                     if (type === "checked" || type === "selected" || type === "disabled" || type === "readonly") {
+                         param = type
+                         type = "attr"
+                         elem.removeAttribute(name)
+-                        name = "ms_attr-" + param
++                        name = "ms-attr-" + param
+                         elem.setAttribute(name, value)
+                         match = [name]
+                         msData[name] = value
+@@ -2104,8 +2093,8 @@
+             }
+         }
+         bindings.sort(bindingSorter)
+-        if (msData["ms_checked"] && msData["ms_duplex"]) {
+-            log("warning!一个元素上不能同时定义ms_checked与ms_duplex")
++        if (msData["ms-checked"] && msData["ms-duplex"]) {
++            log("warning!一个元素上不能同时定义ms-checked与ms-duplex")
+         }
+         var firstBinding = bindings[0] || {}
+         switch (firstBinding.type) {
+@@ -2128,7 +2117,7 @@
+     //但如果我们去掉scanAttr中的attr.specified检测，一个元素会有80+个特性节点（因为它不区分固有属性与自定义属性），很容易卡死页面
+     if (!"1" [0]) {
+         var cacheAttrs = createCache(512)
+-        var rattrs = /\s+(ms_[^=\s]+)(?:=("[^"]*"|'[^']*'|[^\s>]+))?/g,
++        var rattrs = /\s+(ms-[^=\s]+)(?:=("[^"]*"|'[^']*'|[^\s>]+))?/g,
+                 rquote = /^['"]/,
+                 rtag = /<\w+\b(?:(["'])[^"]*?(\1)|[^>])*>/i,
+                 ramp = /&amp;/g
+@@ -2521,9 +2510,9 @@
+             if (method === "css") {
+                 avalon(elem).css(attrName, val)
+             } else if (method === "attr") {
+-                // ms_attr-class="xxx" vm.xxx="aaa bbb ccc"将元素的className设置为aaa bbb ccc
+-                // ms_attr-class="xxx" vm.xxx=false  清空元素的所有类名
+-                // ms_attr-name="yyy"  vm.yyy="ooo" 为元素设置name属性
++                // ms-attr-class="xxx" vm.xxx="aaa bbb ccc"将元素的className设置为aaa bbb ccc
++                // ms-attr-class="xxx" vm.xxx=false  清空元素的所有类名
++                // ms-attr-name="yyy"  vm.yyy="ooo" 为元素设置name属性
+                 if (boolMap[attrName]) {
+                     var bool = boolMap[attrName]
+                     if (typeof elem[bool] === "boolean") {
+@@ -2804,7 +2793,7 @@
+                 }
+                 nodes = avalon.slice(fragment.childNodes)
+                 if (nodes.length === 0) {
+-                    var comment = DOC.createComment("ms_html")
++                    var comment = DOC.createComment("ms-html")
+                     fragment.appendChild(comment)
+                     nodes = [comment]
+                 }
+@@ -2840,7 +2829,7 @@
+                 }
+             } else { //移出DOM树，并用注释节点占据原位置
+                 if (elem.nodeType === 1) {
+-                    var node = DOC.createComment("ms_if")
++                    var node = DOC.createComment("ms-if")
+                     elem.parentNode.replaceChild(node, elem)
+                     data.element = node
+                     head.appendChild(elem)
+@@ -2854,7 +2843,7 @@
+                 var fn = data.evaluator || noop
+                 return fn.apply(this, data.args.concat(e))
+             }
+-            var eventType = data.param.replace(/-\d+$/, "") // ms_on-mousemove-10
++            var eventType = data.param.replace(/-\d+$/, "") // ms-on-mousemove-10
+             if (eventType === "scan") {
+                 callback.call(elem, {type: eventType})
+             } else if (typeof data.specialBind === "function") {
+@@ -2914,7 +2903,7 @@
+     //这里的函数只会在第一次被扫描后被执行一次，并放进行对应VM属性的subscribers数组内（操作方为registerSubscriber）
+     var bindingHandlers = avalon.bindingHandlers = {
+         //这是一个字符串属性绑定的范本, 方便你在title, alt, src, href, include, css添加插值表达式
+-        //<a ms_href="{{url.hostname}}/{{url.pathname}}.html">
++        //<a ms-href="{{url.hostname}}/{{url.pathname}}.html">
+         "attr": function(data, vmodels) {
+             var text = data.value.trim(),
+                     simple = true
+@@ -2928,7 +2917,7 @@
+             data.handlerName = "attr" //handleName用于处理多种绑定共用同一种bindingExecutor的情况
+             parseExprProxy(text, vmodels, data, (simple ? null : scanExpr(data.value)))
+         },
+-        //根据VM的属性值或表达式的值切换类名，ms_class="xxx yyy zzz:flag" 
++        //根据VM的属性值或表达式的值切换类名，ms-class="xxx yyy zzz:flag" 
+         //http://www.cnblogs.com/rubylouvre/archive/2012/12/17/2818540.html
+         "class": function(data, vmodels) {
+             var oldStyle = data.param,
+@@ -2941,21 +2930,21 @@
+                     return Math.pow(10, a.length - 1) //将插值表达式插入10的N-1次方来占位
+                 })
+                 var colonIndex = noExpr.indexOf(":") //取得第一个冒号的位置
+-                if (colonIndex === -1) { // 比如 ms_class="aaa bbb ccc" 的情况
++                if (colonIndex === -1) { // 比如 ms-class="aaa bbb ccc" 的情况
+                     var className = text
+-                } else { // 比如 ms_class-1="ui-state-active:checked" 的情况 
++                } else { // 比如 ms-class-1="ui-state-active:checked" 的情况 
+                     className = text.slice(0, colonIndex)
+                     rightExpr = text.slice(colonIndex + 1)
+                     parseExpr(rightExpr, vmodels, data) //决定是添加还是删除
+                     if (!data.evaluator) {
+-                        log("debug: ms_class '" + (rightExpr || "").trim() + "' 不存在于VM中")
++                        log("debug: ms-class '" + (rightExpr || "").trim() + "' 不存在于VM中")
+                         return false
+                     } else {
+                         data._evaluator = data.evaluator
+                         data._args = data.args
+                     }
+                 }
+-                var hasExpr = rexpr.test(className) //比如ms_class="width{{w}}"的情况
++                var hasExpr = rexpr.test(className) //比如ms-class="width{{w}}"的情况
+                 if (!hasExpr) {
+                     data.immobileClass = className
+                 }
+@@ -2969,7 +2958,7 @@
+             var elem = data.element,
+                     tagName = elem.tagName
+             if (typeof duplexBinding[tagName] === "function") {
+-                data.changed = getBindingCallback(elem, "data-duplex_changed", vmodels) || noop
++                data.changed = getBindingCallback(elem, "data-duplex-changed", vmodels) || noop
+                 //由于情况特殊，不再经过parseExprProxy
+                 parseExpr(data.value, vmodels, data, "duplex")
+                 if (data.evaluator && data.args) {
+@@ -3014,7 +3003,7 @@
+             data.sortedCallback = getBindingCallback(elem, "data-with-sorted", vmodels)
+             data.renderedCallback = getBindingCallback(elem, "data-" + type + "-rendered", vmodels)
+ 
+-            var comment = data.element = DOC.createComment("ms_repeat")
++            var comment = data.element = DOC.createComment("ms-repeat")
+             if (type === "each" || type === "with") {
+                 data.template = elem.innerHTML.trim()
+                 avalon.clearHTML(elem).appendChild(comment)
+@@ -3097,7 +3086,7 @@
+         },
+         "on": function(data, vmodels) {
+             var value = data.value
+-            var eventType = data.param.replace(/-\d+$/, "") // ms_on-mousemove-10
++            var eventType = data.param.replace(/-\d+$/, "") // ms-on-mousemove-10
+             if (typeof bindingHandlers.on[eventType + "Hook"] === "function") {
+                 bindingHandlers.on[eventType + "Hook"](data)
+             }
+@@ -3136,7 +3125,7 @@
+             }
+             data.value = args.join(",")
+             var constructor = avalon.ui[widget]
+-            if (typeof constructor === "function") { //ms_widget="tabs,tabsAAA,optname"
++            if (typeof constructor === "function") { //ms-widget="tabs,tabsAAA,optname"
+                 vmodels = elem.vmodels || vmodels
+                 var optName = args[2] || widget //尝试获得配置项的名字，没有则取widget的名字
+                 for (var i = 0, v; v = vmodels[i++]; ) {
+@@ -3156,10 +3145,10 @@
+                 var widgetData = avalon.getWidgetData(elem, args[0]) //抽取data-tooltip-text、data-tooltip-attr属性，组成一个配置对象
+                 data[widget + "Id"] = args[1]
+                 data[widget + "Options"] = avalon.mix({}, constructor.defaults, vmOptions || {}, widgetData)
+-                elem.removeAttribute("ms_widget")
++                elem.removeAttribute("ms-widget")
+                 var vmodel = constructor(elem, data, vmodels) || {} //防止组件不返回VM
+                 data.evaluator = noop
+-                elem.msData["ms_widget-id"] = vmodel.$id || ""
++                elem.msData["ms-widget-id"] = vmodel.$id || ""
+                 if (vmodel.hasOwnProperty("$init")) {
+                     vmodel.$init()
+                 }
+@@ -3195,7 +3184,7 @@
+     bindingHandlers["if"] = bindingHandlers.data = bindingHandlers.text = bindingHandlers.html
+     //============================= string preperty binding =======================
+     //与href绑定器 用法差不多的其他字符串属性的绑定器
+-    //建议不要直接在src属性上修改，这样会发出无效的请求，请使用ms_src
++    //建议不要直接在src属性上修改，这样会发出无效的请求，请使用ms-src
+     "title,alt,src,value,css,include,href".replace(rword, function(name) {
+         bindingHandlers[name] = bindingHandlers.attr
+     })
+@@ -3227,7 +3216,7 @@
+                     if (composing)
+                         return
+                     var val = element.oldValue = element.value
+-                    if ($elem.data("duplex_observe") !== false) {
++                    if ($elem.data("duplex-observe") !== false) {
+                         evaluator(val)
+                         callback.call(element, val)
+                     }
+@@ -3251,7 +3240,7 @@
+                 element.defaultChecked = (element.checked = /bool|text/.test(fixType) ? evaluator() + "" === element.value : !!evaluator())
+             }
+             updateVModel = function() {
+-                if ($elem.data("duplex_observe") !== false) {
++                if ($elem.data("duplex-observe") !== false) {
+                     var val = element.value
+                     if (fixType === "text") {
+                         evaluator(val)
+@@ -3269,13 +3258,13 @@
+             bound(fixType ? "click" : "mousedown", updateVModel)
+         } else if (type === "checkbox") {
+             updateVModel = function() {
+-                if ($elem.data("duplex_observe") !== false) {
++                if ($elem.data("duplex-observe") !== false) {
+                     var method = element.checked ? "ensure" : "remove"
+                     var array = evaluator()
+                     if (Array.isArray(array)) {
+                         avalon.Array[method](array, element.value)
+                     } else {
+-                        avalon.error("ms_duplex位于checkbox时要求对应一个数组")
++                        avalon.error("ms-duplex位于checkbox时要求对应一个数组")
+                     }
+                     callback.call(element, array)
+                 }
+@@ -3288,7 +3277,7 @@
+             bound(W3C ? "change" : "click", updateVModel)
+ 
+         } else {
+-            var event = element.attributes["data-duplex_event"] || element.attributes["data-event"] || {}
++            var event = element.attributes["data-duplex-event"] || element.attributes["data-event"] || {}
+             event = event.value
+             if (event === "change") {
+                 bound("change", updateVModel)
+@@ -3399,7 +3388,7 @@
+     duplexBinding.SELECT = function(element, evaluator, data) {
+         var $elem = avalon(element)
+         function updateVModel() {
+-            if ($elem.data("duplex_observe") !== false) {
++            if ($elem.data("duplex-observe") !== false) {
+                 var val = $elem.val() //字符串或字符串数组
+                 if (val + "" !== element.oldValue) {
+                     evaluator(val)
+@@ -3534,7 +3523,7 @@
+     }
+ 
+     /*********************************************************************
+-     *          监控数组（与ms_each, ms_repeat配合使用）                     *
++     *          监控数组（与ms-each, ms-repeat配合使用）                     *
+      **********************************************************************/
+ 
+     function Collection(model) {
+@@ -3728,7 +3717,7 @@
+ 
+     //============ each/repeat/with binding 用到的辅助函数与对象 ======================
+ 
+-    //为ms_each, ms_with, ms_repeat要循环的元素外包一个msloop临时节点，ms_view的值为代理VM的$id
++    //为ms-each, ms-with, ms-repeat要循环的元素外包一个msloop临时节点，ms-controller的值为代理VM的$id
+     function shimController(data, transation, proxy, fragments) {
+         var dom = avalon.parseHTML(data.template)
+         var nodes = avalon.slice(dom.childNodes)
+@@ -3741,13 +3730,13 @@
+         fragments.push(fragment)
+     }
+     // 取得用于定位的节点。比如data.group = 3,  结构为
+-    // <div><!--ms_repeat--><br id="first"><br/><br/><br id="second"><br/><br/></div>
++    // <div><!--ms-repeat--><br id="first"><br/><br/><br id="second"><br/><br/></div>
+     // 当pos为0时,返回 br#first
+     // 当pos为1时,返回 br#second
+     // 当pos为2时,返回 null
+     function locateFragment(data, pos) {
+         var comment = data.element
+-        if (data.type == "repeat") {//ms_repeat，data.group为1
++        if (data.type == "repeat") {//ms-repeat，data.group为1
+             var node = comment.nextSibling
+             for (var i = 0, n = pos; i < n; i++) {
+                 if (node) {
+@@ -3787,7 +3776,7 @@
+             data.group = nodes.length / n
+         }
+     }
+-    // 为ms_each, ms_repeat创建一个代理对象，通过它们能使用一些额外的属性与功能（$index,$first,$last,$remove,$key,$val,$outer）
++    // 为ms-each, ms-repeat创建一个代理对象，通过它们能使用一些额外的属性与功能（$index,$first,$last,$remove,$key,$val,$outer）
+     var watchEachOne = oneObject("$index,$first,$last")
+ 
+     function createWithProxy(key, val, $outer) {
+@@ -4210,13 +4199,9 @@
+         var factorys = [] //储存需要绑定ID与factory对应关系的模块（标准浏览器下，先parse的script节点会先onload）
+         var basepath
+ 
+-         function cleanUrl(url) {
+-            var path = "://"+location.host+"/",pos = url.indexOf(path)
+-            if(pos>0&&pos<6){
+-                url=url.slice(pos+path.length-1)
+-            }
+-             return (url || "").replace(/[?#].*/, "")
+-         }
++        function cleanUrl(url) {
++            return (url || "").replace(/[?#].*/, "")
++        }
+ 
+         plugins.js = function(url, shim) {
+             var id = cleanUrl(url)
+@@ -4225,23 +4210,19 @@
+                     id: id,
+                     exports: {}
+                 }
+-                loadJS(url, id, function(){
+-                    modules[id].state=2
+-                    checkDeps()
+-                })
+-                //if (shim) { //shim机制
+-                //    innerRequire(shim.deps || "", function() {
+-                //        loadJS(url, id, function() {
+-                //            modules[id].state = 2
+-                //            if (shim.exports)
+-                //                modules[id].exports = typeof shim.exports === "function" ?
+-                //                        shim.exports() : window[shim.exports]
+-                //            innerRequire.checkDeps()
+-                //        })
+-                //    })
+-                //} else {
+-                //    loadJS(url, id)
+-                //}
++                if (shim) { //shim机制
++                    innerRequire(shim.deps || "", function() {
++                        loadJS(url, id, function() {
++                            modules[id].state = 2
++                            if (shim.exports)
++                                modules[id].exports = typeof shim.exports === "function" ?
++                                        shim.exports() : window[shim.exports]
++                            innerRequire.checkDeps()
++                        })
++                    })
++                } else {
++                    loadJS(url, id)
++                }
+             }
+             return id
+         }
+@@ -4393,35 +4374,34 @@
+             }
+ 
+             //4. 补全路径
+-            ret = url
+-            //if (/^(\w+)(\d)?:.*/.test(url)) {
+-            //    ret = url
+-            //} else {
+-            //    parent = parent.substr(0, parent.lastIndexOf("/"))
+-            //    var tmp = url.charAt(0)
+-            //    if (tmp !== "." && tmp !== "/") { //相对于根路径
+-            //        ret = basepath + url
+-            //    } else if (url.slice(0, 2) === "./") { //相对于兄弟路径
+-            //        ret = parent + url.slice(1)
+-            //    } else if (url.slice(0, 2) === "..") { //相对于父路径
+-            //        ret = parent + "/" + url
+-            //        while (rdeuce.test(ret)) {
+-            //            ret = ret.replace(rdeuce, "")
+-            //        }
+-            //    } else if (tmp === "/") {
+-            //        ret = url //相对于根路径
+-            //    } else {
+-            //        avalon.error("不符合模块标识规则: " + url)
+-            //    }
+-            //}
++            if (/^(\w+)(\d)?:.*/.test(url)) {
++                ret = url
++            } else {
++                parent = parent.substr(0, parent.lastIndexOf("/"))
++                var tmp = url.charAt(0)
++                if (tmp !== "." && tmp !== "/") { //相对于根路径
++                    ret = basepath + url
++                } else if (url.slice(0, 2) === "./") { //相对于兄弟路径
++                    ret = parent + url.slice(1)
++                } else if (url.slice(0, 2) === "..") { //相对于父路径
++                    ret = parent + "/" + url
++                    while (rdeuce.test(ret)) {
++                        ret = ret.replace(rdeuce, "")
++                    }
++                } else if (tmp === "/") {
++                    ret = url //相对于根路径
++                } else {
++                    avalon.error("不符合模块标识规则: " + url)
++                }
++            }
+             //5. 补全扩展名
+             url = cleanUrl(ret)
+-            //var ext = plugin.ext
+-            //if (ext) {
+-            //    if (url.slice(0 - ext.length) !== ext) {
+-            //        ret += ext
+-            //    }
+-            //}
++            var ext = plugin.ext
++            if (ext) {
++                if (url.slice(0 - ext.length) !== ext) {
++                    ret += ext
++                }
++            }
+             //6. 缓存处理
+             if (kernel.nocache) {
+                 ret += (ret.indexOf("?") === -1 ? "?" : "&") + (new Date - 0)
+@@ -4524,7 +4504,7 @@
+             factory.id = _id //用于调试
+             factory.delay = function(d) {
+                 args.push(d)
+-                var isCycle = d in modules 
++                var isCycle = true
+                 try {
+                     isCycle = checkCycle(modules[d].deps, d)
+                 } catch (e) {
+>>>>>>> other

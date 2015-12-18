@@ -1,0 +1,98 @@
+/* alice.form 样式模块 */
+
+.ui-form {
+    font-size: 12px;
+    line-height: 1.5;
+}
+select {
+    height: 40px;
+    width: 162px;
+    padding-left: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    margin-right: 6px;
+    height: 26px\9;
+
+}
+
+.ui-form, .ui-form * {
+    list-style: none;
+}
+
+.ui-form fieldset {
+    border:0;
+}
+
+.ui-form legend {
+    display: none;
+}
+
+.ui-form-explain {
+    margin: 0;
+    padding: 8px 0 0;
+    font-size: 12px;
+    color: #B2B2B2;
+}
+
+.ui-form-other {
+    margin-left: 8px;
+}
+
+.ui-form-text {
+    display: inline-block;
+    margin-top: 6px;
+    *display: inline;
+    *zoom: 1;
+}
+
+.ui-form-item:after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+.ui-form-item {
+    padding: 0 5px 20px 170px;
+    zoom: 1;
+}
+
+.ui-form-item select {
+    vertical-align: middle;
+}
+
+.ui-form-item input {
+    vertical-align: middle;
+}
+
+.ui-form-item .ui-input {
+    vertical-align: middle;
+    *vertical-align: -5px;
+}
+
+.ui-form-item-error .ui-input,
+.ui-form-item-error .ui-textarea {
+    border: 1px #F00 solid;
+    color: #F00;
+}
+
+.ui-form-item-error .ui-input-reset {
+    border: 1px #9C9C9C solid;
+    color: #000;
+}
+
+.ui-form-item-error .ui-form-explain {
+    color: #FF5243;
+}
+
+.ui-form-large .ui-input {
+    font-size: 14px;
+    height: 18px;
+    line-height: 18px;
+    padding: 11px 10px;
+}
+
+.ui-form-large .ui-label {
+    padding-top: 12px;
+}

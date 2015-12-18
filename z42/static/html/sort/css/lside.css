@@ -1,0 +1,29 @@
+#LSIDE .link span {
+margin-top: -6px;
+display: block;
+font-weight: bold;
+font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+}
+#LSIDE .link h3 {
+margin: 0;
+color: #3b70e1;
+font-size: 14px;
+}
+#LSIDE {
+	padding-top:20px;
+	width: 144px;
+	float: left;
+	padding-left:10px;
+}
+#LSIDE .link,#LSIDE .slink a{margin-bottom:14px;display:block;}
+#LSIDE .slink a{
+	color:#999;
+	font-size:12px;
+}
+#LSIDE a:hover,#LSIDE .link:hover h3{color:#e50;}
+#LSIDE a.now{color:#e50;}
+#LSIDE .unread {
+	padding-left:16px;
+	margin-left:-16px;
+background: url(_img/bg.png) no-repeat -190px -49px;
+}

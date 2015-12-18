@@ -1,0 +1,18 @@
+.tip-inner.tip-bg-image .tip-com {
+width: 308px;
+background: rgba(0,0,0,0.8);
+color: #fff;
+padding: 20px;
+margin-left: -40px;
+}
+.tip-inner.tip-bg-image .tip-com:before{
+border: 10px solid transparent;
+border-right: 10px solid #333;
+width: 0;
+height: 0;
+position: absolute;
+content: ' ';
+top:50%;
+margin-top:-10px;
+margin-left: -40px;
+}
