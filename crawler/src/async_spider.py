@@ -115,9 +115,9 @@ class MySpider(AsyncSpider):
 def main():
     st = time.time()
     urls = []
-    for page in range(1, 1000):
+    for page in range(1, 100):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
-    s = MySpider(urls)
+    s = MySpider(urls, 100)
     s.run()
     print(time.time()-st)
 
