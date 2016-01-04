@@ -11,25 +11,26 @@ from extract import extract
 class AsyncSpider(object):
     """A simple class of asynchronous spider."""
     def __init__(self, urls, concurrency=10, results=None, **kwargs):
-        urls.reverse()
-        self.urls = urls
         self.concurrency = concurrency
         self._q = queues.Queue()
         self._fetching = set()
         self._fetched = set()
         if results is None:
             self.results = []
+        for url in urls:
+            self._q.put(url)
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')
         return fetch(url, raise_error=False, **kwargs)
 
     def handle_html(self, url, html):
-        """handle html page, you may rewrite this method"""
+        """处理html页面"""
         print(url)
 
     def handle_response(self, url, response):
-        """inherit and rewrite this method"""
+        """处理http响应，对于200响应码直接处理html页面，
+        否则按照需求处理不同响应码"""
         if response.code == 200:
             self.handle_html(url, response.body)
 
@@ -64,10 +65,6 @@ class AsyncSpider(object):
 
                 self._fetched.add(current_url)
 
-                for i in range(self.concurrency):
-                    if self.urls:
-                        yield self._q.put(self.urls.pop())
-
             finally:
                 self._q.task_done()
 
@@ -75,8 +72,6 @@ class AsyncSpider(object):
         def worker():
             while True:
                 yield fetch_url()
-
-        self._q.put(self.urls.pop())    # add first url
 
         # Start workers, then wait for the work queue to be empty.
         for _ in range(self.concurrency):
@@ -108,18 +103,19 @@ class MySpider(AsyncSpider):
         )
 
     def handle_html(self, url, html):
-        title = extract('<title>', '</title>', html)
-        print(url, title.decode('gb18030').encode('utf-8'))
+        title = extract('<title>', '</title>', html.decode('gb18030'))
+        print(url, title)
 
 
 def main():
     st = time.time()
     urls = []
-    for page in range(1, 100):
+    for page in range(1, 1000):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
-    s = MySpider(urls, 100)
+    s = MySpider(urls)
     s.run()
     print(time.time()-st)
+    print(60.0 / (time.time()-st)*1000, 'per minute')
 
 
 if __name__ == '__main__':

@@ -9,7 +9,6 @@ proxies = {
     "https": "http://127.0.0.1:8787",
 }
 
-url = 'http://facebook.com'
+url = 'http://google.com'
 r = requests.get(url, proxies=proxies)
-print r.text
-
+print(r.text)
