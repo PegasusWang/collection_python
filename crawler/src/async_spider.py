@@ -103,19 +103,22 @@ class MySpider(AsyncSpider):
         )
 
     def handle_html(self, url, html):
-        title = extract('<title>', '</title>', html.decode('gb18030'))
-        print(url, title)
+        #title = extract('<title>', '</title>', html.decode('gb18030'))
+        #print(url, title)
+        print(url)
 
 
 def main():
     st = time.time()
     urls = []
-    for page in range(1, 1000):
+    n = 1000
+    for page in range(1, n):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
-    s = MySpider(urls)
+    s = MySpider(urls, 100)
     s.run()
     print(time.time()-st)
-    print(60.0 / (time.time()-st)*1000, 'per minute')
+    print(60.0/(time.time()-st)*1000, 'per minute')
+    print(60.0/(time.time()-st)*1000/60.0, 'per minute')
 
 
 if __name__ == '__main__':

@@ -38,7 +38,8 @@ def worker():
 @gen.coroutine
 def main():
     for i in range(1, 1000):
-        url = "http://tech2ipo.com/10026522.html"
+        #url = "http://tech2ipo.com/10026522.html"
+        url = "http://pyhome.org/about/"
         _q.put(url)
     for _ in range(1000):
         worker()
