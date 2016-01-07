@@ -6,6 +6,7 @@ chrome有个功能，对于请求可以直接右键copy as curl，然后在命�
 模拟发送请求。现在需要把此curl字符串处理成requests库可以传入的参数格式，
 用python脚本更好的进行模拟。可以用来发广告机器人
 暂时测试网址：tech2ipo.com; liwushuo.com
+http://stackoverflow.com/questions/23118249/whats-the-difference-between-request-payload-vs-form-data-as-seen-in-chrome
 """
 
 import json
@@ -14,7 +15,7 @@ import requests
 try:
     from urllib import urlencode  # py2
 except ImportError:
-    from urllib.parse import urlencode
+    from urllib.parse import urlencode  # py3
 
 
 tech2ipo_str = """
@@ -26,15 +27,32 @@ curl 'http://www.liwushuo.com/api/posts/1022318/comments' -H 'Cookie: next_url=h
 """
 
 
+def encode_to_dict(encoded_str):
+    """ 将encode后的数据拆成dict
+    >>> encode_to_dict('name=foo')
+    {'name': foo'}
+    >>> encode_to_dict('name=foo&val=bar')
+    {'name': 'foo', 'val': 'var'}
+    """
+
+    pair_list = encoded_str.split('&')
+    d = {}
+    for pair in pair_list:
+        if pair:
+            key = pair.split('=')[0]
+            val = pair.split('=')[1]
+            d[key] = val
+    return d
+
+
 def parse_curl_str(s):
     pat = re.compile("'(.*?)'")
-    str_list = [s.strip() for s in re.split(pat, s)]
-    #for i in str_list:
-        #print(i)
+    str_list = [i.strip() for i in re.split(pat, s)]   # 拆分curl请求字符串
 
     url = ''
     headers = {}
     data = ''
+
     for i in range(0, len(str_list)-1, 2):
         arg = str_list[i]
         string = str_list[i+1]
@@ -55,15 +73,20 @@ def parse_curl_str(s):
 
 def test_liwushuo():
     url, headers, data = parse_curl_str(liwushuo_str)
-    data = urlencode(['content=测试'.split('=')])
+    print(data)
+    # data = urlencode([tuple('content=requests测试'.split('='))])
+    data_str = 'content=测试'
+    data = urlencode(encode_to_dict(data_str))
     r = requests.post(url, data=data, headers=headers)
     print(r.content)
 
+test_liwushuo()
 
-#test_liwushuo()
+
 def test_tech2ipo():
     url, headers, data = parse_curl_str(tech2ipo_str)
-    r = requests.post(url, json=json.loads(data), headers=headers)
+    print(data)
+    r = requests.post(url, json=json.loads(data), headers=headers)  # loads
     print(r.content)
 
 test_tech2ipo()

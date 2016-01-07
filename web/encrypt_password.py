@@ -5,7 +5,8 @@ import bcrypt
 
 password = 'hahahouhou'
 
-hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())  # encode
+print(hashed)
 
-if hashed == bcrypt.hashpw(password, hashed):
+if hashed == bcrypt.hashpw(password.encode('utf-8'), hashed):
     print('it matched')
