@@ -73,9 +73,8 @@ def parse_curl_str(s):
 
 def test_liwushuo():
     url, headers, data = parse_curl_str(liwushuo_str)
-    print(data)
     # data = urlencode([tuple('content=requests测试'.split('='))])
-    data_str = 'content=测试'
+    data_str = 'content=测试12:05'
     data = urlencode(encode_to_dict(data_str))
     r = requests.post(url, data=data, headers=headers)
     print(r.content)
@@ -85,7 +84,6 @@ test_liwushuo()
 
 def test_tech2ipo():
     url, headers, data = parse_curl_str(tech2ipo_str)
-    print(data)
     r = requests.post(url, json=json.loads(data), headers=headers)  # loads
     print(r.content)
 

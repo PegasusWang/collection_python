@@ -8,3 +8,4 @@
 *settings.py
 _templates/*
 *.htm
+__pycache__/
