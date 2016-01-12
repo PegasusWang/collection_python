@@ -27,6 +27,9 @@ class AsyncSpider(object):
         for url in urls:
             self._q.put(url)
         self.logger = get_logger(self.__class__.__name__)
+        httpclient.AsyncHTTPClient.configure(
+            "tornado.curl_httpclient.CurlAsyncHTTPClient"
+        )
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')
@@ -109,7 +112,8 @@ class MySpider(AsyncSpider):
             'cookie': cookies_str
         }
         return super(MySpider, self).fetch(
-            url, headers=headers
+            url, headers=headers,
+            #proxy_host="127.0.0.1", proxy_port=8787,    # for proxy
         )
 
     def handle_html(self, url, html):
@@ -119,7 +123,7 @@ class MySpider(AsyncSpider):
 def main():
     st = time.time()
     urls = []
-    n = 100
+    n = 10
     for page in range(1, n):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = MySpider(urls, 10)
