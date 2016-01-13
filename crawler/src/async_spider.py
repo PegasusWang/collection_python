@@ -123,7 +123,7 @@ class MySpider(AsyncSpider):
 def main():
     st = time.time()
     urls = []
-    n = 10
+    n = 1000
     for page in range(1, n):
         urls.append('http://www.jb51.net/article/%s.htm' % page)
     s = MySpider(urls, 10)

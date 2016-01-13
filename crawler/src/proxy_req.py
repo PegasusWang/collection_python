@@ -23,6 +23,7 @@ print(r.text)
 # sudo apt-get install libcurl-dev librtmp-dev
 # pip install tornado pycurl
 
+'''
 from tornado import httpclient, ioloop
 
 config = {
@@ -45,3 +46,4 @@ http_client = httpclient.AsyncHTTPClient()
 http_client.fetch("http://twitter.com/",
     handle_request, **config)
 ioloop.IOLoop.instance().start()
+'''
