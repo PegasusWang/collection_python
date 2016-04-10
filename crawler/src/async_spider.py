@@ -9,15 +9,18 @@ import traceback
 from bs4 import BeautifulSoup
 
 
-def get_logger(name):
+def logged(class_):
     logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(name)
-    return logger
+    class_.logger = logging.getLogger(class_.__name__)
+    return class_
 
 
+@logged
 class AsyncSpider(object):
     """A simple class of asynchronous spider."""
     def __init__(self, urls, concurrency=10, results=None, **kwargs):
+        super(AsyncSpider, self).__init__(**kwargs)
+
         self.concurrency = concurrency
         self._q = queues.Queue()
         self._fetching = set()
@@ -26,14 +29,14 @@ class AsyncSpider(object):
             self.results = []
         for url in urls:
             self._q.put(url)
-        self.logger = get_logger(self.__class__.__name__)
         httpclient.AsyncHTTPClient.configure(
             "tornado.curl_httpclient.CurlAsyncHTTPClient"
         )
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')
-        return fetch(url, raise_error=False, **kwargs)
+        request = httpclient.HTTPRequest(url, **kwargs)
+        return fetch(request, raise_error=False)
 
     def handle_html(self, url, html):
         """处理html页面"""
@@ -58,7 +61,7 @@ class AsyncSpider(object):
         except Exception as e:
             self.logger.debug('Exception: %s %s' % (e, url))
             raise gen.Return(e)
-        raise gen.Return(response)
+        raise gen.Return(response)    # py3 can just return response
 
     @gen.coroutine
     def _run(self):
@@ -117,7 +120,8 @@ class MySpider(AsyncSpider):
         )
 
     def handle_html(self, url, html):
-        print(BeautifulSoup(html, 'lxml').find('title'))
+        print(url)
+        #print(BeautifulSoup(html, 'lxml').find('title'))
 
 
 def main():
