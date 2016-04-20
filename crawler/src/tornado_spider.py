@@ -35,8 +35,8 @@ class AsyncSpider(object):
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')
-        request = httpclient.HTTPRequest(url, **kwargs)
-        return fetch(request, raise_error=False)
+        http_request = httpclient.HTTPRequest(url, **kwargs)
+        return fetch(http_request, raise_error=False)
 
     def handle_html(self, url, html):
         """处理html页面"""
