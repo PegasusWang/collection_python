@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-
 import concurrent.futures
 import bs4
 import requests
@@ -37,13 +36,18 @@ class ThreadPoolCrawler(object):
 class TestCrawler(ThreadPoolCrawler):
     def handle_response(self, url, response):
         soup = bs4.BeautifulSoup(response.text, 'lxml')
-        print(soup.find('title'))
+        title = soup.find('title')
+        self.results.append({url: title})
 
 
 def main():
-    urls = ['http://www.baidu.com'] * 100
-    s = TestCrawler(urls)
-    s.run()
+    import time
+    urls = ['http://localhost:8000'] * 300
+    for nums in [2, 5, 10, 15, 20, 50, 70, 100]:
+        beg = time.time()
+        s = TestCrawler(urls, nums)
+        s.run()
+        print(nums, time.time()-beg)
 
 if __name__ == '__main__':
     main()
