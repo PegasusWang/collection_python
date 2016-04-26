@@ -108,7 +108,10 @@ requests.get = get
 
 
 def retry_get_html(*args, **kwargs):
-    return get(*args, **kwargs).content
+    try:
+        return get(*args, **kwargs).content
+    except AttributeError:
+        return ''
 
 
 def lazy_property(fn):

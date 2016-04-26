@@ -43,11 +43,18 @@ class TransformedDict(collections.MutableMapping):
     def __keytransform__(self, key):
         return key
 
+# pip install fronzendict
 
 class FronzenDict(TransformedDict):
+    """immutable dict, init by a dict"""
     def __init__(self, d):
         self.store = d
 
     def __setitem__(self, key, value):
         # self.store[self.__keytransform__(key)] = value
-        raise Exception('can not change dict')
+        raise TypeError("'FronzenDict' object does not support item assignment")
+
+
+# since python3.3, you can use immutable dict
+import types
+d_proxy = types.MappingProxyType(d)    # can add new key/value by assignment but can not assign key alrady exists
