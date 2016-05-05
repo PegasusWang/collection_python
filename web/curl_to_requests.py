@@ -50,8 +50,8 @@ def parse_curl_str(s):
     str_list = [i.strip() for i in re.split(pat, s)]   # 拆分curl请求字符串
 
     url = ''
-    headers = {}
-    data = ''
+    headers_dict = {}
+    data_str = ''
 
     for i in range(0, len(str_list)-1, 2):
         arg = str_list[i]
@@ -63,12 +63,12 @@ def parse_curl_str(s):
         elif arg.startswith('-H'):
             header_key = string.split(':', 1)[0].strip()
             header_val = string.split(':', 1)[1].strip()
-            headers[header_key] = header_val
+            headers_dict[header_key] = header_val
 
         elif arg.startswith('--data'):
-            data = string
+            data_str = string
 
-    return url, headers, data
+    return url, headers_dict, data_str
 
 
 def test_liwushuo():
@@ -79,7 +79,7 @@ def test_liwushuo():
     r = requests.post(url, data=data, headers=headers)
     print(r.content)
 
-test_liwushuo()
+#test_liwushuo()
 
 
 def test_tech2ipo():
@@ -87,4 +87,17 @@ def test_tech2ipo():
     r = requests.post(url, json=json.loads(data), headers=headers)  # loads
     print(r.content)
 
-test_tech2ipo()
+#test_tech2ipo()
+
+
+if __name__ == '__main__':
+    import sys
+    from pprint import pprint
+    try:
+        curl_str = sys.argv[1]
+        url, headers, data = parse_curl_str(curl_str)
+        print(url)
+        pprint(headers)
+        print(data)
+    except IndexError:
+        pass
