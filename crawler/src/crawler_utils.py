@@ -105,3 +105,26 @@ def get(*args, **kwds):
     return _get(*args, **kwds)
 
 requests.get = get
+
+
+def retry_get_html(*args, **kwargs):
+    try:
+        return get(*args, **kwargs).content
+    except AttributeError:
+        return ''
+
+
+def lazy_property(fn):
+    attr_name = '_lazy_' + fn.__name__
+
+    @property
+    def _lazy_property(self):
+        if not hasattr(self, attr_name):
+            setattr(self, attr_name, fn(self))
+            return getattr(self, attr_name)
+    return _lazy_property
+
+
+def my_ip():
+    url = 'https://api.ipify.org?format=json'
+    return requests.get(url).text
