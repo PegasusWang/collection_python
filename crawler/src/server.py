@@ -4,9 +4,13 @@
 from tornado import web, ioloop, gen
 
 
+n = 1
 class Main(web.RequestHandler):
     def get(self):
-        self.write('hehe'*100)
+        global n
+        n+=1
+        print(n)
+        self.write('hehe'*10)
 
 
 app = web.Application(
@@ -16,7 +20,7 @@ app = web.Application(
 
 
 if __name__ == '__main__':
-    app.listen(8000)
+    app.listen(8080)
     try:
         ioloop.IOLoop.current().start()
     except:

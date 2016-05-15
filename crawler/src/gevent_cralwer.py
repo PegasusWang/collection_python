@@ -177,8 +177,9 @@ def fetch(url):
 
 def asy():
     threads = []
-    for i in range(100):
-        url = 'http://baidu.com' + '?a=' + str(i)
+    for i in range(1000):
+        # url = 'http://baidu.com' + '?a=' + str(i)
+        url = 'http://localhost:8080' + '?a=' + str(i)
         threads.append(gevent.spawn(fetch, url))
     gevent.joinall(threads)
 

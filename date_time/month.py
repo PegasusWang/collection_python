@@ -20,11 +20,17 @@ def month_year_iter( start_month, start_year, end_month, end_year ):
 
 
 def _month_year_iter(start_year, start_month, end_year, end_month):
+    """ iter month year
+
+    >>> list(_month_year_iter(2014,12,2015,2))
+    [(2014, 12), (2015, 1)]
+    """
     ym_start= 12*start_year + start_month - 1
     ym_end= 12*end_year + end_month - 1
     for ym in range( ym_start, ym_end ):
         y, m = divmod( ym, 12 )
         yield y, m+1
+
 
 def main():
     st_year = 2015
@@ -36,9 +42,10 @@ def main():
 
 
 def test():
-    #for year, month in month_year_iter(8,2014,7,2015):
     for year, month in _month_year_iter(2014,8,2015,7):
         print(year, month)
 
 if __name__ == '__main__':
     test()
+    import doctest
+    #doctest.testmod()

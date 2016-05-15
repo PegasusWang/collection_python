@@ -67,6 +67,30 @@ def download_file(url):
     print(BeautifulSoup(requests.get(url).content).find('title'))
 
 
+class ThreadPoolSpider(object):
+    def __init__(self, urls, concurrency=10, results=None, **kwargs):
+        self.urls = urls
+        self.wm = WorkManager(concurrency)
+        if results is None:
+            self.results = []
+
+    def handle_response(self, url):
+        print(BeautifulSoup(requests.get(url).content).find('title'))
+
+    def run(self):
+        for url in self.urls:
+            self.wm.add_job(self.handle_response, url)
+        self.wm.start()
+        self.wm.wait_for_complete()
+
+
+def test():
+    urls = []
+    for page in range(1, 100):
+        urls.append('http://www.jb51.net/article/%s.htm' % page)
+    c = ThreadPoolSpider(urls)
+    c.run()
+
 def main():
     try:
         num_of_threads = int(sys.argv[1])
@@ -86,4 +110,5 @@ def main():
     print(time.time() - _st)
 
 if __name__ == '__main__':
-    main()
+    #main()
+    test()

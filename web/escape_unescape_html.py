@@ -21,3 +21,4 @@ def unescape_html(html):
     return HTMLParser.HTMLParser().unescape(html)
 
 # from xml.sax.saxutils import escape, unescape
+print(escape_html('<p>hehe</p>'))

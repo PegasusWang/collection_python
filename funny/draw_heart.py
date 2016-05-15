@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 
@@ -22,4 +22,4 @@ for y in [-y  / limit / 0.66 for y in range(-limit, limit, 1)]:
             sys.stdout.write('  ')
     sys.stdout.write('\n')
 
-print(text[count:-1])
+#print(text[count:-1])

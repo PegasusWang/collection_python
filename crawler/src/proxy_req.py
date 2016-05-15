@@ -4,7 +4,7 @@
 # requests proxy demo
 import requests
 
-# install lantern first
+# install lantern first, 这是使用lantern的代理地址
 proxies = {
     "http": "http://127.0.0.1:8787",
     "https": "http://127.0.0.1:8787",
@@ -13,10 +13,6 @@ proxies = {
 url = 'http://google.com'
 r = requests.get(url, proxies=proxies)
 print(r.text)
-
-
-
-
 
 
 # tornado proxy demo

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+import requests
 
 from bs4 import BeautifulSoup
 def html2txt(html=u''):
@@ -27,8 +28,10 @@ def remove_html_tags(text):
 
 
 def test():
-    s = u"""哈哈<br>"""
-    print(html2makrdown(s))
+    html = requests.get('http://codingpy.com/article/top-10-mistakes-that-python-programmers-make/').text
+    soup = BeautifulSoup(html)
+    content = soup.find(class_='article-content')
+    print(html2makrdown(unicode(content)))
 
 
 if __name__ == '__main__':
