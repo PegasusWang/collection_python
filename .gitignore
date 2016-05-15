@@ -9,3 +9,4 @@
 _templates/*
 *.htm
 __pycache__/
+.cache
