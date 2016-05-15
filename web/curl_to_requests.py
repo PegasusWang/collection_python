@@ -106,7 +106,11 @@ if __name__ == '__main__':
         r = requests.post(url, data=data, headers=headers)  # loads
         print(r.content)
 
+<<<<<<< HEAD
     #test_lagou()
+=======
+#test_liwushuo()
+>>>>>>> dffb48893af42db2b31aaddfc507eaa2ef638612
 
     def test_sougou_wechat():
         s = """curl 'http://weixin.sogou.com/gzhjs?openid=oIWsFt1XTuB0RIm7PjTHp51TNhqs&page=12' -H 'Accept-Encoding: gzip, deflate, sdch' -H 'Accept-Language: zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.4' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Cookie: SUV=00A27B2BB73D015554D9EC5137A6D159; ssuid=6215908745; SUID=2E0D8FDB66CA0D0A0000000055323CAB; usid=g6pDWznVhdOwAWDb; CXID=9621B02E3A96A6AB3F34DB9257660015; SMYUV=1448346711521049; _ga=GA1.2.1632917054.1453002662; ABTEST=8|1455514045|v1; weixinIndexVisited=1; ad=G7iNtZllll2QZQvQlllllVbxBJtlllllNsFMpkllllUlllllRTDll5@@@@@@@@@@; SNUID=C1B8F6463A3F10F2A42630AD3BA7E3E1; sct=1; ppinf=5|1455520623|1456730223|Y2xpZW50aWQ6NDoyMDE3fGNydDoxMDoxNDU1NTIwNjIzfHJlZm5pY2s6NzpQZWdhc3VzfHRydXN0OjE6MXx1c2VyaWQ6NDQ6NENDQTE0NDVEMTg4OTRCMTY1MUEwMENDQUNEMEQxNThAcXEuc29odS5jb218dW5pcW5hbWU6NzpQZWdhc3VzfA; pprdig=Xmd5TMLPOARs3V2jIAZo-5UJDINIE0oFY97uU510_JOZm2-uu5TnST5KKW3oDgJY6-xd66wDhsb4Nm8wbOh1FCPohYO12b1kCrFoe-WUPrvg9JSqC72rjagjOlDg-JX72LcIjFOhsj7l_YGuaJpDrjFPoqy39C0AReCpmVcI5SM; ppmdig=1455520623000000ff71eef01ec88b2fe45bfa15b36e3532; IPLOC=CN' -H 'Connection: keep-alive' --compressed"""
@@ -118,3 +122,20 @@ if __name__ == '__main__':
 
     test_sougou_wechat()
 
+<<<<<<< HEAD
+=======
+#test_tech2ipo()
+
+
+if __name__ == '__main__':
+    import sys
+    from pprint import pprint
+    try:
+        curl_str = sys.argv[1]
+        url, headers, data = parse_curl_str(curl_str)
+        print(url)
+        pprint(headers)
+        print(data)
+    except IndexError:
+        pass
+>>>>>>> dffb48893af42db2b31aaddfc507eaa2ef638612
