@@ -77,8 +77,20 @@ def get_file_curl_list(filepath):
                 yield line
 
 
+COOKIE = "PMs5bkeZejk5DZ9YuE+XRySRFW58DvWlgNYfI2YP+SQ="
+PAT = re.compile(r'ppysid="(.+)?"')
+
+
+def get_replace_cookie(curl_str, cookie=None):
+    if cookie:
+        return re.sub(PAT, 'ppysid="%s"'%cookie, curl_str)
+    return curl_str
+
+
 def assert_many_requests(curl_str_list):
     for curl_str in curl_str_list:
+        curl_str = get_replace_cookie(curl_str, COOKIE)    # replace COOKIE
+        # print(curl_str)
         assert_request_success(curl_str)
 
 
