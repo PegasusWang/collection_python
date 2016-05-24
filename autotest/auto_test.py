@@ -140,7 +140,7 @@ def assert_many_requests(curl_str_list, port=None, cookie=None):
 
 
 if __name__ == '__main__':
-    cookie = COOKIE = "PMs5bkeZejkyb2UdNmbANiVCSdWJOFEmNRpR2Ft3OUc="
+    cookie = COOKIE = "PMs5bkeZejlwWIKw2D4ImFNnN0k/ANHaC9Wz/37nSTA="
     port = ''
 
     import sys
