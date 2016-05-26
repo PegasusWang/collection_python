@@ -11,10 +11,15 @@ http://stackoverflow.com/questions/23118249/whats-the-difference-between-request
 
 import re
 import requests
-try:
-    from urllib import urlencode  # py2
-except ImportError:
-    from urllib.parse import urlencode  # py3
+# http://python-future.org/compatible_idioms.html
+try:   # py3
+    from urllib.parse import urlparse, urlencode
+    from urllib.request import urlopen, Request
+    from urllib.error import HTTPError
+except ImportError:    # py2
+    from urlparse import urlparse
+    from urllib import urlencode
+    from urllib2 import urlopen, Request, HTTPError
 
 
 tech2ipo_str = """
@@ -48,6 +53,7 @@ def parse_curl_str(s):
     此函数用来作为单元测试中提交按钮的操作
     :param s: 右键chrome请求点击copy as curl得到的字符串。
     """
+    s = s.strip('\n').strip()
     pat = re.compile("'(.*?)'")
     str_list = [i.strip() for i in re.split(pat, s)]   # 拆分curl请求字符串
 
