@@ -2,14 +2,9 @@
 # -*- coding:utf-8 -*-
 
 
-def debug():
-    import traceback
-    traceback.print_exc()
-    from pprint import pprint
-    pprint(locals())
-
+debug_s = """__import__('traceback').print_exc();__import__('pprint').pprint(locals())"""
 if __name__ == '__main__':
     try:
         raise Exception()
     except Exception as e:
-        debug()
+        exec debug_s
