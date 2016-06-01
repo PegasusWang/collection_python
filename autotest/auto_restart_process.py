@@ -2,17 +2,20 @@
 # -*- coding: utf-8 -*-
 
 """
-自动重启python进程的脚本
+监控文件改动后自动重启进程的脚本，依赖pyinotify, colorama
 """
 # http://buke.github.io/blog/2013/06/30/reload-the-process-when-source-chage-is-detected/
-# pip install pyinotify
+# pip install pyinotify, colorama
 
 import os
 import signal
 import subprocess
 import time
+
 import pyinotify
+from colorama import Fore, Style    # for color terminal print
 from pyinotify import log
+TERMINAL_COLOR = 'GREEN'
 
 
 class ReloadNotifier(pyinotify.Notifier):
@@ -43,7 +46,7 @@ class ReloadNotifier(pyinotify.Notifier):
 
 class OnChangeHandler(pyinotify.ProcessEvent):
 
-    def __init__(self, cwd, extension, cmd):
+    def my_init(self, cwd, extension, cmd):
         self.cwd = cwd
         self.extensions = extension.split(',')
         self.cmd = cmd
@@ -60,7 +63,6 @@ class OnChangeHandler(pyinotify.ProcessEvent):
         self.process.wait()
 
     def _restart_process(self):
-        print('==> Modification detected, restart process. <==')
         self._stop_process()
         self._start_process()
 
@@ -72,6 +74,12 @@ class OnChangeHandler(pyinotify.ProcessEvent):
     def process_IN_CREATE(self, event):
         if (any(event.pathname.endswith(ext) for ext in self.extensions) or
             "IN_ISDIR" in event.maskname):
+            print(getattr(Fore, TERMINAL_COLOR) +
+                  event.pathname + ' has changed.\n' +
+                  'restart process' +
+                  time.strftime('%Y-%m-%d %A %X %Z',
+                                time.localtime(time.time())))
+            print(Style.RESET_ALL)
             self._restart_process()
 
     process_IN_DELETE = process_IN_CLOSE_WRITE = process_IN_CREATE
@@ -84,12 +92,17 @@ def autoreload(path, extension, cmd):
     handler = OnChangeHandler(cwd=path, extension=extension, cmd=cmd)
     notifier = ReloadNotifier(wm, default_proc_fun=handler)
 
+    # 设置需要监控的事件
     mask = (pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MOVED_FROM |
             pyinotify.IN_MOVED_TO | pyinotify.IN_CREATE | pyinotify.IN_DELETE |
-            pyinotify.IN_DELETE_SELF | pyinotify.IN_MOVE_SELF)
+            pyinotify.IN_DELETE_SELF | pyinotify.IN_MOVE_SELF |
+            pyinotify.IN_MODIFY)
     wm.add_watch(path, mask, rec=True, auto_add=True)
 
-    print('==> Start monitoring %s (type c^c to exit) <==' % path)
+    print(getattr(Fore, TERMINAL_COLOR) +
+          '==> Start monitoring %s (type c^c to exit) <==' % path +
+          time.strftime('%Y-%m-%d %A %X %Z', time.localtime(time.time())))
+    print(Style.RESET_ALL)
     notifier.loop()
 
 
