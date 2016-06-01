@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+自动重启python进程的脚本
+"""
 # http://buke.github.io/blog/2013/06/30/reload-the-process-when-source-chage-is-detected/
 # pip install pyinotify
 
