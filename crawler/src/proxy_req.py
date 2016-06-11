@@ -15,6 +15,11 @@ r = requests.get(url, proxies=proxies)
 print(r.text)
 
 
+# requests from version 2.10.0 support socks proxy
+# pip install -U requests[socks]
+proxies = {'http': "socks5://myproxy:9191"}
+requests.get('http://example.org', proxies=proxies)
+
 # tornado proxy demo
 # sudo apt-get install libcurl-dev librtmp-dev
 # pip install tornado pycurl
