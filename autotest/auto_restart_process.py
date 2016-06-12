@@ -15,7 +15,7 @@ import time
 import pyinotify
 from colorama import Fore, Style    # for color terminal print
 from pyinotify import log
-TERMINAL_COLOR = 'GREEN'
+TERMINAL_COLOR = 'GREEN'    # 设置终端颜色
 
 
 class ReloadNotifier(pyinotify.Notifier):
@@ -108,6 +108,6 @@ def autoreload(path, extension, cmd):
 
 if __name__ == '__main__':
     path = './'
-    extension = 'py,mako'
+    extension = 'py,mako'    # 设置需要监控文件后缀类型
     cmd = """uwsgi --http :1200 --wsgi-file wsgi_test.py --honour-stdin -m -p 2 --http-keepalive --http-timeout 180"""
     autoreload(path, extension, cmd)
