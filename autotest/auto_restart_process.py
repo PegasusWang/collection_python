@@ -8,6 +8,7 @@
 # pip install pyinotify, colorama
 
 import os
+from pprint import pprint
 import signal
 import subprocess
 import time
@@ -15,7 +16,7 @@ import time
 import pyinotify
 from colorama import Fore, Style    # for color terminal print
 from pyinotify import log
-TERMINAL_COLOR = 'GREEN'    # 设置终端颜色
+TERMINAL_COLOR = 'RED'
 
 
 class ReloadNotifier(pyinotify.Notifier):
@@ -48,7 +49,7 @@ class OnChangeHandler(pyinotify.ProcessEvent):
 
     def my_init(self, cwd, extension, cmd):
         self.cwd = cwd
-        self.extensions = extension.split(',')
+        self.extensions = [ext for ext in extension.split(',') if ext]
         self.cmd = cmd
         self.process = None
         self._start_process()
@@ -75,7 +76,7 @@ class OnChangeHandler(pyinotify.ProcessEvent):
         if (any(event.pathname.endswith(ext) for ext in self.extensions) or
             "IN_ISDIR" in event.maskname):
             print(getattr(Fore, TERMINAL_COLOR) +
-                  event.pathname + ' has changed.\n' +
+                  event.pathname + ' ' + event.maskname + '\n' +
                   'restart process' +
                   time.strftime('%Y-%m-%d %A %X %Z',
                                 time.localtime(time.time())))
@@ -87,17 +88,20 @@ class OnChangeHandler(pyinotify.ProcessEvent):
     process_IN_MOVED_TO = process_IN_CLOSE_WRITE
 
 
-def autoreload(path, extension, cmd):
+def autoreload(path, extension, cmd, excl_list):
     wm = pyinotify.WatchManager()
     handler = OnChangeHandler(cwd=path, extension=extension, cmd=cmd)
     notifier = ReloadNotifier(wm, default_proc_fun=handler)
+    # https://github.com/seb-m/pyinotify/blob/master/python2/examples/exclude.py
+    excl = pyinotify.ExcludeFilter(excl_list)    # exclude file
 
     # 设置需要监控的事件
     mask = (pyinotify.IN_CLOSE_WRITE | pyinotify.IN_MOVED_FROM |
             pyinotify.IN_MOVED_TO | pyinotify.IN_CREATE | pyinotify.IN_DELETE |
             pyinotify.IN_DELETE_SELF | pyinotify.IN_MOVE_SELF |
             pyinotify.IN_MODIFY)
-    wm.add_watch(path, mask, rec=True, auto_add=True)
+    wm.add_watch(path, mask, rec=True, auto_add=True,
+                 exclude_filter=excl)
 
     print(getattr(Fore, TERMINAL_COLOR) +
           '==> Start monitoring %s (type c^c to exit) <==' % path +
@@ -107,7 +111,13 @@ def autoreload(path, extension, cmd):
 
 
 if __name__ == '__main__':
-    path = './'
-    extension = 'py,mako'    # 设置需要监控文件后缀类型
-    cmd = """uwsgi --http :1200 --wsgi-file wsgi_test.py --honour-stdin -m -p 2 --http-keepalive --http-timeout 180"""
-    autoreload(path, extension, cmd)
+    import sys
+    path = './webapp/'
+    excl_list = ['./webapp/node_modules/*', './webapp/assets/*']
+    extension = 'py,'
+    try:
+        port = sys.argv[1]
+    except IndexError:
+        port = '1200'
+    cmd = """python manage.py server"""
+    autoreload(path, extension, cmd, excl_list)

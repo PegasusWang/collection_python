@@ -5,7 +5,8 @@ import os
 import requests
 import requesocks
 
-url = 'https://api.ipify.org?format=json'
+#url = 'https://api.ipify.org?format=json'
+url = 'http://httpbin.org/ip'
 
 
 def getip_requests(url):
@@ -23,6 +24,15 @@ def getip_requesocks(url):
     print "(+) IP is: " + r.text.replace("\n", "")
 
 
+def tor_requests():
+    proxies = {
+        'http': 'socks5://127.0.0.1:9050',
+        'https': 'socks5://127.0.0.1:9050',
+    }
+    r = requests.get(url, proxies=proxies)
+    print r.text
+
+
 def main():
     print "Running tests..."
     getip_requests(url)
@@ -33,3 +43,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    #tor_requests()
