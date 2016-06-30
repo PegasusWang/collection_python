@@ -128,3 +128,16 @@ def lazy_property(fn):
 def my_ip():
     url = 'https://api.ipify.org?format=json'
     return requests.get(url).text
+
+
+if __name__ == '__main__':
+    import sys
+    from pprint import pprint
+    try:
+        curl_str = sys.argv[1]   # 用三引号括起来作为参数
+        url, headers_dict, data = parse_curl_str(curl_str)
+        print(url)
+        pprint(headers_dict)
+        print(data)
+    except IndexError:
+        exit(0)
