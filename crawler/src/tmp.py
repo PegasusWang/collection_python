@@ -9,9 +9,11 @@ http://stackoverflow.com/questions/23118249/whats-the-difference-between-request
 
 import json
 import re
-from functools import wraps
 import traceback
 import requests
+
+from functools import wraps
+from pprint import pprint
 
 
 def encode_to_dict(encoded_str):
@@ -149,22 +151,27 @@ def form_data_to_dict(s):
 
 def test():
     from urllib import urlencode
-    S = """curl 'https://graph.facebook.com/v2.5/act_858751837556226/customaudiences?access_token=EAAI4BG12pyIBABlBq3OOBjvOgpSH2euXyk37LpslZBXKUXXfwaLJ3EnJuxwyrZCFmWt1gZCplMjBFvo50wX9uHWIKjVkM5OTFmyfr6vA1QNGpRjkTjZAxY0jPwpAPXIQ9i6e4iXc2EtbL7Tg7qATJPGAVUxrOOTq5KYCUSw2MwZDZD' -H 'origin: https://business.facebook.com' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.4' -H 'user-agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'referer: https://business.facebook.com/' -H 'authority: graph.facebook.com' --data '__business_id=712764242174174&_reqName=path%3A%2Fact_858751837556226%2Fcustomaudiences&_reqSrc=adsDaoGraphDataMutator&accountId=858751837556226&creation_params=%7B%22combination_type%22%3A%22website%22%2C%22traffic_type%22%3A4%7D&description=&endpoint=%2Fact_858751837556226%2Fcustomaudiences&exclusions=%5B%7B%22type%22%3A%22website%22%2C%22retention_days%22%3A30%2C%22rule%22%3A%22%7B%5C%22and%5C%22%3A%5B%7B%5C%22or%5C%22%3A%5B%7B%5C%22url%5C%22%3A%7B%5C%22i_contains%5C%22%3A%5C%22%5C%22%7D%7D%5D%7D%5D%7D%22%2C%22rule_aggregation%22%3Anull%7D%5D&inclusions=%5B%7B%22type%22%3A%22website%22%2C%22retention_days%22%3A180%2C%22rule%22%3A%22%7B%5C%22and%5C%22%3A%5B%7B%5C%22or%5C%22%3A%5B%7B%5C%22url%5C%22%3A%7B%5C%22i_contains%5C%22%3A%5C%22%5C%22%7D%7D%5D%7D%5D%7D%22%2C%22rule_aggregation%22%3Anull%7D%5D&locale=zh_CN&method=post&name=tt&pixel_id=1792170334346121&prefill=true&pretty=0&subtype=combination&suppress_http_code=1' --compressed"""
+    #S = """curl 'https://graph.facebook.com/v2.6/act_858751837556226/customaudiences?access_token=EAAI4BG12pyIBAF58zmAHxtmL3iBMY8RCiGgdeMiLBedZC6X6YqZBDdHc0zcEmPT9dPtq1apZC6TgK5m9iENrJKakdW7myLNki6uYhp78PpmZATL6fxMt38QqnUoTV7nrysZBleelH4zV00ITame85PuwoHqQTQ87NVC8scx5kEAZDZD' -H 'origin: https://business.facebook.com' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.4' -H 'user-agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'referer: https://business.facebook.com/' -H 'authority: graph.facebook.com' --data '__business_id=712764242174174&_reqName=path%3A%2Fact_858751837556226%2Fcustomaudiences&_reqSrc=adsDaoGraphDataMutator&accountId=858751837556226&creation_params=%7B%22combination_type%22%3A%22website%22%2C%22traffic_type%22%3A3%7D&description=&endpoint=%2Fact_858751837556226%2Fcustomaudiences&exclusions=%5B%7B%22id%22%3Anull%2C%22type%22%3A%22website%22%2C%22retention_days%22%3A30%2C%22rule%22%3A%22%7B%5C%22and%5C%22%3A%5B%7B%5C%22or%5C%22%3A%5B%7B%5C%22url%5C%22%3A%7B%5C%22i_contains%5C%22%3A%5C%22shoe%5C%22%7D%7D%5D%7D%5D%7D%22%2C%22rule_aggregation%22%3Anull%7D%5D&inclusions=%5B%7B%22id%22%3Anull%2C%22type%22%3A%22website%22%2C%22retention_days%22%3A30%2C%22rule%22%3A%22%7B%5C%22and%5C%22%3A%5B%7B%5C%22or%5C%22%3A%5B%7B%5C%22url%5C%22%3A%7B%5C%22i_contains%5C%22%3A%5C%22show%5C%22%7D%7D%5D%7D%5D%7D%22%2C%22rule_aggregation%22%3Anull%7D%5D&locale=zh_CN&method=post&name=759331&pixel_id=1792170334346121&prefill=true&pretty=0&subtype=combination&suppress_http_code=1' --compressed"""
+    S = """curl 'https://graph.facebook.com/v2.5/act_858751837556226/customaudiences?access_token=EAAI4BG12pyIBAF58zmAHxtmL3iBMY8RCiGgdeMiLBedZC6X6YqZBDdHc0zcEmPT9dPtq1apZC6TgK5m9iENrJKakdW7myLNki6uYhp78PpmZATL6fxMt38QqnUoTV7nrysZBleelH4zV00ITame85PuwoHqQTQ87NVC8scx5kEAZDZD' -H 'origin: https://business.facebook.com' -H 'accept-encoding: gzip, deflate, br' -H 'accept-language: zh-CN,zh;q=0.8,en-US;q=0.6,en;q=0.4' -H 'user-agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.75 Safari/537.36' -H 'content-type: application/x-www-form-urlencoded' -H 'accept: */*' -H 'referer: https://business.facebook.com/' -H 'authority: graph.facebook.com' --data '__business_id=712764242174174&_reqName=path%3A%2Fact_858751837556226%2Fcustomaudiences&_reqSrc=adsDaoGraphDataMutator&accountId=858751837556226&creation_params=%7B%22combination_type%22%3A%22website%22%2C%22traffic_type%22%3A3%7D&description=&endpoint=%2Fact_858751837556226%2Fcustomaudiences&exclusions=%5B%7B%22id%22%3Anull%2C%22type%22%3A%22website%22%2C%22retention_days%22%3A30%2C%22rule%22%3A%22%7B%5C%22and%5C%22%3A%5B%7B%5C%22or%5C%22%3A%5B%7B%5C%22url%5C%22%3A%7B%5C%22i_contains%5C%22%3A%5C%22shoe%5C%22%7D%7D%5D%7D%5D%7D%22%2C%22rule_aggregation%22%3Anull%7D%5D&inclusions=%5B%7B%22id%22%3Anull%2C%22type%22%3A%22website%22%2C%22retention_days%22%3A30%2C%22rule%22%3A%22%7B%5C%22and%5C%22%3A%5B%7B%5C%22or%5C%22%3A%5B%7B%5C%22url%5C%22%3A%7B%5C%22i_contains%5C%22%3A%5C%22show%5C%22%7D%7D%5D%7D%5D%7D%22%2C%22rule_aggregation%22%3Anull%7D%5D&locale=zh_CN&method=post&name=759331&pixel_id=1792170334346121&prefill=true&pretty=0&subtype=combination&suppress_http_code=1' --compressed"""
+
     url, headers, data = parse_curl_str(S)
+    pprint(url)
+    pprint(headers)
+    pprint(data)
 
     params = r"""
     __business_id:712764242174174
     _reqName:path:/act_858751837556226/customaudiences
     _reqSrc:adsDaoGraphDataMutator
     accountId:858751837556226
-    creation_params:{"combination_type":"website","traffic_type":4}
+    creation_params:{"combination_type":"website","traffic_type":3}
     description:
     endpoint:/act_858751837556226/customaudiences
-    exclusions:[{"type":"website","retention_days":30,"rule":"{\"and\":[{\"or\":[{\"url\":{\"i_contains\":\"\"}}]}]}","rule_aggregation":null}]
-    inclusions:[{"type":"website","retention_days":180,"rule":"{\"and\":[{\"or\":[{\"url\":{\"i_contains\":\"\"}}]}]}","rule_aggregation":null}]
+    exclusions:[{"id":null,"type":"website","retention_days":30,"rule":"{\"and\":[{\"or\":[{\"url\":{\"i_contains\":\"shoe\"}}]}]}","rule_aggregation":null}]
+    inclusions:[{"id":null,"type":"website","retention_days":30,"rule":"{\"and\":[{\"or\":[{\"url\":{\"i_contains\":\"show\"}}]}]}","rule_aggregation":null}]
     locale:zh_CN
     method:post
-    name:741747
+    name:759331
     pixel_id:1792170334346121
     prefill:true
     pretty:0
@@ -173,10 +180,9 @@ def test():
     """
     form_data_dict = form_data_to_dict(params)
     form_str = urlencode(form_data_dict)
-    print(form_data_dict)
-    print(form_str)
-    print(data)
-    r = requests.post(url, headers=headers, data=form_str)
+    #r = requests.post(url, headers=headers, data=form_str)
+    url = 'http://httpbin.org/post'
+    r = requests.post(url, headers=headers, data=form_data_dict)
     print(r.content)
 
 
