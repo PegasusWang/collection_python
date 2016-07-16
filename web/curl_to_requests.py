@@ -13,12 +13,12 @@ import re
 import requests
 # http://python-future.org/compatible_idioms.html
 try:   # py3
-    from urllib.parse import urlparse, urlencode
+    from urllib.parse import urlparse, urlencode, unquote
     from urllib.request import urlopen, Request
     from urllib.error import HTTPError
 except ImportError:    # py2
     from urlparse import urlparse
-    from urllib import urlencode
+    from urllib import urlencode, unquote
     from urllib2 import urlopen, Request, HTTPError
 
 
@@ -48,10 +48,11 @@ def encode_to_dict(encoded_str):
     return d
 
 
-def parse_curl_str(s):
+def parse_curl_str(s, data_as_dict=False):
     """Convert chrome curl string to url, headers dict and data string
     此函数用来作为单元测试中提交按钮的操作
     :param s: 右键chrome请求点击copy as curl得到的字符串。
+    :param data_as_dict: if True, return data as dict
     """
     s = s.strip('\n').strip()
     pat = re.compile("'(.*?)'")
@@ -76,7 +77,15 @@ def parse_curl_str(s):
         elif arg.startswith('--data'):
             data_str = string
 
-    return url, headers_dict, data_str
+    if data_as_dict:
+        data_dict = {}
+        pair_list = unquote(data_str).split('&')
+        for pair in pair_list:
+            k, v = pair.split('=')
+            data_dict[k] = v
+        return url, headers_dict, data_dict
+    else:
+        return url, headers_dict, data_str
 
 
 def request_curl_str(s):
