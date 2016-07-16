@@ -126,9 +126,25 @@ def lazy_property(fn):
 
 
 def my_ip():
-    url = 'https://api.ipify.org?format=json'
+    # url = 'https://api.ipify.org?format=json'
+    url = 'http://httpbin.org/ip'
     return requests.get(url).text
 
+
+def form_data_to_dict(s):
+    """form_data_to_dict s是从chrome里边复制得到的form-data表单里的字符串，
+    注意*必须*用原始字符串r""
+
+    :param s: form-data string
+    """
+    arg_list = [line.strip() for line in s.split('\n')]
+    d = {}
+    for i in arg_list:
+        if i:
+            k = i.split(':', 1)[0].strip()
+            v = ''.join(i.split(':', 1)[1:]).strip()
+            d[k] = v
+    return d
 
 if __name__ == '__main__':
     import sys

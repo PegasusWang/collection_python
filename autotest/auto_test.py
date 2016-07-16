@@ -94,6 +94,7 @@ def assert_request_success(curl_str):
     response = request_curl_str(curl_str)
     if response.status_code != 200:
         pprint(parse_curl_str(curl_str))
+    import ipdb; ipdb.set_trace()  # BREAKPOINT
     assert response.status_code == 200
 
     html = response.text

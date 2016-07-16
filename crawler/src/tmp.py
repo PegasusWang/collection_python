@@ -133,9 +133,10 @@ def my_ip():
 
 
 def form_data_to_dict(s):
-    """form_data_to_dict
+    """form_data_to_dict s是从chrome里边复制得到的form-data表单里的字符串，
+    注意*必须*用原始字符串r""
 
-    :param s:
+    :param s: form-data string
     """
     arg_list = [line.strip() for line in s.split('\n')]
     d = {}
@@ -173,9 +174,6 @@ def test():
     """
     form_data_dict = form_data_to_dict(params)
     form_str = urlencode(form_data_dict)
-    print(form_data_dict)
-    print(form_str)
-    print(data)
     r = requests.post(url, headers=headers, data=form_str)
     print(r.content)
 

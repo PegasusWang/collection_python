@@ -1,0 +1,71 @@
+input {
+    padding: 10px;
+    line-height: 18px;
+    border: 1px solid #c1c1c1;
+    font-size: 14px;
+}
+*:focus {
+    outline: -webkit-focus-ring-color auto 0;
+    outline-offset: 0;
+
+}
+
+input:hover,
+textarea:hover,
+.ui-input-hover {
+    border: 1px #727272 solid;
+    border-top-color: #808080;
+}
+
+.ui-button{
+    outline: none;
+    box-shadow: none;
+}
+textarea {
+    box-shadow:1px 1px 2px #eee inset;
+    line-height: 15px;
+    border: 1px solid #c1c1c1;
+    padding: 7px;
+    overflow: auto;
+    font-size: 14px;
+}
+
+.ui-input[disabled],
+.ui-textarea[disabled] {
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+}
+
+.ui-input:disabled,
+.ui-textarea:disabled {
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+}
+
+.placeholder {
+    color: #ccc;
+}
+
+.ui-input-checkcode {
+    width: 100px;
+    height: 24px;
+    line-height: 28px;
+    margin: 0;
+    padding: 2px 5px;
+}
+
+.ui-form-item-hover .ui-input,
+.ui-form-item-hover .ui-textarea {
+    border:1px #727272 solid;
+}
+
+.ui-form-item-focus .ui-input,
+.ui-form-item-focus .ui-textarea {
+    border: 1px #07f solid;
+    box-shadow: 0 0 3px #8cddff;
+}
+
+.ui-form-item-focus .ui-form-explain,
+.ui-form-item-hover .ui-form-explain {
+    color:#333;
+}
