@@ -18,13 +18,14 @@ def logged(class_):
 @logged
 class AsyncSpider(object):
     """A simple class of asynchronous spider."""
-    def __init__(self, urls, concurrency=10, results=None, **kwargs):
+    def __init__(self, urls, concurrency=10, results=None, sleep=None, **kwargs):
         super(AsyncSpider, self).__init__(**kwargs)
 
         self.concurrency = concurrency
         self._q = queues.Queue()
         self._fetching = set()
         self._fetched = set()
+        self.sleep = sleep
         if results is None:
             self.results = []
         for url in urls:
@@ -54,7 +55,8 @@ class AsyncSpider(object):
 
     @gen.coroutine
     def get_page(self, url):
-        # yield gen.sleep(10)    # sleep when need
+        if self.sleep is not None:
+            yield gen.sleep(self.sleep)    # sleep when need
         try:
             response = yield self.fetch(url)
             self.logger.debug('######fetched %s' % url)
