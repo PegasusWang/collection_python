@@ -1,0 +1,80 @@
+.tip-com a{
+    color:#ff0;
+
+}
+.tip-com {
+    z-index:1000;
+    text-align:left;
+    padding:14px 20px;
+    min-width:50px;
+    color:#fff;
+    background-color:#000;
+    /**
+     *      * - If you set a background-image, border/padding/background-color will be ingnored.
+     *           *   You can set any padding to .tip-inner instead if you need.
+     *                * - If you want a tiled background-image and border/padding for the tip,
+     *                     *   set the background-image to .tip-inner instead.
+     *                          */
+
+}
+.tip-com .tip-inner {
+    font-size: 14px;
+    color: #fff;
+    line-height: 19px;
+}
+
+/* Configure an arrow image - the script will automatically position it on the correct side of the tip */
+.tip-com .tip-arrow-top {
+    margin-top:-6px;
+    margin-left:-5px; /* approx. half the width to center it */
+    top:0;
+    left:50%;
+    width:9px;
+    height:6px;
+
+}
+.tip-com .tip-arrow-bottom {
+    margin-top:0;
+    margin-left:-5px; /* approx. half the width to center it */
+    top:100%;
+    left:50%;
+    width:9px;
+    height:6px;
+
+}
+.tip-com .tip-arrow-left {
+    margin-top:-7px; /* approx. half the height to center it */
+    top:50%;
+    left:0;
+    border: 6px solid transparent;
+    border-right-color: #000;
+    width: 0;
+    height: 0;
+    margin-left: -12px;
+
+}
+
+div.tip-com div.tip-arrow.tip-arrow-left{
+    visibility: visible;
+
+}
+
+div.tip-com div.tip-arrow.tip-arrow-left,
+div.tip-com div.tip-arrow.tip-arrow-right,
+div.tip-com div.tip-arrow.tip-arrow-top,
+div.tip-com div.tip-arrow.tip-arrow-bottom{
+    visibility: visible;
+}
+
+.tip-com .tip-arrow-right {
+    margin-top:-7px; /* approx. half the height to center it */
+    margin-left:0;
+    top:50%;
+    left:100%;
+    border: 6px solid transparent;
+    border-left-color: #000;
+    width: 0;
+    height: 0;
+    margin-right: -13px;
+}
+

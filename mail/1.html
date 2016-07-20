@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="keywords" content="huaoguo,胡傲果,果果,IT,hacker,web" />
+  <meta name="author" content="huaoguo" />
+    <meta name="description" content="果果的个人博客-记录生活感悟和IT技术" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <link rel="alternate" type="application/rss+xml" title="果果哒的博客" href="/feed.xml">
+    <title>用Postfix搭建自己的邮件服务器（一） - 果果哒的博客</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css" />
+
+  <link rel="stylesheet" href="/css/highlight/railscasts.css" />
+</head>
+<body>
+    <div class="blog-container">
+        <div class='sidebar'>
+            <ul>
+                <li id='index'><a href='/'>首页</a></li>
+                <li id='life'><a href='/life'>生活</a></li>
+                <li id='work'><a href='/work'>工作</a></li>
+                <li id='thought'><a href='/thought'>想法</a></li>
+        <li id='section'></li>
+            </ul>
+        </div>
+        <div id='content' class='content'>
+            <div class="post">
+  <h1 class='subject'>
+    <a href='/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A81.html'>用Postfix搭建自己的邮件服务器（一）</a>
+  </h1>
+  <div class="post-content">
+  <p>OS: Ubuntu 14.04 64位</p>
+
+<p>为了避免频繁的输入sudo, 首先执行</p>
+
+<pre><code>sudo -i
+</code></pre>
+
+<p>输入密码，成功后后面的$号就变成了#号。</p>
+
+<h2>安装postfix</h2>
+
+<pre><code>apt-get install postfix
+</code></pre>
+
+<p>安装过程中会有界面要选择配置类型，选Internet Site即可:</p>
+
+<p><img data-src='/images/20150113/1.png' class='lazyload' /></p>
+
+<p><code>System mail name</code> 或者 <code>domain name</code> 里填你的域名:</p>
+
+<p>假设我的邮箱是用的子域名：<code>mail.example.com</code>（因为我的主域名<code>example.com</code>已经被注册为QQ企业邮箱让公司内部使用，用<code>mail.example.com</code>域名的邮箱来做系统对外的通知邮件），这里就填<code>mail.example.com</code>。</p>
+
+<p><img data-src='/images/20150113/2.png' class='lazyload' /></p>
+
+<p>安装完成后，打开<code>/etc/postfix/main.cf</code>，这是postfix最重要的配置文件，解释一下目前最重要的几个参数:</p>
+
+<pre><code>myorigin = /etc/mailname
+</code></pre>
+
+<p>这里将<code>myorigin</code>指定到一个文件，这个文件的第一行会作为<code>myorigin</code>的值，如果没错这个<code>/etc/mailname</code>有且只有一行，即刚才安装postfix时配置的值<code>mail.example.com</code>。</p>
+
+<pre><code>myhostname = mail.example.com
+mydestination = mail.example.com, 10-10-54-87, localhost.localdomain, localhost
+</code></pre>
+
+<p>注意以上三行配置应该默认就是这样，不用修改的。这三行配置不是在一起的，也没有必要放在一起。<code>mydestination</code>告诉postfix所有发往这些地址的邮件都存储到本地邮箱。</p>
+
+<pre><code>smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+smtpd_recipient_restrictions = permit_mynetworks permit_sasl_authenticated reject_unauth_destination
+</code></pre>
+
+<p>以上配置告诉postfix如果是本地局域网发邮件则允许，否则需要先登录才能发邮件。这个配置要根据实际情况做修改。比如假设局域网有很多不能让你放心的电脑，可以修改</p>
+
+<pre><code>mynetworks = 127.0.0.1
+</code></pre>
+
+<p>这样只有本机才有不登录发邮件的特权。</p>
+
+<p>暂时用不着tls，注释掉关于tls的配置:</p>
+
+<pre><code># TLS parameters
+# smtpd_tls_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+# smtpd_tls_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+# smtpd_use_tls=yes
+# smtpd_tls_session_cache_database = btree:${data_directory}/smtpd_scache
+# smtp_tls_session_cache_database = btree:${data_directory}/smtp_scache
+</code></pre>
+
+<p>配置好这些，再只需要配置好域名的MX记录，就可以发邮件了。每次修改完postfix配置文件后记得</p>
+
+<pre><code>service postfix restart
+</code></pre>
+
+<h2>配置域名MX记录</h2>
+
+<p>域名记录解析里要加两条记录，一条A记录，指向邮件服务器的ip，一条MX记录，指向邮箱域名。如图：</p>
+
+<p><img data-src='/images/20150113/3.png' class='lazyload' /></p>
+
+<p>配置完等一会后可以通过nslookup检测是否已经生效</p>
+
+<pre><code>nslookup -q=a mail.example.com
+</code></pre>
+
+<p>如果响应里的Address是你配置的ip则表示已生效。同样</p>
+
+<pre><code>nslookup -q=mx mail.example.com
+</code></pre>
+
+<p>返回的结果里的<code>mail exchanger</code>应该等于<code>mail.example.com</code></p>
+
+<h2>用telnet测试发信</h2>
+
+<p>这样的配置已经可以发信了！但是因为还没有配置spf和dkim，发出去的信很可能会被当做垃圾邮件，这个后面会讲到，现在为了测试配置是否成功，先不管了。另外，因为没有配置smtp验证，只能匿名发信。(&gt;号打头的表示是我输入的，但是并不需要输入&gt;号，这样是为了区分哪些是我输入的)</p>
+
+<pre><code>$&gt; telnet localhost 25
+Trying ::1...
+Connected to localhost.
+Escape character is &#39;^]&#39;.
+220 mail.example.com ESMTP Postfix
+&gt; HELO mail.example.com
+250 mail.example.com
+&gt; mail from: admin@mail.example.com
+250 2.1.0 Ok
+&gt; rcpt to: your@email.address
+250 2.1.5 Ok
+&gt; data
+354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;
+&gt; subject: Test
+&gt;
+&gt; This is a test mail
+&gt; .
+&gt;
+250 2.0.0 Ok: queued as B9AD4204C7
+&gt; quit
+221 2.0.0 Bye
+</code></pre>
+
+<p>注意邮件格式，第一行必须以<code>subject:</code>打头，后面跟邮件标题，然后空一行写邮件正文，最后以<code>换行.换行</code>表示写完了。</p>
+
+<p>现在去邮箱收邮件吧，注意检查垃圾箱。</p>
+
+<p>到这里，postfix已经可以做基本的发信动作了。但是这还不够，因为postfix被配置为远程访问时需要登陆才能发信，当你在一台非局域网的机器，所以接下来需要配置smtp验证。</p>
+
+    <p class="date" style="text-align: right;">13 Jan 2015</p>
+  </div>
+
+  <div class='foot-nav'>
+    <p>继续浏览:</p>
+
+    <div style="float:left;">
+    <a href="/work/2014/12/22/%E6%8A%98%E8%85%BElinuxbrew%E5%92%8Cpm2.html">&lt;&lt; 折腾linuxbrew和pm2</a>
+    </div>
+
+
+    <div style="float:right;">
+    <a href="/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A82.html">用postfix搭建自己的邮件服务器（二） &gt;&gt;</a>
+    </div>
+
+  </div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- jquery -->
+    <script src="/js/jquery.min.js"></script>
+
+  <script src="/js/common.js"></script>
+
+  <script src="/js/highlight.pack.js"></script>
+
+  <script src="/js/lazysizes.min.js" async=""></script>
+
+  <script>
+    window.category = 'work';
+  </script>
+</body>
+</html>
+

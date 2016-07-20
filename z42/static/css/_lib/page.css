@@ -1,0 +1,34 @@
+
+.page{
+font-size:15px;
+color: #444;
+line-height:150%;
+text-align:left;
+}
+.page a,.page span{
+padding:0 8px 2px;
+line-height:27px;
+/*margin:3px 10px;*/
+margin:1px 3px;
+text-decoration:none;
+display:inline-block;
+color:#444;
+}
+.page a:hover{
+padding-bottom:2px;
+border-bottom:2px solid #d20;
+color:#d20;
+}
+.page span{
+color:#ccc;
+}
+.page .now{
+color:#000;
+border-bottom:2px solid #01A;
+}
+.page .pgt{
+padding-right:0;
+}
+.page .plt{
+padding-left:0;
+}

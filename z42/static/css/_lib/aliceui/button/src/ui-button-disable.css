@@ -1,0 +1,9 @@
+
+.ui-button-disable,
+.ui-button-disable:active,
+.ui-button-disable:active,
+.ui-button-disable:hover {
+    color:#999;
+    border: none;
+    background: #eee;
+}

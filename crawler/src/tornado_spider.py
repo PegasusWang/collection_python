@@ -18,21 +18,35 @@ def logged(class_):
 @logged
 class AsyncSpider(object):
     """A simple class of asynchronous spider."""
+<<<<<<< HEAD
     def __init__(self, urls, concurrency=10, results=None, sleep=None, **kwargs):
+=======
+    def __init__(self, urls=None, concurrency=10, results=None, **kwargs):
+>>>>>>> b3d1ca232e282537709e3244149fb770dd7e2e0f
         super(AsyncSpider, self).__init__(**kwargs)
 
         self.concurrency = concurrency
         self._q = queues.Queue()
         self._fetching = set()
         self._fetched = set()
+<<<<<<< HEAD
         self.sleep = sleep
+=======
+        self.urls = urls or []
+>>>>>>> b3d1ca232e282537709e3244149fb770dd7e2e0f
         if results is None:
             self.results = []
+        if not self.urls:
+            self.init_urls()
         for url in urls:
             self._q.put(url)
         httpclient.AsyncHTTPClient.configure(
             "tornado.curl_httpclient.CurlAsyncHTTPClient"
         )
+
+    def init_urls(self):
+        """init_urls generate urls to self.urls"""
+        raise NotImplementedError
 
     def fetch(self, url, **kwargs):
         fetch = getattr(httpclient.AsyncHTTPClient(), 'fetch')

@@ -1,0 +1,58 @@
+.ui-button-lpblue,
+.ui-button-mpblue,
+.ui-button-spblue {
+    border:none;
+    background: #e2e9f7;
+    color: #08c;
+}
+
+.ui-button-lpblue:hover,
+.ui-button-mpblue:hover,
+.ui-button-spblue:hover {
+    border:none;
+    background-color: #dfdffd;
+}
+
+.ui-button-lpblue:active,
+.ui-button-mpblue:active,
+.ui-button-spblue:active{
+    border:none;
+    background-color:#99f;
+    color:#FFF;
+}
+
+.ui-button-lpblue {
+    line-height:33px;
+    height:46px;
+    min-width:130px;
+    font-weight:bold;
+    font-size:16px;
+    padding: 5px 41px;
+}
+
+.ui-button-mpblue {
+    padding: 7px 40px;
+    vertical-align: baseline;
+}
+
+.ui-button-spblue {
+    padding: 0 12px;
+    line-height:24px;
+    height:24px;
+    font-size:12px;
+}
+
+a.ui-button-lpblue {
+    line-height:30px;
+    height:30px;
+}
+
+a.ui-button-mpblue {
+    line-height:26px;
+    height:26px;
+}
+
+a.ui-button-spblue {
+    line-height:22px;
+    height:22px;
+}

@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="keywords" content="huaoguo,胡傲果,果果,IT,hacker,web" />
+  <meta name="author" content="huaoguo" />
+    <meta name="description" content="果果的个人博客-记录生活感悟和IT技术" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <link rel="alternate" type="application/rss+xml" title="果果哒的博客" href="/feed.xml">
+    <title>用postfix搭建自己的邮件服务器（三） - 果果哒的博客</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css" />
+
+  <link rel="stylesheet" href="/css/highlight/railscasts.css" />
+</head>
+<body>
+    <div class="blog-container">
+        <div class='sidebar'>
+            <ul>
+                <li id='index'><a href='/'>首页</a></li>
+                <li id='life'><a href='/life'>生活</a></li>
+                <li id='work'><a href='/work'>工作</a></li>
+                <li id='thought'><a href='/thought'>想法</a></li>
+        <li id='section'></li>
+            </ul>
+        </div>
+        <div id='content' class='content'>
+            <div class="post">
+  <h1 class='subject'>
+    <a href='/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A83.html'>用postfix搭建自己的邮件服务器（三）</a>
+  </h1>
+  <div class="post-content">
+  <h2>配置SPF</h2>
+
+<p>什么是SPF，先看看SPF长什么样：</p>
+
+<pre><code>v=spf1 ip4:xxx.xx.xxx.xx -all
+</code></pre>
+
+<p>这条记录配置在域名解析里，就是说我这个域名的邮件全都是来自这个服务器发送的，其他ip发出来的都是仿冒的。通过设置这条记录，可以很大程度上提高域名的信誉。在域名解析里添加一条TXT记录即可：</p>
+
+<p><img data-src='/images/20150113/4.png' class='lazyload' /></p>
+
+<p>配置完成后稍等一会，用</p>
+
+<pre class='bash'>
+nslookup -q=txt mail.example.com
+</pre>
+
+<p>来测试，返回结果里包含设置的psf结果就表示已经生效。</p>
+
+<p>可以尝试给gmail发一封邮件，收到邮件后show origin，可以看到<code>spf: pass</code></p>
+
+<h2>配置DKIM</h2>
+
+<pre class='bash'>
+apt-get install opendkim opendkim-tools
+</pre>
+
+<p>打开<code>/etc/opendkim.conf</code>，加上以下代码:</p>
+
+<pre><code>Domain          mail.example.com
+KeyFile         /etc/postfix/dkim.key
+Selector        default
+SOCKET          inet:8891@localhost
+</code></pre>
+
+<p>打开<code>/etc/default/opendkim</code>，加上:</p>
+
+<pre><code>SOCKET=&quot;inet:8891@localhost&quot;
+</code></pre>
+
+<p>打开<code>/etc/postfix/main.cf</code>，加上:</p>
+
+<pre><code># DKIM
+milter_default_action = accept
+milter_protocol = 2
+smtpd_milters = inet:localhost:8891
+non_smtpd_milters = inet:localhost:8891
+</code></pre>
+
+<h3>生成DKIM Key</h3>
+
+<pre><code>opendkim-genkey -t -d mail.example.com
+</code></pre>
+
+<p>这个命令会在当前目录下生成<code>default.private</code>和<code>default.txt</code>，将<code>default.private</code>移动到我们配置的路径:</p>
+
+<pre><code>mv default.private /etc/postfix/dkim.key
+</code></pre>
+
+<p>启动opendkim</p>
+
+<pre><code>service opendkim start
+service postfix restart
+</code></pre>
+
+<h3>设置域名解析</h3>
+
+<pre><code>cat mail.txt
+</code></pre>
+
+<p>你将会看到类似：</p>
+
+<pre><code>default._domainkey  IN  TXT ( &quot;v=DKIM1; k=rsa; &quot;
+  &quot;p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1tUwIQPaFVDGYFIe18HTRYYW5OQAS7LYLD1atDW1uphvs19yk7dYp30jI+CI/xNeCje4en0umd5eVTaYxQV2h6va0lqBtD6xCYqvUbVnjAcf+6iyyiQzzN6rOYcVsBmsX/0IjxDBqQDYD5L9JDXiwkI6pPiOMKAwqtUXoFm6sCQIDAQAB&quot; )  ; ----- DKIM key default for example.com
+</code></pre>
+
+<p>将从<code>v=DKIM1</code>开始的到最后一个双引号之前的字符串拷贝出来，并去掉其中<code>k=rsa;</code>之后的双引号和双引号之间的空白内容，处理后如下</p>
+
+<pre><code>v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC1tUwIQPaFVDGYFIe18HTRYYW5OQAS7LYLD1atDW1uphvs19yk7dYp30jI+CI/xNeCje4en0umd5eVTaYxQV2h6va0lqBtD6xCYqvUbVnjAcf+6iyyiQzzN6rOYcVsBmsX/0IjxDBqQDYD5L9JDXiwkI6pPiOMKAwqtUXoFm6sCQIDAQAB
+</code></pre>
+
+<p>然后新建一个DNS记录，类型为TXT，主机记录值为<code>default._domainkey.mail</code>，记录值为刚才处理后的长串文本。</p>
+
+<h3>测试DKIM</h3>
+
+<p>你可以用你配置好的邮箱给你的gmail邮箱发一封信，然后看是否有signed-by标记以及其值是否为mail.example.com。可以参考这个：<a href="http://www.appmaildev.com/en/dkim/">http://www.appmaildev.com/en/dkim/</a></p>
+
+<h2>全面测试</h2>
+
+<p>有一个网站<a href="http://www.mail-tester.com/">http://www.mail-tester.com/</a>，可以很方便的、全方位的检查你的邮件有哪些问题，并给出建议。按照建议一条条改，争取拿到10分，保证更大的概率不被当做垃圾邮件。</p>
+
+<p>但是这些配置做得再好，如果发送的内容确实是垃圾邮件，也是于事无补的。关键是内容，这些技术只是铺垫。怎么发邮件可以参考<a href="http://www.zhihu.com/question/19574247">http://www.zhihu.com/question/19574247</a>，讲得已经很详细了！</p>
+
+    <p class="date" style="text-align: right;">13 Jan 2015</p>
+  </div>
+
+  <div class='foot-nav'>
+    <p>继续浏览:</p>
+
+    <div style="float:left;">
+    <a href="/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A82.html">&lt;&lt; 用postfix搭建自己的邮件服务器（二）</a>
+    </div>
+
+
+    <div style="float:right;">
+    <a href="/thought/2015/03/08/%E5%8D%83%E9%87%91%E5%A5%B3%E8%B4%BC%E5%88%B0%E5%BA%95%E5%9C%A8%E8%AE%B2%E4%BB%80%E4%B9%88.html">千金女贼到底在讲什么 &gt;&gt;</a>
+    </div>
+
+  </div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- jquery -->
+    <script src="/js/jquery.min.js"></script>
+
+  <script src="/js/common.js"></script>
+
+  <script src="/js/highlight.pack.js"></script>
+
+  <script src="/js/lazysizes.min.js" async=""></script>
+
+  <script>
+    window.category = 'work';
+  </script>
+</body>
+</html>
+

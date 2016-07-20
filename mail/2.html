@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="keywords" content="huaoguo,胡傲果,果果,IT,hacker,web" />
+  <meta name="author" content="huaoguo" />
+    <meta name="description" content="果果的个人博客-记录生活感悟和IT技术" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+    <link rel="alternate" type="application/rss+xml" title="果果哒的博客" href="/feed.xml">
+    <title>用postfix搭建自己的邮件服务器（二） - 果果哒的博客</title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css" />
+
+  <link rel="stylesheet" href="/css/highlight/railscasts.css" />
+</head>
+<body>
+    <div class="blog-container">
+        <div class='sidebar'>
+            <ul>
+                <li id='index'><a href='/'>首页</a></li>
+                <li id='life'><a href='/life'>生活</a></li>
+                <li id='work'><a href='/work'>工作</a></li>
+                <li id='thought'><a href='/thought'>想法</a></li>
+        <li id='section'></li>
+            </ul>
+        </div>
+        <div id='content' class='content'>
+            <div class="post">
+  <h1 class='subject'>
+    <a href='/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A82.html'>用postfix搭建自己的邮件服务器（二）</a>
+  </h1>
+  <div class="post-content">
+  <p>之前已经配置好了postfix，这里讲怎么配置使Postfix启用smtp验证。</p>
+
+<h2>安装dovecot</h2>
+
+<pre><code>apt-get install dovecot-core
+</code></pre>
+
+<p>打开<code>/etc/dovecot/conf.d/10-auth.conf</code>，找到然后修改下面这行代码：</p>
+
+<pre><code>auth_mechanisms = plain login
+</code></pre>
+
+<p>打开<code>/etc/dovecot/conf.d/10-master.conf</code>，找到service auth并修改其中的内容：</p>
+
+<pre><code>service auth {
+
+    unix_listener /var/spool/postfix/private/auth {
+        mode = 0600
+        group = postfix
+        user = postfix
+    }
+
+}
+</code></pre>
+
+<p>改完后重启dovecot:</p>
+
+<pre><code>service dovecot restart
+</code></pre>
+
+<p>检查<code>private/auth</code>是否被创建:</p>
+
+<pre><code>ls /var/spool/postfix/private/auth
+</code></pre>
+
+<p>然后修改<code>/etc/postfix/main.cf</code>:</p>
+
+<pre><code>smtpd_sasl_auth_enable = yes
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+broken_sasl_auth_clients = yes
+</code></pre>
+
+<p>以上几行配置告诉Postfix启用sasl验证并用dovecot来做验证，<code>broken_sasl_auth_clients</code>是为了保证兼容性。</p>
+
+<h2>添加用户</h2>
+
+<p>以上已经完成了smtp验证的配置，当然这里只是简单的使用了系统用户，而非虚拟用户，对于简单的情况，系统用户已经够用了。简单添加一个用户来测试：</p>
+
+<pre><code>useradd -s /usr/sbin/nologin admin -p admin
+</code></pre>
+
+<p>以上创建了一个账号密码均为admin的用户，而且出于安全考虑这个用户不能登录到这台服务器。接着在控制台输入:</p>
+
+<pre><code>perl -MMIME::Base64 -e &#39;print encode_base64(&quot;admin&quot;);&#39;
+YWRtaW4=
+</code></pre>
+
+<p>返回的这一段文本是admin经base64加密后的样子，这在后面的登录测试里会用到。</p>
+
+<h2>用telnet测试配置是否成功</h2>
+
+<pre><code>$&gt; telnet localhost 25
+Trying ::1...
+Connected to localhost.
+Escape character is &#39;^]&#39;.
+220 mail.example.com ESMTP Postfix
+&gt; EHLO  mail.example.com
+250-m mail.example.com
+250-PIPELINING
+250-SIZE 10240000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-AUTH=PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250 DSN
+</code></pre>
+
+<p>注意之前我们测试是用的HELO命令，现在因为要做登录操作，所以要用EHLO命令，后者是对前者的扩展（加入了身份认证）。</p>
+
+<p>当看到250-AUTH PLAIN LOGIN即表示之前的配置生效了。</p>
+
+<pre><code>&gt; auth login
+334 VXNlcm5hbWU6 # Username:
+&gt; YWRtaW4=
+334 UGFzc3dvcmQ6 # Password:
+&gt; YWRtaW4=
+235 2.7.0 Authentication successful
+</code></pre>
+
+<p>看到Authentication successful表示我们的账号配置成功。</p>
+
+<p>到了这一步，已经可以用任何语言（Java、Ruby、NodeJS）在任何接入互联网的电脑上通过这台服务器发邮件了（记得防火墙打开25端口）。但是发出去的邮件会极大概率被当做垃圾邮件，这是因为还有非常重要的SPF和DKIM没有配置。</p>
+
+    <p class="date" style="text-align: right;">13 Jan 2015</p>
+  </div>
+
+  <div class='foot-nav'>
+    <p>继续浏览:</p>
+
+    <div style="float:left;">
+    <a href="/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A81.html">&lt;&lt; 用Postfix搭建自己的邮件服务器（一）</a>
+    </div>
+
+
+    <div style="float:right;">
+    <a href="/work/2015/01/13/%E7%94%A8postfix%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%AE%E4%BB%B6%E6%9C%8D%E5%8A%A1%E5%99%A83.html">用postfix搭建自己的邮件服务器（三） &gt;&gt;</a>
+    </div>
+
+  </div>
+</div>
+
+        </div>
+    </div>
+
+    <!-- jquery -->
+    <script src="/js/jquery.min.js"></script>
+
+  <script src="/js/common.js"></script>
+
+  <script src="/js/highlight.pack.js"></script>
+
+  <script src="/js/lazysizes.min.js" async=""></script>
+
+  <script>
+    window.category = 'work';
+  </script>
+</body>
+</html>
+
