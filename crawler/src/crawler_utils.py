@@ -146,6 +146,12 @@ def form_data_to_dict(s):
             d[k] = v
     return d
 
+
+def change_ip():
+    os.system("""(echo authenticate '"%s"'; echo signal newnym; echo quit) | nc localhost 9051"""%CONFIG.CRAWLER.PROXIES_PASSWORD)
+    print(my_ip())
+
+
 if __name__ == '__main__':
     import sys
     from pprint import pprint
