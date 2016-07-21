@@ -8,9 +8,10 @@ http://stackoverflow.com/questions/23118249/whats-the-difference-between-request
 """
 
 import re
-from functools import wraps
 import traceback
 import requests
+from functools import wraps
+from tld import get_tld    # pip install tld
 
 
 def encode_to_dict(encoded_str):
@@ -150,6 +151,10 @@ def form_data_to_dict(s):
 def change_ip():
     os.system("""(echo authenticate '"%s"'; echo signal newnym; echo quit) | nc localhost 9051"""%CONFIG.CRAWLER.PROXIES_PASSWORD)
     print(my_ip())
+
+
+def get_domain(url):
+    return get_tld(url)
 
 
 if __name__ == '__main__':
