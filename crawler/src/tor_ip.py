@@ -9,6 +9,11 @@ import requesocks
 url = 'http://httpbin.org/ip'
 
 
+def get_ip_socks_tor():
+    cmd = """curl --socks5 127.0.01:9050 http://checkip.amazonaws.com/"""
+    os.system(cmd)
+
+
 def getip_requests(url):
     print "(+) Sending request with plain requests..."
     r = requests.get(url)
