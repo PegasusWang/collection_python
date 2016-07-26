@@ -12,6 +12,16 @@ import traceback
 import requests
 from functools import wraps
 from tld import get_tld    # pip install tld
+try:
+    from http.cookies import SimpleCookie
+except ImportError:
+    from Cookie import SimpleCookie
+try:    # py3
+    from urllib.parse import urlparse, quote, urlencode, unquote
+    from urllib.request import urlopen
+except ImportError:    # py2
+    from urllib import urlencode, quote, unquote
+    from urllib2 import urlopen
 
 
 def encode_to_dict(encoded_str):
@@ -57,6 +67,55 @@ def parse_curl_str(s):
             data = string
 
     return url, headers_dict, data
+
+
+class CurlStrParser(object):
+    def __init__(self, s):
+        self.s = s
+
+    def parse_curl_str(self, data_as_dict=False):
+        s = self.s
+        s = s.strip('\n').strip()
+        pat = re.compile("'(.*?)'")
+        str_list = [i.strip() for i in re.split(pat, s)]   # 拆分curl请求字符串
+
+        url = ''
+        headers_dict = {}
+        data_str = ''
+
+        for i in range(0, len(str_list)-1, 2):
+            arg = str_list[i]
+            string = str_list[i+1]
+
+            if arg.startswith('curl'):
+                url = string
+
+            elif arg.startswith('-H'):
+                header_key = string.split(':', 1)[0].strip()
+                header_val = string.split(':', 1)[1].strip()
+                headers_dict[header_key] = header_val
+
+            elif arg.startswith('--data'):
+                data_str = string
+
+        if data_as_dict:
+            data_dict = {}
+            pair_list = unquote(data_str).split('&')
+            for pair in pair_list:
+                k, v = pair.split('=')
+                data_dict[k] = v
+            return url, headers_dict, data_dict
+        else:
+            return url, headers_dict, data_str
+
+    def get_url(self):
+        return self.parse_curl_str()[0]
+
+    def get_headers_dict(self):
+        return self.parse_curl_str()[1]
+
+    def get_data(self, as_dict=False):
+        return self.parse_curl_str()[2]
 
 
 def retry(retries=3):
@@ -157,6 +216,41 @@ def get_domain(url):
     return get_tld(url)
 
 
+def cookie_dict_from_cookie_str(cookie_str):
+    """cookie_dict_from_str Cookie字符串返回成dict
+
+    :param cookie_str: cookies string
+    """
+    cookie = SimpleCookie()
+    cookie.load(cookie_str)
+    return {key: morsel.value for key, morsel in cookie.items()}
+
+
+def cookie_dict_from_response(r):
+    """cookie_dict_from_response 获取返回的response对象的Set-Cookie字符串
+    并返回成dict
+
+    :param r: requests.models.Response
+    """
+    cookie_str = r.headers.get('Set-Cookie')
+    return cookie_dict_from_cookie_str(cookie_str)
+
+
+def get_proxy_dict(ip, port, proxy_type='http' or 'socks5'):
+    """get_proxy_dict return dict proxies as requests proxies
+    http://docs.python-requests.org/en/master/user/advanced/
+
+    :param ip: ip string
+    :param port: int port
+    :param proxy_type: 'http' or 'socks5'
+    """
+    proxies = {
+        'http': '{proxy_type}://{ip}:{port}'.format(proxy_type=proxy_type, ip=ip, port=port),
+        'https': '{proxy_type}://{ip}:{port}'.format(proxy_type=proxy_type, ip=ip, port=port),
+    }
+    return proxies
+
+
 if __name__ == '__main__':
     import sys
     from pprint import pprint
@@ -168,3 +262,4 @@ if __name__ == '__main__':
         print(data)
     except IndexError:
         exit(0)
+
