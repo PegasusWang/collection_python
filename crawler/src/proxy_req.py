@@ -76,6 +76,15 @@ def requests_proxy(ip, port):
     print(r.text)
 
 
+def test_socks_proxy(url):
+    from ua import random_ua
+    PROXIES = {'http': 'socks5://127.0.0.1:9050',
+               'https': 'socks5://127.0.0.1:9050'}
+    headers = {'User-Agent': random_ua}
+    r = requests.get(url, headers=headers, proxies=PROXIES)
+    print(r.text)
+
+
 if __name__ == '__main__':
     requests_proxy('101.201.235.141', 8000)
     requests_proxy('171.39.28.231', 8123)
