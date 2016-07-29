@@ -188,7 +188,11 @@ def lazy_property(fn):
 def my_ip():
     # url = 'https://api.ipify.org?format=json'
     url = 'http://httpbin.org/ip'
-    return requests.get(url).text
+    headers = {'X-Forwarded-For': '192.155.212.33',
+               'REMOTE_ADDR': '192.155.212.4',
+               'X-Real-Ip': '192.155.323.4'}
+    return requests.get(url, headers=headers).text
+    #return requests.get(url).text
 
 
 def form_data_to_dict(s):
@@ -251,7 +255,14 @@ def get_proxy_dict(ip, port, proxy_type='http' or 'socks5'):
     return proxies
 
 
+def random_ip():
+    import random, socket, struct
+    return socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
+
+
 if __name__ == '__main__':
+    print my_ip()
+    exit()
     import sys
     from pprint import pprint
     try:
@@ -262,4 +273,6 @@ if __name__ == '__main__':
         print(data)
     except IndexError:
         exit(0)
+
+
 
