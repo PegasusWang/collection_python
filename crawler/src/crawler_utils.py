@@ -212,6 +212,7 @@ def form_data_to_dict(s):
 
 
 def change_ip():
+    """change_ip use tor as socks proxy, this command can change tor ip"""
     os.system("""(echo authenticate '"%s"'; echo signal newnym; echo quit) | nc localhost 9051"""%CONFIG.CRAWLER.PROXIES_PASSWORD)
     print(my_ip())
 
