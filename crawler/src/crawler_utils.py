@@ -43,7 +43,9 @@ def encode_to_dict(encoded_str):
 
 
 def parse_curl_str(s):
-    """convert chrome curl string to url, headers_dict and data"""
+    """convert chrome curl string to url, headers_dict and data
+    js version http://curl.trillworks.com/
+    """
     pat = re.compile("'(.*?)'")
     str_list = [i.strip() for i in re.split(pat, s)]   # 拆分curl请求字符串
 
