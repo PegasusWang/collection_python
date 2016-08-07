@@ -261,27 +261,24 @@ def random_ip():
     return socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
 
 
-def download_file(url):
-    local_filename = url.split('/')[-1]
-    # NOTE the stream=True parameter
-    r = requests.get(url, stream=True)
-    with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
-            if chunk:  # filter out keep-alive new chunks
-                f.write(chunk)
-    return local_filename
-
-
 if __name__ == '__main__':
-    print(my_ip())
-    exit()
-    import sys
-    from pprint import pprint
-    try:
-        curl_str = sys.argv[1]   # 用三引号括起来作为参数
-        url, headers_dict, data = parse_curl_str(curl_str)
-        print(url)
-        pprint(headers_dict)
-        print(data)
-    except IndexError:
-        exit(0)
+
+
+    url = 'http://182.92.196.13:8000/ip'
+    headers = {'X-Forwarded-For': '192.155.212.33',
+               'REMOTE_ADDR': '192.155.212.4',
+               'X-Real-Ip': '192.155.323.4'}
+    print requests.get(url, headers=headers).text
+
+    url = 'http://httpbin.org/ip'
+    headers = {'X-Forwarded-For': '192.155.212.33',
+               'REMOTE_ADDR': '192.155.212.4',
+               'X-Real-Ip': '192.155.323.4'}
+    print requests.get(url, headers=headers).text
+
+
+    url = 'https://api.ipify.org?format=json'
+    headers = {'X-Forwarded-For': '192.155.212.33',
+               'REMOTE_ADDR': '192.155.212.4',
+               'X-Real-Ip': '192.155.323.4'}
+    print requests.get(url, headers=headers).text

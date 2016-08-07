@@ -51,6 +51,8 @@ class AsyncSpider(object):
         elif response.code == 599:    # retry
             self._fetching.remove(url)
             self._q.put(url)
+        else:
+            print(response.code)
 
     @gen.coroutine
     def get_page(self, url):
@@ -115,20 +117,23 @@ class MySpider(AsyncSpider):
             'cookie': cookies_str
         }
         return super(MySpider, self).fetch(
-            url, headers=headers,
+            url, headers=headers
             #proxy_host="127.0.0.1", proxy_port=8787,    # for proxy
         )
 
     def handle_html(self, url, html):
-        print(html)
-        #print(BeautifulSoup(html, 'lxml').find('title'))
+        #print(url)
+        #print(html)
+        title_text = (BeautifulSoup(html, 'lxml').find('title')).text
+        print(title_text)
+        assert title_text == '访问验证-拉勾网'
 
 
 def main():
     st = time.time()
     urls = []
-    n = 1000
-    url = 'http://182.92.196.13:5000/redis'
+    n = 100
+    url = 'http://www.lagou.com/jobs/1973411.html'
     for page in range(1, n):
         # urls.append('http://www.jb51.net/article/%s.htm' % page)
         urls.append(url+'?redis=%d'%page)
