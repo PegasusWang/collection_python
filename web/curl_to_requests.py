@@ -138,7 +138,7 @@ if __name__ == '__main__':
     from pprint import pprint
     try:
         curl_str = sys.argv[1]
-        url, headers, data = parse_curl_str(curl_str)
+        url, headers, data = parse_curl_str(curl_str, True)
         print(url)
         pprint(headers)
         print(data)
