@@ -1,7 +1,7 @@
 from random import choice
 
 
-UA_LIST = [
+_UA_LIST = [
     "Mozilla/1.22 (compatible; MSIE 10.0; Windows 3.1)",
     "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_6; it-it) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27",
     "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36",
@@ -255,9 +255,22 @@ UA_LIST = [
 ]
 
 
+_SEARCH_ENGINE_UA_LIST = [
+    'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)',
+    'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+    'Mozilla/5.0 (compatible; bingbot/2.0 +http://www.bing.com/bingbot.htm)',
+    'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)',
+]
+
+
 def random_ua():
-    return choice(UA_LIST)
+    return choice(_UA_LIST)
+
+
+def random_search_engine_ua():
+    return choice(_SEARCH_ENGINE_UA_LIST)
 
 
 if __name__ == '__main__':
     print(random_ua())
+    print(random_search_engine_ua())
