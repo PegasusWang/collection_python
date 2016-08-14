@@ -4,6 +4,7 @@
 from tornado import web, ioloop, gen
 from random import random
 
+# 用tornado本地测试的server
 
 n = 1
 class Main(web.RequestHandler):
@@ -17,8 +18,8 @@ class Main(web.RequestHandler):
 class Sleep(web.RequestHandler):
     @gen.coroutine
     def get(self):
-        yield gen.sleep(random())
-        self.write('hehe'*1000)
+        yield gen.sleep(3)
+        self.write('hehe'*10)
 
 
 app = web.Application(
