@@ -263,8 +263,8 @@ def random_ip():
     return socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
 
 
-def download_file(url):
-    local_filename = url.split('/')[-1]
+def download_file(url, filename=None):
+    local_filename = filename or url.split('/')[-1]
     # NOTE the stream=True parameter
     r = requests.get(url, stream=True)
     with open(local_filename, 'wb') as f:

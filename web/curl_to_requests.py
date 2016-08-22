@@ -78,6 +78,8 @@ def parse_curl_str(s, data_as_dict=False):
             data_str = string
 
     if data_as_dict:
+        if not data_str:
+            return url, headers_dict, {}
         data_dict = {}
         pair_list = unquote(data_str).split('&')
         for pair in pair_list:
