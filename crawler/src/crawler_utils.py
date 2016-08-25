@@ -274,6 +274,32 @@ def download_file(url, filename=None):
     return local_filename
 
 
+class Downloader(object):
+    def __init__(self, url):
+        self.url = url
+
+    def get(self, *args, **kwargs):
+        return requests.get(*args, **kwargs)
+
+    def download_file(self, filename=None):
+        local_filename = filename or self.url.split('/')[-1]
+        r = self.get(self.url, stream=True)
+        with open(local_filename, 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+        return local_filename
+
+    def get_content(self):
+        # http://stackoverflow.com/questions/9718950/do-i-have-to-do-stringio-close
+        r = self.get(self.url, stream=True)
+        io = BytesIO()
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                io.write(chunk)
+        return io.getvalue()
+
+
 def class_method_decorator(method):
     @wraps(method)
     def _impl(self, *method_args, **method_kwargs):
