@@ -274,6 +274,13 @@ def download_file(url, filename=None):
     return local_filename
 
 
+def class_method_decorator(method):
+    @wraps(method)
+    def _impl(self, *method_args, **method_kwargs):
+        method(self, *method_args, **method_kwargs)
+    return _impl
+
+
 if __name__ == '__main__':
     print(my_ip())
     exit()

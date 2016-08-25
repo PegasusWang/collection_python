@@ -90,8 +90,9 @@ def extract_map(begin, end, html, func):
 
 
 if __name__ == '__main__':
-    import _env
-    from model.po.blog import Po
-    from z42.lib.base.txt2html import txt_withlink
-    txt = Po.mc_get(10501881)
-    txt_withlink(txt.txt)
+    pass
+    # import _env
+    # from model.po.blog import Po
+    # from z42.lib.base.txt2html import txt_withlink
+    # txt = Po.mc_get(10501881)
+    # txt_withlink(txt.txt)
