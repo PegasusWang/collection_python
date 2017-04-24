@@ -95,6 +95,22 @@ def test_socks_proxy(url):
     print(r.text)
 
 
+def test():
+    import urllib2
+    from proxy_urllib2 import SocksHandler
+
+    proxy_addr_ip = ('45.79.153.90', 18436L)
+
+    url = 'https://api.ipify.org?format=json'
+
+    opener = urllib2.build_opener(SocksHandler(*proxy_addr_ip))
+    print(opener.open(url).read())
+
+
+    proxy_addr_ip = ('45.33.92.71', 18436L)
+    opener = urllib2.build_opener(SocksHandler(*proxy_addr_ip))
+    print(opener.open(url).read())
+
 if __name__ == '__main__':
     # requests_proxy('101.201.235.141', 8000)
     # requests_proxy('171.39.28.231', 8123)
