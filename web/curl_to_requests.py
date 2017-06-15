@@ -143,6 +143,7 @@ if __name__ == '__main__':
         url, headers, data = parse_curl_str(curl_str, True)
         print(url)
         pprint(headers)
+        print(headers['User-Agent'])
         print(data)
     except IndexError:
         pass

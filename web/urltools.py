@@ -23,3 +23,9 @@ def is_valid_url(url):
         r'(?::\d+)?'  # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
     return bool(url is not None and regex.search(url))
+
+if __name__ == "__main__":
+    print(is_valid_url(None))
+    print(is_valid_url(''))
+    print(is_valid_url('http://stackoverflow.com/questions/827557/how-do-you-validate-a-url-with-a-regular-expression-in-python'))
+    print(is_valid_url('https://stackoverflow.com/questions/827557/how-do-you-validate-a-url-with-a-regular-expression-in-python'))

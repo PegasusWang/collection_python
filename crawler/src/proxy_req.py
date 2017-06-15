@@ -8,15 +8,14 @@ import requests
 
 
 def use_lantern():
-	# install lantern first, 这是使用lantern的代理地址
-	proxies = {
-		"http": "http://127.0.0.1:8787",
-		"https": "http://127.0.0.1:8787",
-	}
-
-	url = 'http://httpbin.org/ip'
-	r = requests.get(url, proxies=proxies)
-	print(r.text)
+    # install lantern first, 这是使用lantern的代理地址
+    proxies = {
+        "http": "http://127.0.0.1:63463",
+        "https": "http://127.0.0.1:63463",
+    }
+    url = 'http://google.com'
+    r = requests.get(url, proxies=proxies)
+    print(r.text)
 
 
 def user_socks5():
@@ -44,9 +43,9 @@ def tornado_proxy():
 
 	def handle_request(response):
 		if response.error:
-			print "Error:", response.error
+			print("Error:", response.error)
 		else:
-			print response.body
+			print(response.body)
 		ioloop.IOLoop.instance().stop()
 
 	http_client = httpclient.AsyncHTTPClient()
@@ -99,7 +98,7 @@ def test():
     import urllib2
     from proxy_urllib2 import SocksHandler
 
-    proxy_addr_ip = ('45.79.153.90', 18436L)
+    proxy_addr_ip = ('45.79.153.90', 18436)
 
     url = 'https://api.ipify.org?format=json'
 
@@ -107,11 +106,12 @@ def test():
     print(opener.open(url).read())
 
 
-    proxy_addr_ip = ('45.33.92.71', 18436L)
+    proxy_addr_ip = ('45.33.92.71', 18436)
     opener = urllib2.build_opener(SocksHandler(*proxy_addr_ip))
     print(opener.open(url).read())
 
 if __name__ == '__main__':
     # requests_proxy('101.201.235.141', 8000)
     # requests_proxy('171.39.28.231', 8123)
-    test_socks_proxy(url='http://www.lagou.com/jobs/1606717.html')
+    # test_socks_proxy(url='http://www.lagou.com/jobs/1606717.html')
+    use_lantern()

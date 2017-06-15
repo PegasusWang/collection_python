@@ -32,7 +32,7 @@ class AsyncSpider(object):
             self.results = []
         if not self.urls:
             self.init_urls()
-        for url in urls:
+        for url in self.urls:
             self._q.put(url)
         httpclient.AsyncHTTPClient.configure(
             "tornado.curl_httpclient.CurlAsyncHTTPClient"
@@ -131,6 +131,7 @@ class MySpider(AsyncSpider):
 
     def handle_html(self, url, html):
         print(url)
+        print(html)
         #print(BeautifulSoup(html, 'lxml').find('title'))
 
 
@@ -139,8 +140,10 @@ def main():
     urls = []
     n = 1000
     for page in range(1, n):
-        urls.append('http://www.jb51.net/article/%s.htm' % page)
-    s = MySpider(urls, 10)
+        # urls.append('http://www.jb51.net/article/%s.htm' % page)
+        url = 'https://www.sov5.com/suggest?wd=i&p=3&cb=BaiduSuggestion.callbacks.give1481039919331&t=1481040157120&page=%d'%page
+        urls.append(url)
+    s = MySpider(urls, 20)
     s.run()
     print(time.time()-st)
     print(60.0/(time.time()-st)*1000, 'per minute')

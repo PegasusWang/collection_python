@@ -65,9 +65,8 @@ def main():
         timestamp = sys.argv[1]
     except:
         timestamp = time.time()
-
-    timestamp = 16071*86400
+    print(datetime_from_timestamp(timestamp))
 
 
 if __name__ == '__main__':
-    delta()
+    main()
