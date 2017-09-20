@@ -263,12 +263,12 @@ def random_ip():
     return socket.inet_ntoa(struct.pack('>I', random.randint(1, 0xffffffff)))
 
 
-def download_file(url, filename=None):
+def download_file(url, filename=None, chunk_size=1024):
     local_filename = filename or url.split('/')[-1]
     # NOTE the stream=True parameter
     r = requests.get(url, stream=True)
     with open(local_filename, 'wb') as f:
-        for chunk in r.iter_content(chunk_size=1024):
+        for chunk in r.iter_content(chunk_size=chunk_size):
             if chunk:  # filter out keep-alive new chunks
                 f.write(chunk)
     return local_filename

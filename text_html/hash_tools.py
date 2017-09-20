@@ -12,4 +12,4 @@ def file_md5(filepath, chunksize=4096):
 
 
 if __name__ == "__main__":
-    print(file_md5('./common.txt'))
+    print(file_md5('./common.txt', 2048))
