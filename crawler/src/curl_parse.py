@@ -305,6 +305,7 @@ def random_ip():
 
 
 def download_file(url, filename=None):
+    """ requests 下载大文件 """
     local_filename = filename or url.split('/')[-1]
     # NOTE the stream=True parameter
     r = requests.get(url, stream=True)

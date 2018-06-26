@@ -26,3 +26,16 @@ def test_check():
     ori_pwd = '1234567'
     input_pwd = '1234567'
     assert check(input_pwd, gen_hash(ori_pwd)) == True
+
+
+
+"""
+"zhihu_remix": {
+    "check_member_permission": 0,
+    "name": "zhihu-remix",
+    "key": "ec2b1b",
+    "secret": "wCXkKAwqZWlbZ8t0B3Yd"
+}
+"""
+print(gen_hash('zhihu-remix'))
+
