@@ -26,7 +26,6 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 if not data:
                     break
                 conn.sendall(data)
-
 ```
 
 但是这个 tcp echo server 比较低效，我们下边用一个 golang 的 tcp client 并发地给它发请求测试下它的性能：
@@ -138,26 +137,19 @@ class EventLoop:
     def __init__(self, selector=None):
         if selector is None:
             selector = selectors.DefaultSelector()
-        self._selector = selector
-
-    def add_reader(self, reader, callback):
-        try:
-            self._selector.register(reader, selectors.EVENT_READ, callback)
-        except KeyError:
-            pass
-
-    def remove_reader(self, reader):
-        try:
-            self._selector.unregister(reader)
-        except KeyError:
-            pass
+        self.selector = selector
 
     def run_forever(self):
         while True:
-            events = self._selector.select()
+            events = self.selector.select()
             for key, mask in events:
-                callback = key.data
-                callback(key.fileobj, mask)
+                if mask == selectors.EVENT_READ:
+                    callback = key.data
+                    callback(key.fileobj)
+                else:
+                    callback, msg = key.data
+                    callback(key.fileobj, msg)
+
 ```
 
 接下来我们写一个 TCPEchoServer，它将接受一个额外的参数 loop 实例，用来执行事件循环。
@@ -169,35 +161,44 @@ class TCPEchoServer:
         self.host = host
         self.port = port
         self._loop = loop
-        s = socket.socket()
-        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.s = s
+        self.s = socket.socket()
 
-    def _on_read(self, conn, callback):
+    def _on_read(self, conn):
         msg = conn.recv(1024)
         if msg:
             print('echoing', repr(msg), 'to', conn)
-            conn.sendall(msg)
+            self._loop.selector.modify(conn, selectors.EVENT_WRITE, (self._on_write, msg))
         else:
             print('closing', conn)
-            self._loop.remove_reader(conn)
+            self._loop.selector.unregister(conn)
             conn.close()
 
-    def _accept(self, sock, mask):
-        conn, addr = sock.accept()  # Should be ready
+    def _on_write(self, conn, msg):
+        conn.send(msg)
+        conn.close()
+        self._loop.selector.unregister(conn)
+
+    def _accept(self, sock):
+        conn, addr = sock.accept()
         print('accepted', conn, 'from', addr)
         conn.setblocking(False)
-        self._loop.add_reader(conn, self._on_read)
+        self._loop.selector.register(conn, selectors.EVENT_READ, self._on_read)
 
     def run(self):
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.s.bind((self.host, self.port))
         self.s.listen(100)
         self.s.setblocking(False)
-        self._loop.add_reader(self.s, self._accept)
+        self._loop.selector.register(self.s, selectors.EVENT_READ, self._accept)
         self._loop.run_forever()
+
+
+event_loop = EventLoop()
+echo_server = TCPEchoServer('localhost', 8888, event_loop)
+echo_server.run()
 ```
 
 
 到这里就差不多了，我们再继续运行 go 写的并发的 tcp client 来测试它。你会发现是能抗住很高的并发请求的。
 
-在后边教程中我们将使用 python 的 coroutine 来改造这个例子，这样一来我们就能使用 async/await 来运行这个小例子了。
+在后边教程中我们将使用 python 的 coroutine 而不是恶心的回调函数来改造这个例子，这样一来我们就能使用 async/await 来运行它了
