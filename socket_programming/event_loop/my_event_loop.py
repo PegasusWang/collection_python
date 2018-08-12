@@ -7,6 +7,8 @@
 https://www.4async.com/2016/02/simple-implement-asyncio-to-understand-how-async-works/
 https://www.youtube.com/watch?v=ZzfHjytDceU
 http://asyncio.readthedocs.io/en/latest/tcp_echo.html
+http://scotdoyle.com/python-epoll-howto.html
+https://gist.github.com/dtoma/564375673b354397efc5
 """
 import selectors
 import socket
