@@ -193,13 +193,8 @@ class TCPEchoServer:
         self.s.bind((self.host, self.port))
         self.s.listen(100)
         self.s.setblocking(False)
-        self.loop.add_reader(self.s, self._accept)
-        self.loop.run_forever()
-
-
-event_loop = EventLoop()
-echo_server = TCPEchoServer('localhost', 8888, event_loop)
-echo_server.run()
+        self._loop.add_reader(self.s, self._accept)
+        self._loop.run_forever()
 ```
 
 
