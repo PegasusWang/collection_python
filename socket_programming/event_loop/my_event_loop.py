@@ -35,12 +35,8 @@ class EventLoop:
         while True:
             events = self._selector.select()
             for key, mask in events:
-                if mask & selectors.EVENT_READ:
-                    callback = key.data
-                    callback(key.fileobj, mask)
-                else:
-                    callback, msg = key.data
-                    callback(key.fileobj, msg)
+                callback = key.data
+                callback(key.fileobj, mask)
 
 
 class TCPEchoServer:
