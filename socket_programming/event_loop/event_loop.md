@@ -85,7 +85,7 @@ func main() {
 
 接下来我们使用python3 提供的 selectros 来改造它，这个模块封装了操作系统底层提供的 I/O 复用机制，比如 linux 上使用了
 epoll。通过 I/O 复用机制我们可以监听多个文件描述符的读写事件并且注册回调函数。下边的例子我们会看到如何 selectors 模块，
-如何注册注册事件和回调函数。先看python3 的 selectors 文档给的例子
+如何注册注册事件和回调函数。先看python3 的 selectors 文档给的例子（建议先简单过一下 selectors 模块的文档）
 
 ```py
 import selectors
