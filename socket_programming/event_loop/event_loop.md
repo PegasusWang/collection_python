@@ -83,9 +83,10 @@ func main() {
 }
 ```
 
-接下来我们使用python3 提供的 selectros 来改造它，这个模块封装了操作系统底层提供的 I/O 复用机制，比如 linux 上使用了
-epoll。通过 I/O 复用机制我们可以监听多个文件描述符的读写事件并且注册回调函数。下边的例子我们会看到如何 selectors 模块，
-如何注册注册事件和回调函数。先看python3 的 selectors 文档给的例子（建议先简单过一下 selectors 模块的文档）
+会你看到，并发数上去之后这个 echo server 很快就扛不住了。
+接下来我们使用 python3 提供的 selectros 来改造它，这个模块封装了操作系统底层提供的 I/O 复用机制，比如 linux 上使用了
+epoll。通过 I/O 复用机制我们可以监听多个文件描述符的可读写事件并且注册回调函数。
+先看 python3 的 selectors 文档给的例子
 
 ```py
 import selectors
@@ -123,5 +124,85 @@ while True:  # 这其实就是通常在异步框架中所说的 event loop 啦
 ```
 
 我们来运行下这个 使用了 seelctors I/O 复用机制的 tcp echo server，你会发现并发性能比之前的 echo server 强很多。
+但是这个代码不太优雅，我们使用 EventLoop 类来改造，先来编写一个简单的 EventLoop 类。事件循环是异步框架中都会提到的东西，
+其实它的实现原理就是 EventLoop 类中将要实现的 run_forever 函数，在一个死循环里调用 selector.select 函数，这个函数会在
+我们注册了感兴趣的事件发生后返回，然后我们针对事件调用回调函数。
 
-但是这个代码不太优雅，我们使用 EventLoop 类来改造，听我边敲代码边扯（中间过程大脑可能会有短路）
+```py
+import selectors
+import socket
+
+
+class EventLoop:
+
+    def __init__(self, selector=None):
+        if selector is None:
+            selector = selectors.DefaultSelector()
+        self._selector = selector
+
+    def add_reader(self, reader, callback):
+        try:
+            self._selector.register(reader, selectors.EVENT_READ, callback)
+        except KeyError:
+            pass
+
+    def remove_reader(self, reader):
+        try:
+            self._selector.unregister(reader)
+        except KeyError:
+            pass
+
+    def run_forever(self):
+        while True:
+            events = self._selector.select()
+            for key, mask in events:
+                callback = key.data
+                callback(key.fileobj, mask)
+```
+
+接下来我们写一个 TCPEchoServer，它将接受一个额外的参数 loop 实例，用来执行事件循环。
+
+
+```py
+class TCPEchoServer:
+    def __init__(self, host, port, loop):
+        self.host = host
+        self.port = port
+        self._loop = loop
+        s = socket.socket()
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.s = s
+
+    def _on_read(self, conn, callback):
+        msg = conn.recv(1024)
+        if msg:
+            print('echoing', repr(msg), 'to', conn)
+            conn.sendall(msg)
+        else:
+            print('closing', conn)
+            self._loop.remove_reader(conn)
+            conn.close()
+
+    def _accept(self, sock, mask):
+        conn, addr = sock.accept()  # Should be ready
+        print('accepted', conn, 'from', addr)
+        conn.setblocking(False)
+        self._loop.add_reader(conn, self._on_read)
+
+    def run(self):
+        self.s.bind((self.host, self.port))
+        self.s.listen(100)
+        self.s.setblocking(False)
+        self.loop.add_reader(self.s, self._accept)
+        self.loop.run_forever()
+
+
+event_loop = EventLoop()
+echo_server = TCPEchoServer('localhost', 8888, event_loop)
+echo_server.run()
+```
+
+
+到这里就差不多了，我们再继续运行 go 写的并发的 tcp client 来测试它。你会发现是能抗住很高的并发请求的。
+
+在后边教程中我们将使用 python 的 coroutine 来改造这个例子，这样一来我们就能使用 async/await 来运行这个小例子了。

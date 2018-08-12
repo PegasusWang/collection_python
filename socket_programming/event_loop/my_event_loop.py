@@ -1,3 +1,13 @@
+"""
+
+用来了解 event loop 的 python 例子
+
+参考资料：
+
+https://www.4async.com/2016/02/simple-implement-asyncio-to-understand-how-async-works/
+https://www.youtube.com/watch?v=ZzfHjytDceU
+http://asyncio.readthedocs.io/en/latest/tcp_echo.html
+"""
 import selectors
 import socket
 
@@ -15,26 +25,11 @@ class EventLoop:
         except KeyError:
             pass
 
-    def add_writer(self, writer, callback):
-        try:
-            self._selector.register(writer, selectors.EVENT_WRITE, callback)
-        except KeyError:
-            pass
-
     def remove_reader(self, reader):
         try:
             self._selector.unregister(reader)
         except KeyError:
             pass
-
-    def remove_writer(self, writer):
-        try:
-            self._selector.unregister(writer)
-        except KeyError:
-            pass
-
-    def register(self, fileobj, mask, data=None):
-        self._selector.register(fileobj, mask, data)
 
     def run_forever(self):
         while True:
@@ -70,14 +65,13 @@ class TCPEchoServer:
         self._loop.add_reader(conn, self._on_read)
 
     def run(self):
-        loop = self._loop
         self.s.bind((self.host, self.port))
         self.s.listen(100)
         self.s.setblocking(False)
-        loop.add_reader(self.s, self._accept)
-        loop.run_forever()
+        self.loop.add_reader(self.s, self._accept)
+        self.loop.run_forever()
 
 
-loop = EventLoop()
-echo_server = TCPEchoServer('localhost', 8888, loop)
+event_loop = EventLoop()
+echo_server = TCPEchoServer('localhost', 8888, event_loop)
 echo_server.run()
