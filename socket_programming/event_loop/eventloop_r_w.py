@@ -41,9 +41,9 @@ class TCPEchoServer:
             conn.close()
 
     def _on_write(self, conn, msg):
-        conn.send(msg)
-        conn.close()
+        conn.sendall(msg)
         self._loop.selector.unregister(conn)
+        conn.close()
 
     def _accept(self, sock):
         conn, addr = sock.accept()
@@ -54,7 +54,7 @@ class TCPEchoServer:
     def run(self):
         self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.s.bind((self.host, self.port))
-        self.s.listen(100)
+        self.s.listen(50)
         self.s.setblocking(False)
         self._loop.selector.register(self.s, selectors.EVENT_READ, self._accept)
         self._loop.run_forever()
