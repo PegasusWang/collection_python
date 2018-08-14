@@ -1,26 +1,23 @@
-# -*- coding: utf-8 -*-
-
 import selectors
 import socket
 
 
 class EventLoop:
-
     def __init__(self, selector=None):
         if selector is None:
             selector = selectors.DefaultSelector()
         self.selector = selector
 
     def run_forever(self):
-        while True:
+        while True:  # EventLoop
             events = self.selector.select()
             for key, mask in events:
                 if mask == selectors.EVENT_READ:
-                    callback = key.data
+                    callback = key.data   # on_read or accept
                     callback(key.fileobj)
                 else:
                     callback, msg = key.data
-                    callback(key.fileobj, msg)
+                    callback(key.fileobj, msg)  # callback is _on_write
 
 
 class TCPEchoServer:
@@ -29,6 +26,20 @@ class TCPEchoServer:
         self.port = port
         self._loop = loop
         self.s = socket.socket()
+
+    def run(self):
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.s.bind((self.host, self.port))
+        self.s.listen(128)
+        self.s.setblocking(False)
+        self._loop.selector.register(self.s, selectors.EVENT_READ, self._accept)
+        self._loop.run_forever()
+
+    def _accept(self, sock):
+        conn, addr = sock.accept()
+        print('accepted', conn, 'from', addr)
+        conn.setblocking(False)
+        self._loop.selector.register(conn, selectors.EVENT_READ, self._on_read)
 
     def _on_read(self, conn):
         msg = conn.recv(1024)
@@ -43,20 +54,6 @@ class TCPEchoServer:
     def _on_write(self, conn, msg):
         conn.sendall(msg)
         self._loop.selector.modify(conn, selectors.EVENT_READ, self._on_read)
-
-    def _accept(self, sock):
-        conn, addr = sock.accept()
-        print('accepted', conn, 'from', addr)
-        conn.setblocking(False)
-        self._loop.selector.register(conn, selectors.EVENT_READ, self._on_read)
-
-    def run(self):
-        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.s.bind((self.host, self.port))
-        self.s.listen(128)
-        self.s.setblocking(False)
-        self._loop.selector.register(self.s, selectors.EVENT_READ, self._accept)
-        self._loop.run_forever()
 
 
 event_loop = EventLoop()
