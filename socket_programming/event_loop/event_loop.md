@@ -1,12 +1,10 @@
-# Python web 科普:了解 Python 高性能 web 框架是如何工作的[视频]
 
-这篇文章我们从 socket 编程的简单例子来看看 Python 异步框架是如何实现并发的。
+这篇文章我们从 socket 编程的例子来看看 Python 异步框架是如何工作的，需要了解下简单的 socket 编程。
 其实 Python 异步框架也是基于操作系统底层提供的 I/O 复用机制来实现的，比如 linux 下可以使用 select/poll/epoll 等。
-
 我们先看个简单的 python socket server 例子，Python 代码使用 Python3，确保可以使用 selectors 模块。
 
 
-# Echo server program
+## 一个 socket 回显示例
 
 ```py
 import socket
@@ -82,8 +80,13 @@ func main() {
 }
 ```
 
+使用 go 运行它可以看到输出。
+
+
+## selectors 示例
+
 接下来我们使用 python3 提供的 selectros 来改造它，这个模块封装了操作系统底层提供的 I/O 复用机制，比如 linux 上使用了
-epoll。通过 I/O 复用机制我们可以监听多个文件描述符的可读写事件并且注册回调函数。
+epoll。通过 I/O 复用机制我们可以监听多个文件描述符的可读写事件并且注册回调函数，拥有更好的并发性能。
 先看 python3 的 selectors 文档给的例子
 
 ```py
@@ -122,9 +125,13 @@ while True:  # 这其实就是通常在异步框架中所说的 event loop 啦
 ```
 
 我们来运行下这个 使用了 seelctors I/O 复用机制的 tcp echo server 看下输出结果。
+
+
+## 使用 EventLoop 改造下
+
 但是这个代码不太优雅，我们使用 EventLoop 类来改造，先来编写一个简单的 EventLoop 类。事件循环是异步框架中都会提到的东西，
 其实它的实现原理就是 EventLoop 类中将要实现的 run_forever 函数，在一个死循环里调用 selector.select 函数，这个函数会在
-我们注册了感兴趣的事件发生后返回，然后我们针对事件调用回调函数。
+我们注册了感兴趣的 I/O 事件发生后返回(比如有 socket 可读或者可写了)，然后我们针对不同事件调用我们的回调函数。
 
 ```py
 import selectors
