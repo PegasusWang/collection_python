@@ -1,65 +1,57 @@
 import selectors
 import socket
-import collections
+from functools import partial
+
 
 # TODO 尝试模仿一个简易版的 Future  和 Task
+"""
+参考：
+https://www.jianshu.com/p/b5e347b3a17c
+http://lucumr.pocoo.org/2016/10/30/i-dont-understand-asyncio/
+http://masnun.com/2015/11/20/python-asyncio-future-task-and-the-event-loop.html
+https://www.4async.com/2016/02/simple-implement-asyncio-to-understand-how-async-works/
+[深入理解python异步编程](https://mp.weixin.qq.com/s/GgamzHPyZuSg45LoJKsofA)
+http://github.com/denglj/aiotutorial
+
+很多概念：
+协程
+Future
+Task
+EventLoop
+"""
 
 
 class Future:
-    def __init__(self, loop):
-        self._loop = loop
-        self._result = None
+    def __init__(self):
+        self.result = None
         self._callbacks = []
 
-    def result(self):
-        return self._result
+    def add_done_callback(self, fn):
+        self._callbacks.append(fn)
 
     def set_result(self, result):
-        self._result = result
-        self._schedule_callbacks()
+        self.result = result
+        for callback in self._callbacks:
+            callback(self)
 
-    def _schedule_callbacks(self):
-        callbacks = self._callbacks[:]
-        if not callbacks:
-            return
-
-        self._callbacks[:] = []
-        for callback in callbacks:
-            self._loop.call_soon(callback, self)
+    def __iter__(self):
+        yield self
+        return self.result
 
 
 class Task:
-    def __init__(self, coro, loop):
-        self._coro = coro
-        self._step()
-        self._loop = loop
+    def __init__(self, coro):
+        self.coro = coro
+        f = Future()
+        f.set_result(None)
+        self.step(f)
 
-    def _step(self):
+    def step(self, future):
         try:
-            f = next(self._coro)
+            next_future = self.coro.send(future.result)
         except StopIteration:
             return
-        # f.callbacks.append(self.step)
-        self._loop.call_soon(self._step)
-
-
-class EventLoop:
-    def __init__(self, selector=None):
-        if selector is None:
-            selector = selectors.DefaultSelector()
-        self.selector = selector
-        self._ready = collections.deque()
-
-    def run_forever(self):
-        while True:  # EventLoop
-            events = self.selector.select()
-            for key, mask in events:
-                if mask == selectors.EVENT_READ:
-                    callback = key.data   # on_read or accept
-                    callback(key.fileobj)
-                else:
-                    callback, msg = key.data
-                    callback(key.fileobj, msg)  # callback is _on_write
+        next_future.add_done_callback(self.step)
 
 
 class TCPEchoServer:
@@ -74,30 +66,70 @@ class TCPEchoServer:
         self.s.bind((self.host, self.port))
         self.s.listen(128)
         self.s.setblocking(False)
-        self._loop.selector.register(self.s, selectors.EVENT_READ, self._accept)
-        self._loop.run_forever()
 
-    def _accept(self, sock):
-        conn, addr = sock.accept()
-        print('accepted', conn, 'from', addr)
-        conn.setblocking(False)
-        self._loop.selector.register(conn, selectors.EVENT_READ, self._on_read)
+        while True:
+            conn, addr = yield from self.accept()
+            msg = yield from self.read(conn)
+            if msg:
+                yield from self.sendall(conn, msg)
+            else:
+                conn.close()
 
-    def _on_read(self, conn):
-        msg = conn.recv(1024)
-        if msg:
-            print('echoing', repr(msg), 'to', conn)
-            self._loop.selector.modify(conn, selectors.EVENT_WRITE, (self._on_write, msg))
-        else:
-            print('closing', conn)
+    def accept(self):
+        f = Future()
+
+        def on_accept():
+            conn, addr = self.s.accept()
+            print('accepted', conn, 'from', addr)
+            conn.setblocking(False)
+            f.set_result((conn, addr))
+        self._loop.selector.register(self.s, selectors.EVENT_READ, on_accept)
+        conn, addr = yield from f
+        self._loop.selector.unregister(self.s)
+        return conn, addr
+
+    def read(self, conn):
+        f = Future()
+
+        def on_read():
+            msg = conn.recv(1024)
+            f.set_result(msg)
+        self._loop.selector.register(conn, selectors.EVENT_READ, on_read)
+        msg = yield from f
+        if not msg:
             self._loop.selector.unregister(conn)
-            conn.close()
+        return msg
 
-    def _on_write(self, conn, msg):
-        conn.sendall(msg)
-        self._loop.selector.modify(conn, selectors.EVENT_READ, self._on_read)
+    def sendall(self, conn, msg):
+        f = Future()
+
+        def on_write():
+            conn.sendall(msg)
+            f.set_result(None)
+        self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
+        yield from f
+        callback = partial(self.read, conn)
+        self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
+
+
+class EventLoop:
+    def __init__(self, selector=None):
+        if selector is None:
+            selector = selectors.DefaultSelector()
+        self.selector = selector
+
+    def create_task(self, coro):
+        return Task(coro)
+
+    def run_forever(self):
+        while 1:
+            events = self.selector.select()
+            for event_key, event_mask in events:
+                callback = event_key.data
+                callback()
 
 
 event_loop = EventLoop()
 echo_server = TCPEchoServer('localhost', 8888, event_loop)
-echo_server.run()
+task = Task(echo_server.run())
+event_loop.run_forever()
