@@ -40,6 +40,7 @@ class Future:
 
 
 class Task:
+    """管理生成器的执行"""
     def __init__(self, coro):
         self.coro = coro
         f = Future()
@@ -47,7 +48,7 @@ class Task:
         self.step(f)
 
     def step(self, future):
-        try:
+        try:  # 把当前 future 的结果发送给协程作为 yield from 表达式的值，同时执行到下一个 future 处
             next_future = self.coro.send(future.result)
         except StopIteration:
             return
@@ -82,9 +83,9 @@ class TCPEchoServer:
             conn, addr = self.s.accept()
             print('accepted', conn, 'from', addr)
             conn.setblocking(False)
-            f.set_result((conn, addr))
+            f.set_result((conn, addr))  # accept 的 result 是接受连接的新对象 conn, addr
         self._loop.selector.register(self.s, selectors.EVENT_READ, on_accept)
-        conn, addr = yield from f
+        conn, addr = yield from f  # 委派给 future 对象，直到 future 执行了 socket.accept() 并且把 result 返回
         self._loop.selector.unregister(self.s)
         return conn, addr
 
@@ -108,6 +109,7 @@ class TCPEchoServer:
             f.set_result(None)
         self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
         yield from f
+        # 注意这里监听完写事件之后要改成读事件，这里用partial 可以把函数包装成一个不需要参数的方法
         callback = partial(self.read, conn)
         self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
 
