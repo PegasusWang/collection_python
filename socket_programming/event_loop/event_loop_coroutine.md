@@ -118,8 +118,8 @@ def coro():
 
 
 c = coro()
-print(next(c))    # 输出 'hello'
-print(c.send('world'))    # 输出 'world'
+print(next(c))    # 输出 'hello'，这里调用 next 产出第一个值 'hello'，之后函数暂停
+print(c.send('world'))    # 再次调用 send 发送值，此时 hello 变量赋值为 'world', 然后 yield 产出 hello 变量的值 'world'
 ```
 
 这里发生了什么？和之前一样我们先调用了next()函数，代码执行到yield 'hello'然后我们得到了’hello’之后我们使用了send函数发送了一个值’world’, 它使coro恢复执行并且赋了参数’world’给hello这个变量，接着执行到下一行的yield语句并将hello变量的值’world’返回。所以我们得到了send()方法的返回值’world’。
@@ -134,8 +134,9 @@ print(c.send('world'))    # 输出 'world'
 - 可以通过 coroutine.send(value) 来给协程发送值
 - 协程执行完成后抛出 StopIteration 异常
 
-TODO 这里上传下自己的图片。协程
-通常为了方便，我们会写一个装饰器来预激协程
+[协程](./coro.png)
+
+不过通常为了方便，我们会写一个装饰器来预激协程，这样就不用每次都先调用 send(None) 或者 next 了。
 
 ```py
 from functools import wraps
@@ -152,7 +153,7 @@ return primer
 
 
 # yield from 的含义
-yield from 的语义比较复杂，一开始理解会比较吃力，我建议你先阅读下 Fluent Python 16 章协程。先看下边这个例子:
+yield from 的语义比较复杂，一开始理解会比较吃力，我建议你先阅读下 Fluent Python 16 章协程。 先看下边这个例子:
 
 ```
 >>> def gen():
@@ -171,12 +172,44 @@ yield from 的语义比较复杂，一开始理解会比较吃力，我建议你
 >>> list(gen())
 ['A', 'B', 1, 2]
 ```
-python3 引入了一个 yield from 语法用来链接可迭代对象，引用 pep 380 中的话就是
+
+python3 引入了 yield from 语法用来链接可迭代对象，引用 pep 380 中的话就是
 
 > “把迭代器当作生成器使用，相当于把子生成器的定义体内联在 yield from 表达式中。此外，子生成器可以执行 return 语句，返回一个值，而返回的值会成为 yield from 表达式的值。”
 
-这样，使用 yield from 就可以起到了『委派』作用，这里我写一个小例子，理解它对于后边理解使用协程异步编程非常重要：
+这样，使用 yield from 就可以起到了『委派』作用，这里我写一个小例子来演示委派生成器的用法，理解它对于后边理解使用协程异步编程非常重要：
 
+
+```py
+def coro1():
+    """定义一个简单的基于生成器的协程作为子生成器"""
+    word = yield 'hello'
+    yield word
+    return word
+
+
+def coro2():
+    """委派生成器，起到了调用方和子生成器通道的作用
+    委派生成器会在 yield from 表达式处暂停，调用方可以直接发数据发给子生成器，
+    子生成器再把产出的值发给调用方。
+    子生成器返回后，解释器抛出 StopIteration异常， 并把返回值附加到异常对象上，此时委派生成器恢复
+    """
+    # 子生成器返回后，解释器抛出 StopIteration 异常，返回值被附加到异常对象上，此时委派生成器恢复
+    result = yield from coro1()
+    print('coro2 result', result)
+
+
+def main():  # 调用方，用来演示调用方通过委派生成器可以直接发送值给子生成器
+    c2 = coro2()  # 委派生成器
+    print(next(c2))   # 委派生成器进入 coro1 执行到第一个 yield 'hello' 产出 'hello'
+    print(c2.send('world')) # 委派生成器发送给 coro1，word 赋值为 'world'，之后产出 'world'
+    try:
+        c2.send(None)  # 发送 None 导致 coro1 结束，返回值赋值给 yield from 表达式的左边的 result，然后输出 coro2 result world
+    except StopIteration:
+        pass
+
+main()
+```
 
 
 # 使用 Future 对象改写
