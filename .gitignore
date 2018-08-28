@@ -10,3 +10,4 @@ _templates/*
 *.htm
 __pycache__/
 .cache
+.python-version
