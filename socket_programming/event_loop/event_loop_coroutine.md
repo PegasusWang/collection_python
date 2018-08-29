@@ -121,6 +121,7 @@ def coro():
 c = coro()
 print(next(c))    # 输出 'hello'，这里调用 next 产出第一个值 'hello'，之后函数暂停
 print(c.send('world'))    # 再次调用 send 发送值，此时 hello 变量赋值为 'world', 然后 yield 产出 hello 变量的值 'world'
+# 之后协程结束，后续再 send 值会抛异常 StopIteration
 ```
 
 这里发生了什么？和之前一样我们先调用了next()函数，代码执行到yield 'hello'然后我们得到了’hello’。之后我们使用了send函数发送了一个值’world’, 它使coro恢复执行并且赋了参数’world’给hello这个变量，接着执行到下一行的yield语句并将hello变量的值’world’返回。所以我们得到了send()方法的返回值’world’。
@@ -132,12 +133,14 @@ print(c.send('world'))    # 再次调用 send 发送值，此时 hello 变量赋
 
 - 协程需要使用 send(None) 或者 next(coroutine) 来『预激』(prime) 才能启动
 - 在 yield 处协程会暂停执行
-- 可以通过 coroutine.send(value) 来给协程发送值
+- 可以通过 coroutine.send(value) 来给协程发送值，发送的值会赋值给 yield 表达式左边的变量
 - 协程执行完成后(没有遇到下一个 yield 语句)抛出 StopIteration 异常
+
+请仔细看下边这个图示来理解协程的执行过程：
 
 ![协程](./coro.png)
 
-不过通常为了方便，我们会写一个装饰器来预激协程，这样就不用每次都先调用 send(None) 或者 next 了。
+通常为了方便，我们会写一个装饰器来预激协程，这样就不用每次都先调用 send(None) 或者 next 了。
 
 ```py
 from functools import wraps
@@ -174,6 +177,7 @@ yield from 的语义比较复杂，一开始理解会比较吃力，我建议你
 ['A', 'B', 1, 2]
 ```
 
+这个例子使用 yield from 简化了两个 for 循环 yield，使用一个 yield from 就能产出子生成器的内容。
 python3 引入了 yield from 语法用来链接可迭代对象，引用 pep 380 中的话就是
 
 > “把迭代器当作生成器使用，相当于把子生成器的定义体内联在 yield from 表达式中。此外，子生成器可以执行 return 语句，返回一个值，而返回的值会成为 yield from 表达式的值。”
@@ -205,8 +209,9 @@ def main():  # 调用方，用来演示调用方通过委派生成器可以直�
     print(next(c2))   # 这里虽然调用的是 c2 的send，但是会发送给 coro1, 委派生成器进入 coro1 执行到第一个 yield 'hello' 产出 'hello'
     print(c2.send('world')) # 委派生成器发送给 coro1，word 赋值为 'world'，之后产出 'world'
     try:
-        # 继续 send 由于 coro1 已经没有 yield 语句了，直接执行到了 return 并且跑出 StopIteration
-        c2.send(None)  # 发送 None 导致 coro1 结束，返回值赋值给 yield from 表达式的左边的 result，然后输出 coro2 result world
+        # 继续 send 由于 coro1 已经没有 yield 语句了，直接执行到了 return 并且抛出 StopIteration
+        # 同时返回的结果作为 yield from 表达式的值赋值给左边的 result，接着 coro2() 里输出 "coro2 result world"
+        c2.send(None)
     except StopIteration:
         pass
 
@@ -224,6 +229,7 @@ coro2 result world
 yield from 的语义很复杂又有点让人混淆，不过可以先忽略异常处理，下边是一个简化版的伪代码表示 yield from 的含义(来自 Fluent Python 16章)
 
 ```py
+# RESULT = yield from EXPR 伪代码
 _i = iter(EXPR)  # <1>
 try:
     _y = next(_i)  # <2>
@@ -312,7 +318,114 @@ class TCPEchoServer:
 
 # 使用 Future 对象改写
 如果不用回调的方式，如何获取到异步调用的结果呢？python 异步框架中使用到了一个叫做 Future
-的对象，当异步调用执行完的时候，用来保存它的结果。
+的对象，当异步调用执行完的时候，用来保存它的结果。 Future 对象的 result 用来保存未来的执行结果，set_result 用来设置 result并且运行给 future 对象添加的回调。
+注意这里依然无法完全消除回调，但是却可以屏蔽掉业务层代码的回调，后边我们会看到。
+为了让 Future 支持 yield from ，我们给他定义一个 `__iter__` 方法:
+
+```py
+class Future:
+    def __init__(self):
+        self.result = None   # 保存结果
+        self._callbacks = []  # 保存对 Future 的回调函数
+
+    def add_done_callback(self, fn):
+        self._callbacks.append(fn)
+
+    def set_result(self, result):
+        self.result = result
+        for callback in self._callbacks:
+            callback(self)
+
+    def __iter__(self):
+        """ 让 Future 对象支持 yield from"""
+        yield self  # 产出自己
+        return self.result   # yield from 将把 result 值返回作为 yield from 表达式的值
+```
+
+好了，那如何使用 Future 呢，我们先来看个小例子：
+
+
+```py
+def callback1(a, b):
+    c = a + b
+    c = callback2(c)
+    return c
+
+
+def callback2(c):
+    c *= 2
+    c = callback3(c)
+    return c
+
+
+def callback3(c):
+    print(c)
+    return c
+
+
+def caller(a, b):
+    callback1(a, b)
+
+caller(1, 2)  # 输出 6
+```
+
+这个例子我想不用怎么解释了，不需要运行你在脑子里就应该知道它的结果，虽然有点绕。如果使用 Future 改写呢？
+
+```py
+def callback_1(a, b):
+    f = Future()
+
+    def on_callback_1():
+        f.set_result(a+b)
+
+    on_callback_1()
+    c = yield from f
+    return c
+
+
+def callback_2(c):
+    f = Future()
+
+    def on_callback_2():
+        f.set_result(c*2)
+    on_callback_2()
+    c = yield from f
+    return c
+
+
+def callback_3(c):
+    f = Future()
+
+    def on_callback_3():
+        f.set_result(c)
+    on_callback_3()
+    c = yield from f
+    return c
+
+
+def caller_use_yield_from(a, b):
+    c1 = yield from callback_1(a, b)
+    c2 = yield from callback_2(c1)
+    c3 = yield from callback_3(c2)
+    return c3
+```
+
+然后你再执行以下 caller_use_yield_from(1, 2)，你会发现没有任何输出，直接调用它并没什么卵用，因为这个时候有了 yield from
+语句它成为了协程。 那我们怎么执行它呢？协程需要调用方来驱动执行，还记得我们之前说的 预激(prime) 吗？
+
+```py
+c = caller_use_yield_from(1,2)  # coroutine
+f1 = c.send(None)   # 产出第一个 future 对象
+f2 = c.send(f1.result)
+f3 = c.send(f2.result)
+try:
+    f4 = c.send(None)
+except StopIteration as e:
+    print(e.value)   # 输出结果 6
+```py
+
+
+
 
 ```py
 class Future:
@@ -330,9 +443,12 @@ class Future:
 
 ```
 
-Future 对象的 result 用来保存未来的执行结果，set_result 用来设置 result并且运行给 future 对象添加的回调。
-注意这里依然无法完全消除回调，但是却可以屏蔽掉业务层代码的回调，后边我们会看到。这里先用 Future 对象来改造之前的
-TCPEchoServer，注意代码里的变动，我们先来修改 accept() 方法:
+
+
+
+
+
+这里先用 Future 对象来改造之前的 TCPEchoServer，注意代码里的变动，我们先来修改 accept() 方法:
 
 ```py
     def accept(self):
@@ -355,26 +471,7 @@ Future对象。
 之后如果遇到server socket 读事件代码会在运行到 yield from f 处暂停，然后执行权委派给了 future 对象，future
 对象执行完成后把 socket.accept() 的结果 conn, addr 返回。
 
-注意这里 yield from f，为了让 Future 支持 yield from ，我们给他定义一个 `__iter__` 方法:
 
-```py
-class Future:
-    def __init__(self):
-        self.result = None
-        self._callbacks = []
-
-    def add_done_callback(self, fn):
-        self._callbacks.append(fn)
-
-    def set_result(self, result):
-        self.result = result
-        for callback in self._callbacks:
-            callback(self)
-
-    def __iter__(self):
-        yield self  # 产出自己
-        return self.result   # yield from 将把 result 值返回作为 yield from 表达式的值
-```
 
 采用同样的方式我们可以改写 下 read 和 sendall 方法：
 
@@ -469,7 +566,7 @@ class TCPEchoServer:
 ```
 
 
-## Task 对象
+## Task 驱动协程
 上边使用 Future 将函数改造成了 生成器，之前说过生成器需要由 send(None) 或者 next 来启动， 之后可以通过
 send(value) 的方式发送值并且继续执行。注意我们的 TCPEchoServer.run 方法已经成了协程，我们用 Task 驱动它执行。
 我们创建一个 Task 来管理生成器的执行。
@@ -491,6 +588,8 @@ class Task:
             return
         next_future.add_done_callback(self.step)
 ```
+
+怎么使用 Task 呢？这里我给另一个例子帮助你理解它，我们先来看一个比较简单的例子：
 
 ## 参考资料
 这里一些参考过的比较好的资料
