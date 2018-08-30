@@ -369,7 +369,8 @@ def caller(a, b):
 caller(1, 2)  # 输出 6
 ```
 
-这个例子我想不用怎么解释了，不需要运行你在脑子里就应该知道它的结果，虽然有点绕。如果使用 Future 改写呢？
+这个无聊的例子中使用了多个嵌套回调， callback3 依赖 callback2 的结果，callback2 又 依赖 callback1 的结果。
+不需要电脑运行你在脑子里也可以想象出它的结果，虽然有点绕。如果使用 Future 改写呢？
 
 ```py
 def callback_1(a, b):
@@ -424,8 +425,21 @@ except StopIteration as e:
     print(e.value)   # 输出结果 6
 ```py
 
+或者我们还可以用这种方式不断驱动它来执行，（后边我们会看到如何将它演变为 Task 类）:
 
-
+c = caller_use_yield_from(1, 2)  # coroutine
+f = Future()
+f.set_result(None)
+next_future = c.send(f.result)
+def _step(future):
+    next_future = c.send(future.result)
+    next_future.add_done_callback(_step)
+while 1:
+    try:
+        _step(f)
+    except StopIteration as e:
+        print(e.value)   # 输出结果 6
+        break
 
 ```py
 class Future:
