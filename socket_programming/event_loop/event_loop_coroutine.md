@@ -423,7 +423,7 @@ try:
     f4 = c.send(None)
 except StopIteration as e:
     print(e.value)   # 输出结果 6
-```py
+```
 
 或者我们还可以用这种方式不断驱动它来执行，（后边我们会看到如何将它演变为 Task 类）:
 
@@ -460,7 +460,7 @@ while 1:
         return conn, addr
 ```
 
-这里我们做了什么呢？同样还是使用 selectors 模块注册一个 server socket 的读事件的回调 on_accept()
+这里我们做了什么呢？同样还是使用 selectors 模块注册一个 server socket 的读事件的回调 on_accept()。
 on_accept() 回调真正执行了的时候，我们把结果设置到 future.result 属性里，注意这里每个 accept() 都有自己的一个
 Future对象。
 之后如果遇到server socket 读事件代码会在运行到 yield from f 处暂停，然后执行权委派给了 future 对象，future
@@ -609,9 +609,307 @@ class Task:
 Task(caller_use_yield_from(1,2)).run()
 ```
 
-## 参考资料
-这里一些参考过的比较好的资料
+不过对于 TCPEchoServer 我们需要事件循环来驱动它，我们把 Task 修改成如下形式：
 
+```py
+class Task:
+    """管理生成器的执行"""
+    def __init__(self, coro):
+        self.coro = coro
+        f = Future()
+        f.set_result(None)
+        self.step(f)
+
+    def step(self, future):
+        try:  # 把当前 future 的结果发送给协程作为 yield from 表达式的值，同时执行到下一个 future 处
+            next_future = self.coro.send(future.result)
+        except StopIteration:
+            return
+        next_future.add_done_callback(self.step)
+```
+
+然后是我们的 EventLoop 事件循环类：
+
+```py
+class EventLoop:
+    def __init__(self, selector=None):
+        if selector is None:
+            selector = selectors.DefaultSelector()
+        self.selector = selector
+
+    def create_task(self, coro):
+        return Task(coro)
+
+    def run_forever(self):
+        while 1:
+            events = self.selector.select()
+            for event_key, event_mask in events:
+                callback = event_key.data
+                callback()
+```
+
+好了，最后我们来启动 TCPEchoServer:
+
+```py
+event_loop = EventLoop()
+echo_server = TCPEchoServer('localhost', 8888, event_loop)
+task = Task(echo_server.run())
+event_loop.run_forever()
+```
+
+到这里基本就大功告成了，所有代码如下：
+
+```py
+import selectors
+import socket
+from functools import partial
+
+
+class Future:
+    def __init__(self):
+        self.result = None
+        self._callbacks = []
+
+    def add_done_callback(self, fn):
+        self._callbacks.append(fn)
+
+    def set_result(self, result):
+        self.result = result
+        for callback in self._callbacks:
+            callback(self)
+
+    def __iter__(self):
+        yield self
+        return self.result
+
+
+class Task:
+    """管理生成器的执行"""
+    def __init__(self, coro):
+        self.coro = coro
+        f = Future()
+        f.set_result(None)
+        self.step(f)
+
+    def step(self, future):
+        try:  # 把当前 future 的结果发送给协程作为 yield from 表达式的值，同时执行到下一个 future 处
+            next_future = self.coro.send(future.result)
+        except StopIteration:
+            return
+        next_future.add_done_callback(self.step)
+
+
+class TCPEchoServer:
+    def __init__(self, host, port, loop):
+        self.host = host
+        self.port = port
+        self._loop = loop
+        self.s = socket.socket()
+
+    def run(self):
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.s.bind((self.host, self.port))
+        self.s.listen(128)
+        self.s.setblocking(False)
+
+        while True:
+            conn, addr = yield from self.accept()
+            msg = yield from self.read(conn)
+            if msg:
+                yield from self.sendall(conn, msg)
+            else:
+                conn.close()
+
+    def accept(self):
+        f = Future()
+
+        def on_accept():
+            conn, addr = self.s.accept()
+            print('accepted', conn, 'from', addr)
+            conn.setblocking(False)
+            f.set_result((conn, addr))  # accept 的 result 是接受连接的新对象 conn, addr
+        self._loop.selector.register(self.s, selectors.EVENT_READ, on_accept)
+        conn, addr = yield from f  # 委派给 future 对象，直到 future 执行了 socket.accept() 并且把 result 返回
+        self._loop.selector.unregister(self.s)
+        return conn, addr
+
+    def read(self, conn):
+        f = Future()
+
+        def on_read():
+            msg = conn.recv(1024)
+            f.set_result(msg)
+        self._loop.selector.register(conn, selectors.EVENT_READ, on_read)
+        msg = yield from f
+        if not msg:
+            self._loop.selector.unregister(conn)
+        return msg
+
+    def sendall(self, conn, msg):
+        f = Future()
+
+        def on_write():
+            conn.sendall(msg)
+            f.set_result(None)
+        self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
+        yield from f
+        # 注意这里监听完写事件之后要改成读事件，这里用partial 可以把函数包装成一个不需要参数的方法
+        callback = partial(self.read, conn)
+        self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
+
+
+class EventLoop:
+    def __init__(self, selector=None):
+        if selector is None:
+            selector = selectors.DefaultSelector()
+        self.selector = selector
+
+    def create_task(self, coro):
+        return Task(coro)
+
+    def run_forever(self):
+        while 1:
+            events = self.selector.select()
+            for event_key, event_mask in events:
+                callback = event_key.data
+                callback()
+
+
+event_loop = EventLoop()
+echo_server = TCPEchoServer('localhost', 8888, event_loop)
+task = Task(echo_server.run())
+event_loop.run_forever()
+```
+
+# 原生协程, async/await
+
+到目前为止，我们仍然使用的是 基于生成器的协程(generators based
+coroutines)，在python3.5中，python增加了使用async/await语法的原生协程(native coroutines)，
+它们使用起来并没有功能上的差别。
+我们把之前的所有 yield from 改成 await，同时函数定义前面加上 async 就好了。
+不过注意 Future 需要定义 `__await__` 方法 :
+
+```py
+class Future:
+    def __init__(self):
+        self.result = None
+        self._callbacks = []
+
+    def add_done_callback(self, fn):
+        self._callbacks.append(fn)
+
+    def set_result(self, result):
+        self.result = result
+        for callback in self._callbacks:
+            callback(self)
+
+    def __iter__(self):
+        yield self
+        return self.result
+
+    __await__ = __iter__ # make compatible with 'await' expression
+
+class Task:
+    def __init__(self, coro):
+        self.coro = coro
+        f = Future()
+        f.set_result(None)
+        self.step(f)
+
+    def step(self, future):
+        try:
+            next_future = self.coro.send(future.result)
+        except StopIteration:
+            return
+        next_future.add_done_callback(self.step)
+
+
+class TCPEchoServer:
+    def __init__(self, host, port, loop):
+        self.host = host
+        self.port = port
+        self._loop = loop
+        self.s = socket.socket()
+
+    async def run(self):
+        self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.s.bind((self.host, self.port))
+        self.s.listen(128)
+        self.s.setblocking(False)
+
+        while True:
+            conn, addr = await self.accept()
+            msg = await self.read(conn)
+            if msg:
+                await self.sendall(conn, msg)
+            else:
+                conn.close()
+
+    async def accept(self):
+        f = Future()
+
+        def on_accept():
+            conn, addr = self.s.accept()
+            print('accepted', conn, 'from', addr)
+            conn.setblocking(False)
+            f.set_result((conn, addr))
+        self._loop.selector.register(self.s, selectors.EVENT_READ, on_accept)
+        conn, addr = await f
+        self._loop.selector.unregister(self.s)
+        return conn, addr
+
+    async def read(self, conn):
+        f = Future()
+
+        def on_read():
+            msg = conn.recv(1024)
+            f.set_result(msg)
+        self._loop.selector.register(conn, selectors.EVENT_READ, on_read)
+        msg = await f
+        if not msg:
+            self._loop.selector.unregister(conn)
+        return msg
+
+    async def sendall(self, conn, msg):
+        f = Future()
+
+        def on_write():
+            conn.sendall(msg)
+            f.set_result(None)
+        self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
+        await f
+        callback = partial(self.read, conn)
+        self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
+
+
+class EventLoop:
+    def __init__(self, selector=None):
+        if selector is None:
+            selector = selectors.DefaultSelector()
+        self.selector = selector
+
+    def create_task(self, coro):
+        return Task(coro)
+
+    def run_forever(self):
+        while 1:
+            events = self.selector.select()
+            for event_key, event_mask in events:
+                callback = event_key.data
+                callback()
+
+
+event_loop = EventLoop()
+echo_server = TCPEchoServer('localhost', 8888, event_loop)
+task = Task(echo_server.run())
+event_loop.run_forever()
+```
+
+这样就使用 async/await 改写了之前的例子。
+
+## 参考资料
+
+这里一些参考过的比较好的资料，如果你觉得的理解起来有问题，可以参考这些链接或者书籍：
 
 《Fluent Python》
 
@@ -620,4 +918,3 @@ Task(caller_use_yield_from(1,2)).run()
 [从 asyncio 简单实现看异步是如何工作的](https://www.4async.com/2016/02/simple-implement-asyncio-to-understand-how-async-works/)
 
 [Python generators, coroutines, native coroutines and async/await]()
-
