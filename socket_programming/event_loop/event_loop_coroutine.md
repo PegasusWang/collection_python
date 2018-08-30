@@ -427,6 +427,7 @@ except StopIteration as e:
 
 或者我们还可以用这种方式不断驱动它来执行，（后边我们会看到如何将它演变为 Task 类）:
 
+```py
 c = caller_use_yield_from(1, 2)  # coroutine
 f = Future()
 f.set_result(None)
@@ -440,29 +441,9 @@ while 1:
     except StopIteration as e:
         print(e.value)   # 输出结果 6
         break
-
-```py
-class Future:
-    def __init__(self):
-        self.result = None
-        self._callbacks = []
-
-    def add_done_callback(self, fn):
-        self._callbacks.append(fn)
-
-    def set_result(self, result):
-        self.result = result
-        for callback in self._callbacks:
-            callback(self)
-
 ```
 
-
-
-
-
-
-这里先用 Future 对象来改造之前的 TCPEchoServer，注意代码里的变动，我们先来修改 accept() 方法:
+好了，有上面的铺垫，开始改造 TCPEchoServer 的几个方法，先从 accept 方法开始，注意代码的改动：
 
 ```py
     def accept(self):
@@ -483,9 +464,7 @@ class Future:
 on_accept() 回调真正执行了的时候，我们把结果设置到 future.result 属性里，注意这里每个 accept() 都有自己的一个
 Future对象。
 之后如果遇到server socket 读事件代码会在运行到 yield from f 处暂停，然后执行权委派给了 future 对象，future
-对象执行完成后把 socket.accept() 的结果 conn, addr 返回。
-
-
+对象执行完成后把 socket.accept() 的结果 conn, addr 返回。这里的 accept() 可以看作是是委派生成器，future 是子生成器。
 
 采用同样的方式我们可以改写 下 read 和 sendall 方法：
 
@@ -517,7 +496,6 @@ Future对象。
 ```
 
 到这里我们整个 TCPEchoServer 就差不多了：
-
 
 ```py
 class TCPEchoServer:
@@ -574,36 +552,62 @@ class TCPEchoServer:
             f.set_result(None)
         self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
         yield from f
-        # 注意这里监听完写事件之后要改成读事件，这里用partial 可以把函数包装成一个不需要参数的方法
+        # 注意这里监听完写事件之后要改成读事件，这里用 partial 可以把函数包装成一个不需要参数的方法
         callback = partial(self.read, conn)
         self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
 ```
 
 
 ## Task 驱动协程
-上边使用 Future 将函数改造成了 生成器，之前说过生成器需要由 send(None) 或者 next 来启动， 之后可以通过
-send(value) 的方式发送值并且继续执行。注意我们的 TCPEchoServer.run 方法已经成了协程，我们用 Task 驱动它执行。
-我们创建一个 Task 来管理生成器的执行。
+上边使用 Future 将函数改造成了 生成器，之前说过生成器需要由 send(None) 或者 next 来启动， 之后可以通过 send(value) 的方式发送值并且继续执行。
+前面我们使用如下方式来运行 caller_use_yield_from 协程:
 
+```py
+c = caller_use_yield_from(1, 2)  # coroutine
+f = Future()
+f.set_result(None)
+next_future = c.send(f.result)
+def _step(future):
+    next_future = c.send(future.result)
+    next_future.add_done_callback(_step)
+while 1:
+    try:
+        _step(f)
+    except StopIteration as e:
+        print(e.value)   # 输出结果 6
+        break
+```
+
+这里我们重构下这种方式，写一个 Task 对象驱动协程执行。 注意我们的 TCPEchoServer.run 方法已经成了协程，我们用 Task 驱动它执行。
+我们创建一个 Task 来管理生成器的执行。
 
 ```py
 class Task:
     """管理生成器的执行"""
+
     def __init__(self, coro):
         self.coro = coro
-        f = Future()
-        f.set_result(None)
-        self.step(f)
 
     def step(self, future):
-        try:  # 把当前 future 的结果发送给协程作为 yield from 表达式的值，同时执行到下一个 future 处
-            next_future = self.coro.send(future.result)
-        except StopIteration:
-            return
+        next_future = self.coro.send(future.result)
         next_future.add_done_callback(self.step)
+
+    def run(self):
+        f = Future()
+        f.set_result(None)
+        while 1:
+            try:
+                self.step(f)
+            except StopIteration as e:
+                print(e.value)
+                return
 ```
 
-怎么使用 Task 呢？这里我给另一个例子帮助你理解它，我们先来看一个比较简单的例子：
+然后我们可以用如下方式使用它：
+
+```py
+Task(caller_use_yield_from(1,2)).run()
+```
 
 ## 参考资料
 这里一些参考过的比较好的资料
