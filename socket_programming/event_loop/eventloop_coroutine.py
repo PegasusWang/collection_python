@@ -1,6 +1,5 @@
 import selectors
 import socket
-from functools import partial
 
 
 # TODO 尝试模仿一个简易版的 Future  和 Task
@@ -41,6 +40,7 @@ class Future:
 
 class Task:
     """管理生成器的执行"""
+
     def __init__(self, coro):
         self.coro = coro
         f = Future()
@@ -97,8 +97,6 @@ class TCPEchoServer:
             f.set_result(msg)
         self._loop.selector.register(conn, selectors.EVENT_READ, on_read)
         msg = yield from f
-        if not msg:
-            self._loop.selector.unregister(conn)
         return msg
 
     def sendall(self, conn, msg):
@@ -107,11 +105,10 @@ class TCPEchoServer:
         def on_write():
             conn.sendall(msg)
             f.set_result(None)
+            self._loop.selector.unregister(conn)
+            conn.close()
         self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
         yield from f
-        # 注意这里监听完写事件之后要改成读事件，这里用partial 可以把函数包装成一个不需要参数的方法
-        callback = partial(self.read, conn)
-        self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
 
 
 class EventLoop:

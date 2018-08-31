@@ -38,7 +38,7 @@ class Future:
         yield self
         return self.result
 
-    __await__ = __iter__ # make compatible with 'await' expression
+    __await__ = __iter__  # make compatible with 'await' expression
 
 
 class Task:
@@ -84,9 +84,9 @@ class TCPEchoServer:
             conn, addr = self.s.accept()
             print('accepted', conn, 'from', addr)
             conn.setblocking(False)
-            f.set_result((conn, addr))
+            f.set_result((conn, addr))  # accept 的 result 是接受连接的新对象 conn, addr
         self._loop.selector.register(self.s, selectors.EVENT_READ, on_accept)
-        conn, addr = await f
+        conn, addr = await f  # 委派给 future 对象，直到 future 执行了 socket.accept() 并且把 result 返回
         self._loop.selector.unregister(self.s)
         return conn, addr
 
@@ -98,8 +98,6 @@ class TCPEchoServer:
             f.set_result(msg)
         self._loop.selector.register(conn, selectors.EVENT_READ, on_read)
         msg = await f
-        if not msg:
-            self._loop.selector.unregister(conn)
         return msg
 
     async def sendall(self, conn, msg):
@@ -108,10 +106,10 @@ class TCPEchoServer:
         def on_write():
             conn.sendall(msg)
             f.set_result(None)
+            self._loop.selector.unregister(conn)
+            conn.close()
         self._loop.selector.modify(conn, selectors.EVENT_WRITE, on_write)
         await f
-        callback = partial(self.read, conn)
-        self._loop.selector.modify(conn, selectors.EVENT_READ, callback)
 
 
 class EventLoop:
