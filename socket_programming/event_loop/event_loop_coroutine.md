@@ -98,6 +98,8 @@ def f(n):
 def yield_n(n):
     for i in range(n):
         yield i
+
+assert f(10) == list(yield_n(10))
 ```
 
 ## 什么是基于生成器的协程(coroutine)
@@ -124,7 +126,10 @@ print(c.send('world'))    # 再次调用 send 发送值，此时 hello 变量赋
 # 之后协程结束，后续再 send 值会抛异常 StopIteration
 ```
 
-这里发生了什么？和之前一样我们先调用了next()函数，代码执行到yield 'hello'然后我们得到了’hello’。之后我们使用了send函数发送了一个值’world’, 它使coro恢复执行并且赋了参数’world’给hello这个变量，接着执行到下一行的yield语句并将hello变量的值’world’返回。所以我们得到了send()方法的返回值’world’。
+这里发生了什么？
+
+- 和之前一样我们先调用了next()函数，代码执行到yield 'hello'然后我们得到了’hello’。
+- 之后我们使用了send函数发送了一个值’world’, 它使coro恢复执行并且赋了参数’world’给hello这个变量，接着执行到下一行的yield语句并将hello变量的值’world’返回。所以我们得到了send()方法的返回值’world’。
 
 当我们使用基于生成器的协程(generator based coroutines)时候，术语”generator”和”coroutine”通常表示一个东西，尽管实际上不是。而python3.5以后增加了async/await关键字用来支持原生协程(native coroutines)，我们在后边讨论。
 
@@ -155,9 +160,10 @@ def primer(*args,**kwargs):  ➊
 return primer
 ```
 
-
 # yield from 的含义
-yield from 的语义比较复杂，一开始理解会比较吃力，我建议你先阅读下 Fluent Python 16 章协程。 先看下边这个例子:
+python3 中引入了 yield from, 它的语义比较复杂，一开始理解会比较吃力，我建议你先阅读下 Fluent Python 16
+章协程，它的主要作用有两个：一个是链接子生成器，一个是用来作为调用者和子生成器的通道。
+我们通过几个例子来看下 yield from 的使用场景。先看下边这个例子:
 
 ```
 >>> def gen():
@@ -226,10 +232,11 @@ world
 coro2 result world
 ```
 
-yield from 的语义很复杂又有点让人混淆，不过可以先忽略异常处理，下边是一个简化版的伪代码表示 yield from 的含义(来自 Fluent Python 16章)
+yield from 的语义很复杂又有点让人混淆，不过可以先忽略异常处理，下边是一个简化版的伪代码表示 yield from 的含义(来自
+Fluent Python 16章 协程)
 
 ```py
-# RESULT = yield from EXPR 伪代码
+# RESULT = yield from EXPR 伪代码演示
 _i = iter(EXPR)  # <1>
 try:
     _y = next(_i)  # <2>
@@ -342,7 +349,7 @@ class Future:
         return self.result   # yield from 将把 result 值返回作为 yield from 表达式的值
 ```
 
-好了，那如何使用 Future 呢，我们先来看个小例子：
+好了，那如何使用 Future 呢，我们先来看个无聊的小例子：
 
 
 ```py
@@ -369,7 +376,7 @@ def caller(a, b):
 caller(1, 2)  # 输出 6
 ```
 
-这个无聊的例子中使用了多个嵌套回调， callback3 依赖 callback2 的结果，callback2 又 依赖 callback1 的结果。
+这个例子中使用了多个嵌套回调， callback3 依赖 callback2 的结果，callback2 又依赖 callback1 的结果。
 不需要电脑运行你在脑子里也可以想象出它的结果，虽然有点绕。如果使用 Future 改写呢？
 
 ```py
@@ -417,7 +424,7 @@ def caller_use_yield_from(a, b):
 ```py
 c = caller_use_yield_from(1,2)  # coroutine
 f1 = c.send(None)   # 产出第一个 future 对象
-f2 = c.send(f1.result)
+f2 = c.send(f1.result)  # 驱动运行到第二个 callback
 f3 = c.send(f2.result)
 try:
     f4 = c.send(None)
@@ -432,12 +439,12 @@ c = caller_use_yield_from(1, 2)  # coroutine
 f = Future()
 f.set_result(None)
 next_future = c.send(f.result)
-def _step(future):
+def step(future):
     next_future = c.send(future.result)
-    next_future.add_done_callback(_step)
+    next_future.add_done_callback(step)
 while 1:
     try:
-        _step(f)
+        step(f)
     except StopIteration as e:
         print(e.value)   # 输出结果 6
         break
@@ -560,12 +567,12 @@ c = caller_use_yield_from(1, 2)  # coroutine
 f = Future()
 f.set_result(None)
 next_future = c.send(f.result)
-def _step(future):
+def step(future):
     next_future = c.send(future.result)
-    next_future.add_done_callback(_step)
+    next_future.add_done_callback(step)
 while 1:
     try:
-        _step(f)
+        step(f)
     except StopIteration as e:
         print(e.value)   # 输出结果 6
         break

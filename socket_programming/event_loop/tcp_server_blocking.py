@@ -7,7 +7,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen(128)
     while True:
-        conn, addr = s.accept()
+        conn, addr = s.accept()   # 没有新的连接会阻塞在 accept 调用上
+        print('accept')
         print('Connected by', addr)
         with conn:
             while 1:
