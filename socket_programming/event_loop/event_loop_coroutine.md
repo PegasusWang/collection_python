@@ -349,7 +349,7 @@ class Future:
         return self.result   # yield from 将把 result 值返回作为 yield from 表达式的值
 ```
 
-好了，那如何使用 Future 呢，我们先来看个无聊的小例子：
+好了，那如何使用 Future 呢，我们先来看个无聊的小例子，后边会演示如何使用 Future 对象和协程来消除在应用层代码消除回调：
 
 
 ```py
@@ -361,13 +361,12 @@ def callback1(a, b):
 
 def callback2(c):
     c *= 2
-    c = callback3(c)
+    callback3(c)
     return c
 
 
 def callback3(c):
     print(c)
-    return c
 
 
 def caller(a, b):
@@ -407,15 +406,14 @@ def callback_3(c):
     def on_callback_3():
         f.set_result(c)
     on_callback_3()
-    c = yield from f
-    return c
+    yield from f
 
 
 def caller_use_yield_from(a, b):
     c1 = yield from callback_1(a, b)
     c2 = yield from callback_2(c1)
-    c3 = yield from callback_3(c2)
-    return c3
+    yield from callback_3(c2)
+    return c2
 ```
 
 然后你再执行以下 caller_use_yield_from(1, 2)，你会发现没有任何输出，直接调用它并没什么卵用，因为这个时候有了 yield from
@@ -449,6 +447,12 @@ while 1:
         print(e.value)   # 输出结果 6
         break
 ```
+
+呀，代码看起来似乎更麻烦和复杂了，似乎比用回调还晕，不过在 caller_use_yield_from 调用方这里，我们用协程和 Future 结合把回调给消除了。
+当一个函数的结果依赖另一个函数的时候，我们不需要一个函数回调另一个函数，而是通过协程把上一个协程的结果
+通过 send(value) 的方式发送给下一个依赖它的值的协程。(还记得之前讲到的协程可以用 send 发送值吗)。
+真实的异步编程也是复杂的，只不过大量复杂性被框架掩盖了(比如写asyncio 库的人)，应用层代码会大大简化，比如这里的
+TCPEchoServer.run 方法看起来比回调形式好看得多。
 
 好了，有上面的铺垫，开始改造 TCPEchoServer 的几个方法，先从 accept 方法开始，注意代码的改动：
 
@@ -508,7 +512,7 @@ class TCPEchoServer:
         self._loop = loop
         self.s = socket.socket()
 
-    def run(self):
+    def run(self):   # 这是我们的应用层代码，看起来比起回调方便很多，但是内部 accept 等函数却做了很多工作
         self.s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.s.bind((self.host, self.port))
         self.s.listen(128)
