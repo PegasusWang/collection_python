@@ -44,8 +44,6 @@
 
 
 页面右侧的最佳回答者都不错
-* http://www.zhihu.com/topic/19552521
-* http://www.zhihu.com/topic/19557964
 
 其它牛人
 * http://blog.csdn.net/yaoxtao/article/details/38518933
