@@ -30,12 +30,11 @@ def test_check():
 
 
 """
-"zhihu_remix": {
+"exemple_remix": {
     "check_member_permission": 0,
-    "name": "zhihu-remix",
+    "name": "exemple-remix",
     "key": "ec2b1b",
     "secret": "wCXkKAwqZWlbZ8t0B3Yd"
 }
 """
-print(gen_hash('zhihu-remix'))
-
+print(gen_hash('exemple-remix'))
