@@ -138,6 +138,7 @@ print(c.send('world'))    # 再次调用 send 发送值，此时 hello 变量赋
 
 - 协程需要使用 send(None) 或者 next(coroutine) 来『预激』(prime) 才能启动
 - 在 yield 处协程会暂停执行
+- 单独的 yield value 会产出值给调用方
 - 可以通过 coroutine.send(value) 来给协程发送值，发送的值会赋值给 yield 表达式左边的变量
 - 协程执行完成后(没有遇到下一个 yield 语句)抛出 StopIteration 异常
 
@@ -152,12 +153,12 @@ from functools import wraps
 
 def coroutine(func):
 """装饰器：向前执行到第一个`yield`表达式，预激`func`"""
-@wraps(func)
-def primer(*args,**kwargs):  ➊
-    gen = func(*args,**kwargs)  ➋
-    next(gen)  ➌
-    return gen  ➍
-return primer
+    @wraps(func)
+    def primer(*args,**kwargs):  ➊
+        gen = func(*args,**kwargs)  ➋
+        next(gen)  ➌
+        return gen  ➍
+    return primer
 ```
 
 # yield from 的含义
@@ -272,6 +273,7 @@ RESULT = _r  # <8>
 ❺ 产出子生成器当前产出的元素；等待调用方发送 _s 中保存的值。注意，这个代码清单中只有这一个 yield 表达式。
 
 ❻ 尝试让子生成器向前执行，转发调用方发送的 _s。
+
 ❼ 如果子生成器抛出 StopIteration 异常，获取 value 属性的值，赋值给 _r，然后退出循环，让委派生成器恢复运行。
 
 ❽ 返回的结果（RESULT）是 _r，即整个 yield from 表达式的值。
@@ -670,7 +672,6 @@ event_loop.run_forever()
 ```py
 import selectors
 import socket
-from functools import partial
 
 
 class Future:
