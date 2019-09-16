@@ -13,7 +13,9 @@ from termcolor import cprint
 from pyfiglet import figlet_format
 
 # cprint(figlet_format('missile!', font='starwars'), 'yellow', 'on_red', attrs=['bold'])
-cprint(figlet_format(u'docker vim'))
+# cprint(figlet_format(u'docker vim'))
+# cprint(figlet_format(u'Python/Go Web Guide'))
+cprint(figlet_format(u'Python/Go Web Guide', width=300))
 
 """
 
