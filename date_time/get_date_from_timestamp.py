@@ -2,9 +2,9 @@
 # -*- coding:utf-8 -*-
 
 
+import datetime
 import sys
 import time
-import datetime
 
 
 def datetime_from_timestamp(time_stamp):
