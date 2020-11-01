@@ -1,0 +1,282 @@
+{
+  "data": {
+    "pid": -110,
+    "category": 2,
+    "stocks": [
+      {
+        "symbol": "F163406",
+        "name": "兴全合润",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948579181
+      },
+      {
+        "symbol": "F519736",
+        "name": "交银新成长混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948537884
+      },
+      {
+        "symbol": "F206009",
+        "name": "鹏华新兴产业混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948516495
+      },
+      {
+        "symbol": "F162703",
+        "name": "广发小盘成长混合（LOF）",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948500580
+      },
+      {
+        "symbol": "F002692",
+        "name": "富国创新科技混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948486420
+      },
+      {
+        "symbol": "F519066",
+        "name": "汇添富蓝筹稳健混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948428233
+      },
+      {
+        "symbol": "F003095",
+        "name": "中欧医疗健康混合A",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948390736
+      },
+      {
+        "symbol": "F001714",
+        "name": "工银文体产业股票",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603948048671
+      },
+      {
+        "symbol": "F519702",
+        "name": "交银趋势优先股票",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603845424178
+      },
+      {
+        "symbol": "F005827",
+        "name": "易方达蓝筹精选混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603845251320
+      },
+      {
+        "symbol": "F163417",
+        "name": "兴全合宜混合（LOF）A",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1603815542329
+      },
+      {
+        "symbol": "F001875",
+        "name": "前海开源沪港深优势精选",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1598545074042
+      },
+      {
+        "symbol": "F003634",
+        "name": "嘉实农业产业股票",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1597673591527
+      },
+      {
+        "symbol": "F166002",
+        "name": "中欧新蓝筹混合A",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1596203765100
+      },
+      {
+        "symbol": "F519697",
+        "name": "交银优势行业混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1596125592157
+      },
+      {
+        "symbol": "F161005",
+        "name": "富国天惠成长LOF",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1595949633275
+      },
+      {
+        "symbol": "F519772",
+        "name": "交银新生活力混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1595549650223
+      },
+      {
+        "symbol": "F006751",
+        "name": "富国互联科技股票",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1595549310327
+      },
+      {
+        "symbol": "F163402",
+        "name": "兴全趋势",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594976564630
+      },
+      {
+        "symbol": "F110011",
+        "name": "易方达中小盘混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594830231826
+      },
+      {
+        "symbol": "F270002",
+        "name": "广发稳健增长混合A类",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594830196333
+      },
+      {
+        "symbol": "F001631",
+        "name": "天弘中证食品饮料指数A",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594132214432
+      },
+      {
+        "symbol": "F001171",
+        "name": "工银养老产业股票",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594132186128
+      },
+      {
+        "symbol": "F180031",
+        "name": "银华中小盘精选混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594132171209
+      },
+      {
+        "symbol": "F001691",
+        "name": "南方香港成长",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594132075546
+      },
+      {
+        "symbol": "F007300",
+        "name": "国联安半导体ETF联接A",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131944166
+      },
+      {
+        "symbol": "F000751",
+        "name": "嘉实新兴产业",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131920891
+      },
+      {
+        "symbol": "F001410",
+        "name": "信达澳银新能源产业",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131873040
+      },
+      {
+        "symbol": "F519068",
+        "name": "汇添富成长焦点",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131826140
+      },
+      {
+        "symbol": "F009549",
+        "name": "汇添富中盘价值精选混合C",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131792316
+      },
+      {
+        "symbol": "F000220",
+        "name": "富国医疗保健行业混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131702704
+      },
+      {
+        "symbol": "F100061",
+        "name": "富国中国中小盘混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1594131598592
+      },
+      {
+        "symbol": "F260108",
+        "name": "景顺长城新兴成长",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1583768283873
+      },
+      {
+        "symbol": "F000083",
+        "name": "汇添富消费行业混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1583768233157
+      }
+    ]
+  },
+  "error_code": 0,
+  "error_description": ""
+}
