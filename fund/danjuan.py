@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-抓取蛋卷基金数据。主要是为了导出我关注的一些优秀主动基金的季度重仓股
+抓取蛋卷基金数据。主要是为了导出我关注的一些优秀主动基金的季度重仓股。随手写的仅供参考
 
 pip install requests
 pip install SQLAlchemy -i https://pypi.doubanio.com/simple --user
 pip install pymysql -i https://pypi.doubanio.com/simple --user
 
-# https://github.com/numpy/numpy/issues/15947 numpy 版本高有问题
+# https://github.com/numpy/numpy/issues/15947 numpy 版本高 mac 有问题
 pip3 install numpy==1.18.0 -i https://pypi.doubanio.com/simple
 pip3 install pandas -i https://pypi.doubanio.com/simple
 pip3 install openpyxl -i https://pypi.doubanio.com/simple
@@ -154,7 +154,7 @@ def request_and_save(fund_code, fund_name):
 
 
 def get_my_xueqiu_fund_codes():
-    """ 从我的雪球获取我关注的所有基金代码
+    """ 从我的雪球获取我关注的所有基金代码。如果你有雪球账号并且有关注的基金，可以用这段代码自动化查询。
     https://stock.xueqiu.com/v5/stock/portfolio/stock/list.json?size=1000&pid=-110&category=2
     """
     # resp = requests.get(
@@ -169,7 +169,7 @@ def get_my_xueqiu_fund_codes():
     #         "Sec-Fetch-Mode": "cors",
     #         "Sec-Fetch-Site": "same-site",
     #         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36"},
-    #     cookies={}, # TODO 用浏览器查询请求，改成你自己的 uncurl requests 代码
+    #     cookies={}, # TODO 用浏览器查询请求，改成你自己的 uncurl requests 代码，注意你的 cookie 不要随便泄露出去
     # )
     #
     # with open("./funds.json", "w") as f:
@@ -193,7 +193,7 @@ def crawl_all_my_funds_to_mysql():
 
     for fund_code, fund_name in funds:
         request_and_save(fund_code, fund_name)
-        time.sleep(random.randint(5, 10))  # 慢一点，防止反作弊命中
+        time.sleep(random.randint(5, 10))  # 注意慢一点，随机 sleep 防止命中反作弊
 
 
 def export_all_mysql_funds_stocks_to_dict():
@@ -214,7 +214,7 @@ def export_all_mysql_funds_stocks_to_dict():
             stock_fmt = u"{}[{}]({}%)".format(name, code, percent)
             stocks.append(stock_fmt)
 
-        if len(stocks) < 10:
+        if len(stocks) < 10: # 十大重仓股
             stocks += (10 - len(stocks)) * [""]
 
         key = row.fund_name
