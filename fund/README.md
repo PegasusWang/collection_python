@@ -1,6 +1,22 @@
 # 抓取基金重仓股
 
-1. 本地安装 mysql 并创建数据表
+1. 本地安装 mysql 并创建数据库和数据表
+
+```
+def init_conn():
+    global Connection, Table  # 全局使用
+    url = "mysql+pymysql://root:wnnwnn@127.0.0.1:3306/testdb"  # 测试地址，改成你的本地 mysql 数据库地址
+    engine = db.create_engine(url)
+    metadata = db.MetaData()
+    Connection = engine.connect()
+    Table = db.Table(TableName, metadata, autoload=True, autoload_with=engine)
+```
+
+注意 url 里的地址改成你的本地的 mysql 地址。
+
+```
+url = "mysql+pymysql://user:password@127.0.0.1:3306/testdb"  # 测试地址，改成你的本地 mysql 数据库地址
+```
 
 ```
 CREATE TABLE `danjuan_fund_2020_4` (

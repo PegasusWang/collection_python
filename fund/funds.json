@@ -4,6 +4,54 @@
     "category": 2,
     "stocks": [
       {
+        "symbol": "F001102",
+        "name": "前海开源国家比较优势",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611458837144
+      },
+      {
+        "symbol": "F001216",
+        "name": "易方达新收益A",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611458790466
+      },
+      {
+        "symbol": "F180012",
+        "name": "银华富裕主题混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611458781496
+      },
+      {
+        "symbol": "F000991",
+        "name": "工银战略转型股票",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611458752445
+      },
+      {
+        "symbol": "F001938",
+        "name": "中欧时代先锋",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611458717986
+      },
+      {
+        "symbol": "F110022",
+        "name": "易方达消费行业",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611458555127
+      },
+      {
         "symbol": "F161903",
         "name": "万家行业优选混合",
         "type": 23,

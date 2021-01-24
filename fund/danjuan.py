@@ -148,7 +148,7 @@ def parse_danjuan_fund(fund_code, json_text):
     return fund_name, managers, enddate
 
 
-# 在你的 mysql 创建这个表
+# 本地安装 mysql，并且在你的 mysql 创建这个表
 """
 CREATE TABLE `danjuan_fund_2020_4` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -185,11 +185,6 @@ def get_my_xueqiu_fund_codes():
     """从我的雪球获取我关注的所有基金代码
     https://stock.xueqiu.com/v5/stock/portfolio/stock/list.json?size=1000&pid=-110&category=2
     """
-
-    # 直接从雪球上导出到本地 json 文件吧，cookie 之前的会过期
-    with open("./funds.json", "w") as f:
-        json.dump(resp.json(), f, indent=2, ensure_ascii=False)
-
     codes = []  # [ (code, name) ]
     with open("./funds.json") as f:
         res = json.load(f)
@@ -219,9 +214,11 @@ def export_all_mysql_funds_stocks_to_dict():
     for row in rows:
         d = json.loads(row.detail_json)
         try:
+            stock_percent = d["data"]["fund_position"]["stock_percent"]  # 股票比
             stock_list = d["data"]["fund_position"]["stock_list"]
         except KeyError:  # 新基金没披露可能为空
             stock_list = []
+            stock_percent = 0
 
         stocks = []
         for stock in stock_list:
@@ -233,7 +230,7 @@ def export_all_mysql_funds_stocks_to_dict():
             stocks += (10 - len(stocks)) * [""]
 
         key = row.fund_name
-        vals = [row.fund_code, row.managers, row.enddate] + stocks
+        vals = [row.fund_code, row.managers, row.enddate, stock_percent] + stocks
         fund_dict[key] = vals
 
     return fund_dict
@@ -242,14 +239,13 @@ def export_all_mysql_funds_stocks_to_dict():
 # https://www.geeksforgeeks.org/how-to-create-dataframe-from-dictionary-in-python-pandas/
 def export_all_mysql_funds_stocks_to_excel_vertical():
     fund_dict = export_all_mysql_funds_stocks_to_dict()
-    index = ["代码", "管理人", "季报日期"] + ["重仓股"] * 10  # 十大重仓
+    index = ["代码", "管理人", "季报日期", "股票仓位"] + ["重仓股"] * 10  # 十大重仓
     df = pd.DataFrame(fund_dict, index=index)
     df.to_excel("./funds_stock_vertical.xlsx")
 
 
 def export_all_mysql_funds_stocks_to_excel():  # 横着
     fund_dict = export_all_mysql_funds_stocks_to_dict()
-    # index = ['代码', '管理人', '季报日期'] + ['重仓股'] * 10
     df = pd.DataFrame.from_dict(fund_dict, orient="index")
     df.to_excel("./fund_stock.xlsx")
 
