@@ -4,8 +4,48 @@
     "category": 2,
     "stocks": [
       {
+        "symbol": "F161903",
+        "name": "万家行业优选混合",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1611373231330
+      },
+      {
+        "symbol": "F162605",
+        "name": "景顺长城鼎益混合(LOF)",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1610465094754
+      },
+      {
+        "symbol": "F161725",
+        "name": "招商中证白酒指数",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1609131540344
+      },
+      {
+        "symbol": "F100060",
+        "name": "富国高新技术产业",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1604509983036
+      },
+      {
+        "symbol": "F118001",
+        "name": "易方达亚洲精选",
+        "type": 23,
+        "remark": "",
+        "exchange": "F",
+        "created": 1604504170749
+      },
+      {
         "symbol": "F163406",
-        "name": "兴全合润",
+        "name": "兴全合润混合",
         "type": 23,
         "remark": "",
         "exchange": "F",
@@ -68,14 +108,6 @@
         "created": 1603948048671
       },
       {
-        "symbol": "F519702",
-        "name": "交银趋势优先股票",
-        "type": 23,
-        "remark": "",
-        "exchange": "F",
-        "created": 1603845424178
-      },
-      {
         "symbol": "F005827",
         "name": "易方达蓝筹精选混合",
         "type": 23,
@@ -98,14 +130,6 @@
         "remark": "",
         "exchange": "F",
         "created": 1598545074042
-      },
-      {
-        "symbol": "F003634",
-        "name": "嘉实农业产业股票",
-        "type": 23,
-        "remark": "",
-        "exchange": "F",
-        "created": 1597673591527
       },
       {
         "symbol": "F166002",
@@ -204,14 +228,6 @@
         "created": 1594132075546
       },
       {
-        "symbol": "F007300",
-        "name": "国联安半导体ETF联接A",
-        "type": 23,
-        "remark": "",
-        "exchange": "F",
-        "created": 1594131944166
-      },
-      {
         "symbol": "F000751",
         "name": "嘉实新兴产业",
         "type": 23,
@@ -242,14 +258,6 @@
         "remark": "",
         "exchange": "F",
         "created": 1594131792316
-      },
-      {
-        "symbol": "F000220",
-        "name": "富国医疗保健行业混合",
-        "type": 23,
-        "remark": "",
-        "exchange": "F",
-        "created": 1594131702704
       },
       {
         "symbol": "F100061",
