@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+import os
 import subprocess, signal
 
 def kill_process_name(process_name):
@@ -8,7 +8,7 @@ def kill_process_name(process_name):
     out, err = p.communicate()
 
     for line in out.splitlines():
-        if name in line:
+        if process_name in line:
             pid = int(line.split(None, 1)[0])
             os.kill(pid, signal.SIGKILL)
 
