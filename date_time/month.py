@@ -49,5 +49,5 @@ def test():
 
 if __name__ == '__main__':
     test()
-    import doctest
+    # import doctest
     # doctest.testmod()
