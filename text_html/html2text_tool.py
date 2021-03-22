@@ -5,9 +5,9 @@ import requests
 
 from bs4 import BeautifulSoup
 def html2txt(html=u''):
-    print html
+    print(html)
     soup = BeautifulSoup(html)
-    print soup.get_text()
+    print(soup.get_text())
 
 
 import html2text    # to markdown not plain text
@@ -31,7 +31,7 @@ def test():
     html = requests.get('http://codingpy.com/article/top-10-mistakes-that-python-programmers-make/').text
     soup = BeautifulSoup(html)
     content = soup.find(class_='article-content')
-    print(html2makrdown(unicode(content)))
+    print(html2makrdown(content))
 
 
 if __name__ == '__main__':
