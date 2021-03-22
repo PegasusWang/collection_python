@@ -6,10 +6,10 @@
 
 
 # 如果不用cookies参数，使用headers参数也可以这样加上cookie，注意不是cookie(s)
-headers = {
-    'cookie': cookies_str
-}
-r = requests.get(url, headers=headers).content
+# headers = {
+#     'cookie': cookies_str
+# }
+# r = requests.get(url, headers=headers).content
 
 
 def headers_to_dict(s):
@@ -74,10 +74,11 @@ def to_dict(s, s_type):
 def print_li(li):
     if isinstance(li, dict):
         for k, v in li.items():
-            print k, v
+            print(k,':', v)
     else:
         for i in li:
-            print i
+            print(i)
+
 
 # for test
 
@@ -104,6 +105,7 @@ form_string = """
 first=false&pn=1&sortField=0&havemark=0
 """
 
+
 def test_headers_to_dict():
     d = headers_to_dict(headers_string)
     print_li(d)
@@ -127,7 +129,7 @@ def test_to_dict():
     print_li(to_dict(form_string, 'form'))
 
 
-#test_headers_to_dict()
-#test_cookies_to_dict()
-#test_form_to_dict()
+# test_headers_to_dict()
+# test_cookies_to_dict()
+# test_form_to_dict()
 test_to_dict()
