@@ -28,7 +28,7 @@ def to_unicode(unknown_bytes):
 
 
 def detect_html_encoding(url):
-    r = requests.get(url).content
+    data = requests.get(url).content
     return cchardet.detect(data)['encoding']
 
 

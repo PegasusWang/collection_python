@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-
+from queue import Queue
 
 
 def coroutine(func):
@@ -8,19 +8,21 @@ def coroutine(func):
         rc = func(*args, **kwargs)
         rc.next()
         return rc
+
     return start
 
 
 @coroutine
 def threaded(target):
-    messages = Queue()    # message queue
+    messages = Queue()  # message queue
+
     def run_target():
         while True:
-            item = messages.get()    # A thread loop forever.pulling items out of
-                                     # the message queue and sending to the
-                                     # target
+            item = messages.get()  # A thread loop forever.pulling items out of
+            # the message queue and sending to the
+            # target
 
-            if item is GeneratorExit:    # handle close so that thread shuts down correctly
+            if item is GeneratorExit:  # handle close so that thread shuts down correctly
                 target.close()
                 return
             else:
@@ -29,11 +31,15 @@ def threaded(target):
 
         try:
             while True:
-                item = yield    # receive items and pass them into the
-                                # thread (via the queue)
+                item = yield  # receive items and pass them into the
+                # thread (via the queue)
                 messages.put(item)
         except GeneratorExit:
             messages.put(GeneratorExit)
+
+
+def main():
+    pass
 
 
 if __name__ == '__main__':

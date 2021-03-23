@@ -4,6 +4,7 @@
 
 class Singleton1(object):
     """实现方式1：使用__new__"""
+
     def __new__(cls, *args, **kwargs):
         if not hasattr(cls, '_instance'):
             orig = super(Singleton1, cls)
@@ -31,6 +32,7 @@ def Singleton3(cls, *args, **kwargs):
         if cls not in instances:
             instances[cls] = cls(*args, **kwargs)
         return instances[cls]
+
     return getinstance
 
 
@@ -61,3 +63,7 @@ def test_singleton():
     s2 = Singleton()
     assert id(s1) == id(s2)
     assert s1 is s2
+
+
+if __name__ == '__main__':
+    test_singleton()

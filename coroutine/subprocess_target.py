@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import pickle
 
 
 def coroutine(func):
@@ -7,7 +8,9 @@ def coroutine(func):
         rc = func(*args, **kwargs)
         rc.next()
         return rc
+
     return start
+
 
 # bridge two coroutine over a file/pipe
 
@@ -29,6 +32,10 @@ def fecvfrom(f, target):
             target.send(item)
     except EOFError:
         target.close()
+
+
+def main():
+   pass
 
 if __name__ == '__main__':
     main()

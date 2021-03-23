@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
 # -*- coding: gb2312 -*-
 # vi:ts=4:et
-	
-"""
-Ä¿Ç°³ÌĞòÄÜ´ÓÏÂÁĞÍøÕ¾×¥È¡´úÀíÁĞ±í
+ç›®å‰ç¨‹åºèƒ½ä»ä¸‹åˆ—ç½‘ç«™æŠ“å–ä»£ç†åˆ—è¡¨
 
 http://www.cybersyndrome.net/
 http://www.pass-e.com/
@@ -17,10 +19,10 @@ http://www.publicproxyservers.com/
 http://www.digitalcybersoft.com/
 http://www.checkedproxylists.com/
 
-ÎÊ:ÔõÑù²ÅÄÜÌí¼Ó×Ô¼ºµÄĞÂÍøÕ¾£¬²¢×Ô¶¯ÈÃ³ÌĞòÈ¥×¥È¡?
-´ğ:
+é—®:æ€æ ·æ‰èƒ½æ·»åŠ è‡ªå·±çš„æ–°ç½‘ç«™ï¼Œå¹¶è‡ªåŠ¨è®©ç¨‹åºå»æŠ“å–?
+ç­”:
 
-Çë×¢ÒâÔ´´úÂëÖĞÒÔÏÂº¯ÊıµÄ¶¨Òå.´Óº¯ÊıÃûµÄ×îºóÒ»¸öÊı×Ö´Ó1¿ªÊ¼µİÔö£¬Ä¿Ç°ÒÑ¾­µ½ÁË13    
+è¯·æ³¨æ„æºä»£ç ä¸­ä»¥ä¸‹å‡½æ•°çš„å®šä¹‰.ä»å‡½æ•°åçš„æœ€åä¸€ä¸ªæ•°å­—ä»1å¼€å§‹é€’å¢ï¼Œç›®å‰å·²ç»åˆ°äº†13    
 
 def build_list_urls_1(page=5):
 def parse_page_2(html=''):
@@ -34,37 +36,37 @@ def build_list_urls_13(page=5):
 def parse_page_13(html=''):
 
 
-ÄãÒª×öµÄ¾ÍÊÇÌí¼Ó build_list_urls_14 ºÍ parse_page_14 ÕâÁ½¸öº¯Êı
-±ÈÈçÄãÒª´Ó www.somedomain.com ×¥È¡ 
+ä½ è¦åšçš„å°±æ˜¯æ·»åŠ  build_list_urls_14 å’Œ parse_page_14 è¿™ä¸¤ä¸ªå‡½æ•°
+æ¯”å¦‚ä½ è¦ä» www.somedomain.com æŠ“å– 
     /somepath/showlist.asp?page=1
-    ...  µ½
-    /somepath/showlist.asp?page=8  ¼ÙÉè¹²8Ò³
+    ...  åˆ°
+    /somepath/showlist.asp?page=8  å‡è®¾å…±8é¡µ
 
-ÄÇÃ´ build_list_urls_14 ¾ÍÓ¦¸ÃÕâÑù¶¨Òå
-Òª¶¨ÒåÕâ¸öpageÕâ¸ö²ÎÊıµÄÄ¬ÈÏÖµÎªÄãÒª×¥È¡µÄÒ³ÃæÊı8£¬ÕâÑù²ÅÄÜÕıÈ·µ½×¥µ½8¸öÒ³Ãæ
+é‚£ä¹ˆ build_list_urls_14 å°±åº”è¯¥è¿™æ ·å®šä¹‰
+è¦å®šä¹‰è¿™ä¸ªpageè¿™ä¸ªå‚æ•°çš„é»˜è®¤å€¼ä¸ºä½ è¦æŠ“å–çš„é¡µé¢æ•°8ï¼Œè¿™æ ·æ‰èƒ½æ­£ç¡®åˆ°æŠ“åˆ°8ä¸ªé¡µé¢
 def build_list_urls_14(page=8):   
     ..... 
-    return [        #·µ»ØµÄÊÇÒ»¸öÒ»Î¬Êı×é£¬Êı×éÃ¿¸öÔªËØ¶¼ÊÇÄãÒª×¥È¡µÄÒ³ÃæµÄ¾ø¶ÔµØÖ·
-    	'http://www.somedomain.com/somepath/showlist.asp?page=1',
+    return [        #è¿”å›çš„æ˜¯ä¸€ä¸ªä¸€ç»´æ•°ç»„ï¼Œæ•°ç»„æ¯ä¸ªå…ƒç´ éƒ½æ˜¯ä½ è¦æŠ“å–çš„é¡µé¢çš„ç»å¯¹åœ°å€
+        'http://www.somedomain.com/somepath/showlist.asp?page=1',
         'http://www.somedomain.com/somepath/showlist.asp?page=2',
         'http://www.somedomain.com/somepath/showlist.asp?page=3',
         ....
         'http://www.somedomain.com/somepath/showlist.asp?page=8'
     ]
 
-½ÓÏÂÀ´ÔÙĞ´Ò»¸öº¯Êı parse_page_14(html='')ÓÃÀ´·ÖÎöÉÏÃæÄÇ¸öº¯Êı·µ»ØµÄÄÇĞ©Ò³ÃæhtmlµÄÄÚÈİ
-²¢´ÓhtmlÖĞÌáÈ¡´úÀíµØÖ·
-×¢Òâ£º Õâ¸öº¯Êı»áÑ­»·´¦Àí parse_page_14 ÖĞµÄËùÓĞÒ³Ãæ£¬´«ÈëµÄhtml¾ÍÊÇÄÇĞ©Ò³ÃæµÄhtmlÎÄ±¾
+æ¥ä¸‹æ¥å†å†™ä¸€ä¸ªå‡½æ•° parse_page_14(html='')ç”¨æ¥åˆ†æä¸Šé¢é‚£ä¸ªå‡½æ•°è¿”å›çš„é‚£äº›é¡µé¢htmlçš„å†…å®¹
+å¹¶ä»htmlä¸­æå–ä»£ç†åœ°å€
+æ³¨æ„ï¼š è¿™ä¸ªå‡½æ•°ä¼šå¾ªç¯å¤„ç† parse_page_14 ä¸­çš„æ‰€æœ‰é¡µé¢ï¼Œä¼ å…¥çš„htmlå°±æ˜¯é‚£äº›é¡µé¢çš„htmlæ–‡æœ¬
 
-ip:   ±ØĞëÎª xxx.xxx.xxx.xxx Êı×Öip¸ñÊ½£¬²»ÄÜÎª www.xxx.com ¸ñÊ½
-port: ±ØĞëÎª 2-5Î»µÄÊı×Ö
-type: ±ØĞëÎª Êı×Ö 2,1,0,-1 ÖĞµÄÆäÖĞÒ»¸ö¡£ÕâĞ©Êı×Ö´ú±í´úÀí·şÎñÆ÷µÄÀàĞÍ
-      2:¸ß¶ÈÄäÃû´úÀí  1: ÆÕÍ¨ÄäÃû´úÀí  0:Í¸Ã÷´úÀí    -1: ÎŞ·¨È·¶¨µÄ´úÀíÀàĞÍ
- #area: ´úÀíËùÔÚ¹ú¼Ò»òÕßµØÇø£¬ ±ØĞë×ª»¯Îª utf8±àÂë¸ñÊ½  
+ip:   å¿…é¡»ä¸º xxx.xxx.xxx.xxx æ•°å­—ipæ ¼å¼ï¼Œä¸èƒ½ä¸º www.xxx.com æ ¼å¼
+port: å¿…é¡»ä¸º 2-5ä½çš„æ•°å­—
+type: å¿…é¡»ä¸º æ•°å­— 2,1,0,-1 ä¸­çš„å…¶ä¸­ä¸€ä¸ªã€‚è¿™äº›æ•°å­—ä»£è¡¨ä»£ç†æœåŠ¡å™¨çš„ç±»å‹
+      2:é«˜åº¦åŒ¿åä»£ç†  1: æ™®é€šåŒ¿åä»£ç†  0:é€æ˜ä»£ç†    -1: æ— æ³•ç¡®å®šçš„ä»£ç†ç±»å‹
+ #area: ä»£ç†æ‰€åœ¨å›½å®¶æˆ–è€…åœ°åŒºï¼Œ å¿…é¡»è½¬åŒ–ä¸º utf8ç¼–ç æ ¼å¼  
 
 def parse_page_14(html=''):
     ....
-	return [
+    return [
         [ip,port,type,area]         
         [ip,port,type,area]         
         .....                      
@@ -72,82 +74,76 @@ def parse_page_14(html=''):
         [ip,port,type,area]        
     ]
 
-×îºó£¬×îÖØÒªµÄÒ»µã:ĞŞ¸ÄÈ«¾Ö±äÁ¿ web_site_countµÄÖµ£¬ÈÃËû¼ÓµİÔö1  web_site_count=14
+æœ€åï¼Œæœ€é‡è¦çš„ä¸€ç‚¹:ä¿®æ”¹å…¨å±€å˜é‡ web_site_countçš„å€¼ï¼Œè®©ä»–åŠ é€’å¢1  web_site_count=14
 
 
 
-ÎÊ£ºÎÒÒÑ¾­°´ÕÕÉÏÃæµÄËµÃ÷³É¹¦µÄÌí¼ÓÁËÒ»¸ö×Ô¶¨ÒåÕ¾µã£¬ÎÒÒªÔÙÌí¼ÓÒ»¸ö£¬ÔõÃ´°ì?
-´ğ£º¼ÈÈ»ÒÑ¾­ÖªµÀÔõÃ´Ìí¼Ó build_list_urls_14 ºÍ parse_page_14ÁË
+é—®ï¼šæˆ‘å·²ç»æŒ‰ç…§ä¸Šé¢çš„è¯´æ˜æˆåŠŸçš„æ·»åŠ äº†ä¸€ä¸ªè‡ªå®šä¹‰ç«™ç‚¹ï¼Œæˆ‘è¦å†æ·»åŠ ä¸€ä¸ªï¼Œæ€ä¹ˆåŠ?
+ç­”ï¼šæ—¢ç„¶å·²ç»çŸ¥é“æ€ä¹ˆæ·»åŠ  build_list_urls_14 å’Œ parse_page_14äº†
 
-ÄÇÃ´¾Í°´ÕÕÍ¬ÑùµÄ°ì·¨Ìí¼Ó
+é‚£ä¹ˆå°±æŒ‰ç…§åŒæ ·çš„åŠæ³•æ·»åŠ 
 def build_list_urls_15(page=5):
 def parse_page_15(html=''):
 
-ÕâÁ½¸öº¯Êı£¬²¢ ¸üĞÂÈ«¾Ö±äÁ¿   web_site_count=15
+è¿™ä¸¤ä¸ªå‡½æ•°ï¼Œå¹¶ æ›´æ–°å…¨å±€å˜é‡   web_site_count=15
 
 """
 
+import urllib, time, random, re, threading, string
 
-import urllib,time,random,re,threading,string
+web_site_count = 13  # è¦æŠ“å–çš„ç½‘ç«™æ•°ç›®
+day_keep = 2  # åˆ é™¤æ•°æ®åº“ä¸­ä¿å­˜æ—¶é—´å¤§äºday_keepå¤©çš„ æ— æ•ˆä»£ç†
+indebug = 1
 
-web_site_count=13   #Òª×¥È¡µÄÍøÕ¾ÊıÄ¿
-day_keep=2          #É¾³ıÊı¾İ¿âÖĞ±£´æÊ±¼ä´óÓÚday_keepÌìµÄ ÎŞĞ§´úÀí
-indebug=1        
+thread_num = 100  # å¼€ thread_num ä¸ªçº¿ç¨‹æ£€æŸ¥ä»£ç†
+check_in_one_call = thread_num * 10  # æœ¬æ¬¡ç¨‹åºè¿è¡Œæ—¶ æœ€å¤šæ£€æŸ¥çš„ä»£ç†ä¸ªæ•°
 
-thread_num=100                   # ¿ª thread_num ¸öÏß³Ì¼ì²é´úÀí
-check_in_one_call=thread_num*10  # ±¾´Î³ÌĞòÔËĞĞÊ± ×î¶à¼ì²éµÄ´úÀí¸öÊı
+skip_check_in_hour = 1  # åœ¨æ—¶é—´ skip_check_in_hourå†…,ä¸å¯¹åŒä¸€ä¸ªä»£ç†åœ°å€å†æ¬¡éªŒè¯
+skip_get_in_hour = 8  # æ¯æ¬¡é‡‡é›†æ–°ä»£ç†çš„æœ€å°‘æ—¶é—´é—´éš” (å°æ—¶)
 
+proxy_array = []  # è¿™ä¸ªæ•°ç»„ä¿å­˜å°†è¦æ·»åŠ åˆ°æ•°æ®åº“çš„ä»£ç†åˆ—è¡¨
+update_array = []  # è¿™ä¸ªæ•°ç»„ä¿å­˜å°†è¦æ›´æ–°çš„ä»£ç†çš„æ•°æ®
 
-skip_check_in_hour=1    # ÔÚÊ±¼ä skip_check_in_hourÄÚ,²»¶ÔÍ¬Ò»¸ö´úÀíµØÖ·ÔÙ´ÎÑéÖ¤
-skip_get_in_hour=8      # Ã¿´Î²É¼¯ĞÂ´úÀíµÄ×îÉÙÊ±¼ä¼ä¸ô (Ğ¡Ê±)
+db = None  # æ•°æ®åº“å…¨å±€å¯¹è±¡
+conn = None
+dbfile = 'proxier.db'  # æ•°æ®åº“æ–‡ä»¶å
 
-proxy_array=[]          # Õâ¸öÊı×é±£´æ½«ÒªÌí¼Óµ½Êı¾İ¿âµÄ´úÀíÁĞ±í 
-update_array=[]         # Õâ¸öÊı×é±£´æ½«Òª¸üĞÂµÄ´úÀíµÄÊı¾İ 
-
-db=None                 #Êı¾İ¿âÈ«¾Ö¶ÔÏó
-conn=None
-dbfile='proxier.db'     #Êı¾İ¿âÎÄ¼şÃû
-
-target_url="http://www.baidu.com/"   # ÑéÖ¤´úÀíµÄÊ±ºòÍ¨¹ı´úÀí·ÃÎÊÕâ¸öµØÖ·
-target_string="030173"               # Èç¹û·µ»ØµÄhtmlÖĞ°üº¬Õâ¸ö×Ö·û´®£¬
-target_timeout=30                    # ²¢ÇÒÏìÓ¦Ê±¼äĞ¡ÓÚ target_timeout Ãë 
-                                     #ÄÇÃ´ÎÒÃÇ¾ÍÈÏÎªÕâ¸ö´úÀíÊÇÓĞĞ§µÄ 
+target_url = "http://www.baidu.com/"  # éªŒè¯ä»£ç†çš„æ—¶å€™é€šè¿‡ä»£ç†è®¿é—®è¿™ä¸ªåœ°å€
+target_string = "030173"  # å¦‚æœè¿”å›çš„htmlä¸­åŒ…å«è¿™ä¸ªå­—ç¬¦ä¸²ï¼Œ
+target_timeout = 30  # å¹¶ä¸”å“åº”æ—¶é—´å°äº target_timeout ç§’
+# é‚£ä¹ˆæˆ‘ä»¬å°±è®¤ä¸ºè¿™ä¸ªä»£ç†æ˜¯æœ‰æ•ˆçš„
 
 
+# åˆ°å¤„ä»£ç†æ•°æ®çš„æ–‡ä»¶æ ¼å¼ï¼Œå¦‚æœä¸æƒ³å¯¼å‡ºæ•°æ®ï¼Œè¯·è®©è¿™ä¸ªå˜é‡ä¸ºç©º  output_type=''
 
-#µ½´¦´úÀíÊı¾İµÄÎÄ¼ş¸ñÊ½£¬Èç¹û²»Ïëµ¼³öÊı¾İ£¬ÇëÈÃÕâ¸ö±äÁ¿Îª¿Õ  output_type=''
+output_type = 'xml'  # ä»¥ä¸‹æ ¼å¼å¯é€‰,  é»˜è®¤xml
+# xml
+# htm
+# tab         åˆ¶è¡¨ç¬¦åˆ†éš”, å…¼å®¹ excel
+# csv         é€—å·åˆ†éš”,   å…¼å®¹ excel
+# txt         xxx.xxx.xxx.xxx:xx æ ¼å¼
 
-output_type='xml'                   #ÒÔÏÂ¸ñÊ½¿ÉÑ¡,  Ä¬ÈÏxml
-                                    # xml
-                                    # htm           
-                                    # tab         ÖÆ±í·û·Ö¸ô, ¼æÈİ excel
-                                    # csv         ¶ººÅ·Ö¸ô,   ¼æÈİ excel
-                                    # txt         xxx.xxx.xxx.xxx:xx ¸ñÊ½
+# è¾“å‡ºæ–‡ä»¶å è¯·ä¿è¯è¿™ä¸ªæ•°ç»„å«æœ‰å…­ä¸ªå…ƒç´ 
+output_filename = [
+    'uncheck',  # å¯¹äºæœªæ£€æŸ¥çš„ä»£ç†,ä¿å­˜åˆ°è¿™ä¸ªæ–‡ä»¶
+    'checkfail',  # å·²ç»æ£€æŸ¥ï¼Œä½†æ˜¯è¢«æ ‡è®°ä¸ºæ— æ•ˆçš„ä»£ç†,ä¿å­˜åˆ°è¿™ä¸ªæ–‡ä»¶
+    'ok_high_anon',  # é«˜åŒ¿ä»£ç†(ä¸”æœ‰æ•ˆ)çš„ä»£ç†,æŒ‰speedæ’åºï¼Œæœ€å—çš„æ”¾å‰é¢
+    'ok_anonymous',  # æ™®é€šåŒ¿å(ä¸”æœ‰æ•ˆ)çš„ä»£ç†,æŒ‰speedæ’åºï¼Œæœ€å—çš„æ”¾å‰é¢
+    'ok_transparent',  # é€æ˜ä»£ç†(ä¸”æœ‰æ•ˆ)çš„ä»£ç†,æŒ‰speedæ’åºï¼Œæœ€å—çš„æ”¾å‰é¢
+    'ok_other'  # å…¶ä»–æœªçŸ¥ç±»å‹(ä¸”æœ‰æ•ˆ)çš„ä»£ç†,æŒ‰speedæ’åº
+]
 
-# Êä³öÎÄ¼şÃû Çë±£Ö¤Õâ¸öÊı×éº¬ÓĞÁù¸öÔªËØ
-output_filename=[                          
-            'uncheck',             # ¶ÔÓÚÎ´¼ì²éµÄ´úÀí,±£´æµ½Õâ¸öÎÄ¼ş
-            'checkfail',           # ÒÑ¾­¼ì²é£¬µ«ÊÇ±»±ê¼ÇÎªÎŞĞ§µÄ´úÀí,±£´æµ½Õâ¸öÎÄ¼ş
-            'ok_high_anon',        # ¸ßÄä´úÀí(ÇÒÓĞĞ§)µÄ´úÀí,°´speedÅÅĞò£¬×î¿éµÄ·ÅÇ°Ãæ
-            'ok_anonymous',        # ÆÕÍ¨ÄäÃû(ÇÒÓĞĞ§)µÄ´úÀí,°´speedÅÅĞò£¬×î¿éµÄ·ÅÇ°Ãæ
-            'ok_transparent',      # Í¸Ã÷´úÀí(ÇÒÓĞĞ§)µÄ´úÀí,°´speedÅÅĞò£¬×î¿éµÄ·ÅÇ°Ãæ
-            'ok_other'             # ÆäËûÎ´ÖªÀàĞÍ(ÇÒÓĞĞ§)µÄ´úÀí,°´speedÅÅĞò
-            ]
-
-
-#Êä³öÊı¾İµÄ¸ñÊ½  Ö§³ÖµÄÊı¾İÁĞÓĞ  
+# è¾“å‡ºæ•°æ®çš„æ ¼å¼  æ”¯æŒçš„æ•°æ®åˆ—æœ‰
 # _ip_ , _port_ , _type_ , _status_ , _active_ ,
-#_time_added_, _time_checked_ ,_time_used_ ,  _speed_, _area_
-                                        
-output_head_string=''             # Êä³öÎÄ¼şµÄÍ·²¿×Ö·û´®
-output_format=''                  # ÎÄ¼şÊı¾İµÄ¸ñÊ½    
-output_foot_string=''             # Êä³öÎÄ¼şµÄµ×²¿×Ö·û´®
+# _time_added_, _time_checked_ ,_time_used_ ,  _speed_, _area_
 
+output_head_string = ''  # è¾“å‡ºæ–‡ä»¶çš„å¤´éƒ¨å­—ç¬¦ä¸²
+output_format = ''  # æ–‡ä»¶æ•°æ®çš„æ ¼å¼
+output_foot_string = ''  # è¾“å‡ºæ–‡ä»¶çš„åº•éƒ¨å­—ç¬¦ä¸²
 
-
-if   output_type=='xml':
-    output_head_string="<?xml version='1.0' encoding='gb2312'?><proxylist>\n" 
-    output_format="""<item>
+if output_type == 'xml':
+    output_head_string = "<?xml version='1.0' encoding='gb2312'?><proxylist>\n"
+    output_format = """<item>
             <ip>_ip_</ip>
             <port>_port_</port>
             <speed>_speed_</speed>
@@ -155,246 +151,246 @@ if   output_type=='xml':
             <area>_area_</area>
         </item>
             """
-    output_foot_string="</proxylist>"
-elif output_type=='htm':
-    output_head_string="""<table border=1 width='100%'>
-        <tr><td>´úÀí</td><td>×îºó¼ì²é</td><td>ËÙ¶È</td><td>µØÇø</td></tr>
+    output_foot_string = "</proxylist>"
+elif output_type == 'htm':
+    output_head_string = """<table border=1 width='100%'>
+        <tr><td>ä»£ç†</td><td>æœ€åæ£€æŸ¥</td><td>é€Ÿåº¦</td><td>åœ°åŒº</td></tr>
         """
-    output_format="""<tr>
+    output_format = """<tr>
     <td>_ip_:_port_</td><td>_time_checked_</td><td>_speed_</td><td>_area_</td>
     </tr>
     """
-    output_foot_string="</table>"
-else: 
-    output_head_string=''
-    output_foot_string=''
+    output_foot_string = "</table>"
+else:
+    output_head_string = ''
+    output_foot_string = ''
 
-if output_type=="csv":
-    output_format="_ip_, _port_, _type_,  _speed_, _time_checked_,  _area_\n"
+if output_type == "csv":
+    output_format = "_ip_, _port_, _type_,  _speed_, _time_checked_,  _area_\n"
 
-if output_type=="tab":
-    output_format="_ip_\t_port_\t_speed_\t_time_checked_\t_area_\n"
+if output_type == "tab":
+    output_format = "_ip_\t_port_\t_speed_\t_time_checked_\t_area_\n"
 
-if output_type=="txt":
-    output_format="_ip_:_port_\n"
+if output_type == "txt":
+    output_format = "_ip_:_port_\n"
 
 
-# Êä³öÎÄ¼şµÄº¯Êı
+# è¾“å‡ºæ–‡ä»¶çš„å‡½æ•°
 def output_file():
-    global output_filename,output_head_string,output_foot_string,output_type
-    if output_type=='':
+    global output_filename, output_head_string, output_foot_string, output_type
+    if output_type == '':
         return
-    fnum=len(output_filename)
-    content=[]
+    fnum = len(output_filename)
+    content = []
     for i in range(fnum):
         content.append([output_head_string])
-    
+
     conn.execute("select * from `proxier` order by `active`,`type`,`speed` asc")
-    rs=conn.fetchall()
-    
+    rs = conn.fetchall()
+
     for item in rs:
-        type,active=item[2],item[4]
-        if   active is None:
-            content[0].append(formatline(item))   #Î´¼ì²é
-        elif active==0:
-            content[1].append(formatline(item))   #·Ç·¨µÄ´úÀí
-        elif active==1 and type==2:
-            content[2].append(formatline(item))   #¸ßÄä   
-        elif active==1 and type==1:
-            content[3].append(formatline(item))   #ÆÕÍ¨ÄäÃû  
-        elif active==1 and type==0:
-            content[4].append(formatline(item))   #Í¸Ã÷´úÀí             
-        elif active==1 and type==-1:
-            content[5].append(formatline(item))   #Î´ÖªÀàĞÍµÄ´úÀí
+        type, active = item[2], item[4]
+        if active is None:
+            content[0].append(formatline(item))  # æœªæ£€æŸ¥
+        elif active == 0:
+            content[1].append(formatline(item))  # éæ³•çš„ä»£ç†
+        elif active == 1 and type == 2:
+            content[2].append(formatline(item))  # é«˜åŒ¿
+        elif active == 1 and type == 1:
+            content[3].append(formatline(item))  # æ™®é€šåŒ¿å
+        elif active == 1 and type == 0:
+            content[4].append(formatline(item))  # é€æ˜ä»£ç†
+        elif active == 1 and type == -1:
+            content[5].append(formatline(item))  # æœªçŸ¥ç±»å‹çš„ä»£ç†
         else:
             pass
 
     for i in range(fnum):
         content[i].append(output_foot_string)
-        f=open(output_filename[i]+"."+output_type,'w')
-        f.write(string.join(content[i],''))
+        f = open(output_filename[i] + "." + output_type, 'w')
+        f.write(string.join(content[i], ''))
         f.close()
 
-#¸ñÊ½»¯Êä³öÃ¿Ìõ¼ÇÂ¼
+
+# æ ¼å¼åŒ–è¾“å‡ºæ¯æ¡è®°å½•
 def formatline(item):
     global output_format
-    arr=['_ip_','_port_','_type_','_status_','_active_',
-        '_time_added_','_time_checked_','_time_used_',
-        '_speed_','_area_']
-    s=output_format
-    for i  in range(len(arr)):
-        s=string.replace(s,arr[i],str(formatitem(item[i],i)))
-    return s 
+    arr = ['_ip_', '_port_', '_type_', '_status_', '_active_',
+           '_time_added_', '_time_checked_', '_time_used_',
+           '_speed_', '_area_']
+    s = output_format
+    for i in range(len(arr)):
+        s = string.replace(s, arr[i], str(formatitem(item[i], i)))
+    return s
 
 
-#¶ÔÓÚÊı¾İ¿âÖĞµÄÃ¿¸ö²»Í¬×Ö¶Î£¬Òª´¦ÀíÒ»ÏÂ£¬ÖĞÎÄÒª±àÂë£¬ÈÕÆÚ×Ö¶ÎÒª×ª»¯
-def formatitem(value,colnum):
+# å¯¹äºæ•°æ®åº“ä¸­çš„æ¯ä¸ªä¸åŒå­—æ®µï¼Œè¦å¤„ç†ä¸€ä¸‹ï¼Œä¸­æ–‡è¦ç¼–ç ï¼Œæ—¥æœŸå­—æ®µè¦è½¬åŒ–
+def formatitem(value, colnum):
     global output_type
-    if (colnum==9):
-        value=value.encode('cp936')
+    if (colnum == 9):
+        value = value.encode('cp936')
     elif value is None:
-        value=''
+        value = ''
 
-    if colnum==5 or colnum==6 or colnum==7:      #time_xxxed
-        value=string.atof(value)
-        if value<1:
-            value=''
+    if colnum == 5 or colnum == 6 or colnum == 7:  # time_xxxed
+        value = string.atof(value)
+        if value < 1:
+            value = ''
         else:
-            value=formattime(value)
+            value = formattime(value)
 
-    if value=='' and output_type=='htm':value='&#160;'
+    if value == '' and output_type == 'htm': value = '&#160;'
     return value
 
 
-
-def check_one_proxy(ip,port):
+def check_one_proxy(ip, port):
     global update_array
     global check_in_one_call
-    global target_url,target_string,target_timeout
-    
-    url=target_url
-    checkstr=target_string
-    timeout=target_timeout
-    ip=string.strip(ip)
-    proxy=ip+':'+str(port)
-	proxies = {'http': 'http://'+proxy+'/'}
-	opener = urllib.FancyURLopener(proxies)
-	opener.addheaders = [
-        ('User-agent','Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)')
-        ]
-	t1=time.time()
+    global target_url, target_string, target_timeout
 
-	if (url.find("?")==-1):
-		url=url+'?rnd='+str(random.random())
-	else:
-		url=url+'&rnd='+str(random.random())
+    url = target_url
+    checkstr = target_string
+    timeout = target_timeout
+    ip = string.strip(ip)
+    proxy = ip + ':' + str(port)
+    proxies = {'http': 'http://' + proxy + '/'}
+    opener = urllib.FancyURLopener(proxies)
+    opener.addheaders = [
+        ('User-agent', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)')
+    ]
+    t1 = time.time()
 
-	try:
-		f = opener.open(url)
-		s= f.read()		
-		pos=s.find(checkstr)
-	except:
-		pos=-1
-		pass
-	t2=time.time()	
-	timeused=t2-t1
-	if (timeused<timeout and pos>0):
-        active=1
+    if (url.find("?") == -1):
+        url = url + '?rnd=' + str(random.random())
     else:
-        active=0    
-    update_array.append([ip,port,active,timeused])
-    print len(update_array),' of ',check_in_one_call," ",ip,':',port,'--',int(timeused)    
+        url = url + '&rnd=' + str(random.random())
+
+    try:
+        f = opener.open(url)
+        s = f.read()
+        pos = s.find(checkstr)
+    except:
+        pos = -1
+        pass
+    t2 = time.time()
+    timeused = t2 - t1
+    if (timeused < timeout and pos > 0):
+        active = 1
+    else:
+        active = 0
+    update_array.append([ip, port, active, timeused])
+    print (len(update_array), ' of ', check_in_one_call, " ", ip, ':', port, '--', int(timeused))
 
 
 def get_html(url=''):
-	opener = urllib.FancyURLopener({})      #²»Ê¹ÓÃ´úÀí
-	#www.my-proxy.com ĞèÒªÏÂÃæÕâ¸öCookie²ÅÄÜÕı³£×¥È¡
-	opener.addheaders = [
-            ('User-agent','Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)'),
-            ('Cookie','permission=1')
-            ]
-	t=time.time()
-	if (url.find("?")==-1):
-		url=url+'?rnd='+str(random.random())
-	else:
-		url=url+'&rnd='+str(random.random())
-	try:
-		f = opener.open(url)
-		return f.read()		
-	except:
-		return ''	
+    opener = urllib.FancyURLopener({})  # ä¸ä½¿ç”¨ä»£ç†
+    # www.my-proxy.com éœ€è¦ä¸‹é¢è¿™ä¸ªCookieæ‰èƒ½æ­£å¸¸æŠ“å–
+    opener.addheaders = [
+        ('User-agent', 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)'),
+        ('Cookie', 'permission=1')
+    ]
+    t = time.time()
+    if (url.find("?") == -1):
+        url = url + '?rnd=' + str(random.random())
+    else:
+        url = url + '&rnd=' + str(random.random())
+    try:
+        f = opener.open(url)
+        return f.read()
+    except:
+        return ''
 
-
-    
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
 
 
 def build_list_urls_1(page=5):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://proxy4free.com/page%(num)01d.html'%{'num':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://proxy4free.com/page%(num)01d.html' % {'num': i})
+    return ret
+
 
 def parse_page_1(html=''):
-	matches=re.findall(r'''
+    matches = re.findall(r'''
             <td>([\d\.]+)<\/td>[\s\n\r]*   #ip
             <td>([\d]+)<\/td>[\s\n\r]*     #port
             <td>([^\<]*)<\/td>[\s\n\r]*    #type 
             <td>([^\<]*)<\/td>             #area 
-            ''',html,re.VERBOSE)
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=match[2]
-		area=match[3]
-		if (type=='anonymous'):
-			type=1
-		elif (type=='high anonymity'):
-			type=2
-		elif (type=='transparent'):
-			type=0
-		else:
-			type=-1
-		ret.append([ip,port,type,area])
-        if indebug:print '1',ip,port,type,area
-	return ret
+            ''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = match[2]
+        area = match[3]
+        if (type == 'anonymous'):
+            type = 1
+        elif (type == 'high anonymity'):
+            type = 2
+        elif (type == 'transparent'):
+            type = 0
+        else:
+            type = -1
+        ret.append([ip, port, type, area])
+        if indebug: print ('1', ip, port, type, area)
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
 
 
 def build_list_urls_2(page=1):
-	return ['http://www.digitalcybersoft.com/ProxyList/fresh-proxy-list.shtml']
+    return ['http://www.digitalcybersoft.com/ProxyList/fresh-proxy-list.shtml']
+
 
 def parse_page_2(html=''):
-	matches=re.findall(r'''
+    matches = re.findall(r'''
         ((?:[\d]{1,3}\.){3}[\d]{1,3})\:([\d]+)      #ip:port
         \s+(Anonymous|Elite Proxy)[+\s]+            #type
         (.+)\r?\n                                   #area
-        ''',html,re.VERBOSE)
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=match[2]
-		area=match[3]
-		if (type=='Anonymous'):
-			type=1
-		else:
-			type=2
-		ret.append([ip,port,type,area])
-        if indebug:print '2',ip,port,type,area
-	return ret
+        ''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = match[2]
+        area = match[3]
+        if (type == 'Anonymous'):
+            type = 1
+        else:
+            type = 2
+        ret.append([ip, port, type, area])
+        if indebug: print ('2', ip, port, type, area)
+    return ret
 
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
 
 
 def build_list_urls_3(page=15):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://www.samair.ru/proxy/proxy-%(num)02d.htm'%{'num':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://www.samair.ru/proxy/proxy-%(num)02d.htm' % {'num': i})
+    return ret
+
 
 def parse_page_3(html=''):
-	matches=re.findall(r'''
+    matches = re.findall(r'''
         <tr><td><span\sclass\="\w+">(\d{1,3})<\/span>\. #ip(part1)
         <span\sclass\="\w+">                            
         (\d{1,3})<\/span>                               #ip(part2)
@@ -404,118 +400,119 @@ def parse_page_3(html=''):
         <td>([^<]+)</td>                                #type
         <td>[^<]+<\/td>                                
         <td>([^<]+)<\/td>                               #area
-        <\/tr>''',html,re.VERBOSE)	
-	ret=[]
-	for match in matches:
-		ip=match[0]+"."+match[1]+match[2]
-		port=match[3]
-		type=match[4]
-		area=match[5]
-		if (type=='anonymous proxy server'):
-			type=1
-		elif (type=='high-anonymous proxy server'):
-			type=2
-		elif (type=='transparent proxy'):
-			type=0
-		else:
-			type=-1
-		ret.append([ip,port,type,area])
-        if indebug:print '3',ip,port,type,area
-	return ret
-
+        <\/tr>''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0] + "." + match[1] + match[2]
+        port = match[3]
+        type = match[4]
+        area = match[5]
+        if (type == 'anonymous proxy server'):
+            type = 1
+        elif (type == 'high-anonymous proxy server'):
+            type = 2
+        elif (type == 'transparent proxy'):
+            type = 0
+        else:
+            type = -1
+        ret.append([ip, port, type, area])
+        if indebug: print ('3', ip, port, type, area)
+    return ret
 
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
 
 
 def build_list_urls_4(page=3):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://www.pass-e.com/proxy/index.php?page=%(n)01d'%{'n':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://www.pass-e.com/proxy/index.php?page=%(n)01d' % {'n': i})
+    return ret
+
 
 def parse_page_4(html=''):
-	matches=re.findall(r"""
+    matches = re.findall(r"""
         list
         \('(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'        #ip
         \,'(\d{2,5})'                                   #port
         \,'(\d)'                                        #type
         \,'([^']+)'\)                                   #area
-        \;\r?\n""",html,re.VERBOSE)	
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=match[2]
-		area=match[3]
-		if (type=='1'):      #typeµÄÅĞ¶Ï¿ÉÒÔ²é¿´×¥»ØÀ´µÄÍøÒ³µÄjavascript²¿·Ö
-			type=1
-		elif (type=='3'):
-			type=2
-		elif (type=='2'):
-			type=0
-		else:
-			type=-1
-        if indebug:print '4',ip,port,type,area            
-        area=unicode(area, 'cp936') 
-        area=area.encode('utf8')             
-		ret.append([ip,port,type,area])
-	return ret
+        \;\r?\n""", html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = match[2]
+        area = match[3]
+        if (type == '1'):  # typeçš„åˆ¤æ–­å¯ä»¥æŸ¥çœ‹æŠ“å›æ¥çš„ç½‘é¡µçš„javascriptéƒ¨åˆ†
+            type = 1
+        elif (type == '3'):
+            type = 2
+        elif (type == '2'):
+            type = 0
+        else:
+            type = -1
+        if indebug: print ('4', ip, port, type, area)
+        area = unicode(area, 'cp936')
+        area = area.encode('utf8')
+        ret.append([ip, port, type, area])
+    return ret
 
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
 
 
 def build_list_urls_5(page=12):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://www.ipfree.cn/index2.asp?page=%(num)01d'%{'num':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://www.ipfree.cn/index2.asp?page=%(num)01d' % {'num': i})
+    return ret
+
 
 def parse_page_5(html=''):
-	matches=re.findall(r"<font color=black>([^<]*)</font>",html)	
-	ret=[]
-	for index, match in enumerate(matches):
-		if (index%3==0):
-			ip=matches[index+1]
-			port=matches[index+2]
-			type=-1      #¸ÃÍøÕ¾Î´Ìá¹©´úÀí·şÎñÆ÷ÀàĞÍ
-            if indebug:print '5',ip,port,type,match 
-            area=unicode(match, 'cp936') 
-            area=area.encode('utf8') 
-			ret.append([ip,port,type,area])			
-		else:
-			continue
-	return ret
+    matches = re.findall(r"<font color=black>([^<]*)</font>", html)
+    ret = []
+    for index, match in enumerate(matches):
+        if (index % 3 == 0):
+            ip = matches[index + 1]
+            port = matches[index + 2]
+            type = -1  # è¯¥ç½‘ç«™æœªæä¾›ä»£ç†æœåŠ¡å™¨ç±»å‹
+            if indebug: print ('5', ip, port, type, match)
+            area = unicode(match, 'cp936')
+            area = area.encode('utf8')
+            ret.append([ip, port, type, area])
+        else:
+            continue
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
 
 
 def build_list_urls_6(page=3):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://www.cnproxy.com/proxy%(num)01d.html'%{'num':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://www.cnproxy.com/proxy%(num)01d.html' % {'num': i})
+    return ret
+
 
 def parse_page_6(html=''):
-	matches=re.findall(r'''<tr>
+    matches = re.findall(r'''<tr>
         <td>([^&]+)                     #ip
         &#8204&#8205
         \:([^<]+)                       #port
@@ -523,129 +520,125 @@ def parse_page_6(html=''):
         <td>HTTP</td>
         <td>[^<]+</td>
         <td>([^<]+)</td>                #area
-        </tr>''',html,re.VERBOSE)	
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=-1          #¸ÃÍøÕ¾Î´Ìá¹©´úÀí·şÎñÆ÷ÀàĞÍ
-		area=match[2]
-        if indebug:print '6',ip,port,type,area
-        area=unicode(area, 'cp936') 
-        area=area.encode('utf8') 
-		ret.append([ip,port,type,area])
+        </tr>''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = -1  # è¯¥ç½‘ç«™æœªæä¾›ä»£ç†æœåŠ¡å™¨ç±»å‹
+        area = match[2]
+        if indebug: print ('6', ip, port, type, area)
+        area = unicode(area, 'cp936')
+        area = area.encode('utf8')
+        ret.append([ip, port, type, area])
 
-	return ret
-
+    return ret
 
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
-
 
 
 def build_list_urls_7(page=1):
-	return ['http://www.proxylists.net/http_highanon.txt']
+    return ['http://www.proxylists.net/http_highanon.txt']
+
 
 def parse_page_7(html=''):
-    matches=re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{2,5})',html)	
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=2         
-		area='--'
-		ret.append([ip,port,type,area])
-        if indebug:print '7',ip,port,type,area
-	return ret
-
+    matches = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{2,5})', html)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = 2
+        area = '--'
+        ret.append([ip, port, type, area])
+        if indebug: print ('7', ip, port, type, area)
+    return ret
 
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
-
-
 
 
 def build_list_urls_8(page=1):
-	return ['http://www.proxylists.net/http.txt']
+    return ['http://www.proxylists.net/http.txt']
+
 
 def parse_page_8(html=''):
-    matches=re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{2,5})',html)	
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=-1         
-		area='--'
-		ret.append([ip,port,type,area])
-        if indebug:print '8',ip,port,type,area
-	return ret
-
+    matches = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{2,5})', html)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = -1
+        area = '--'
+        ret.append([ip, port, type, area])
+        if indebug: print ('8', ip, port, type, area)
+    return ret
 
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
 
 
 def build_list_urls_9(page=6):
-	page=page+1
-	ret=[]
-	for i in range(0,page):
-		ret.append('http://proxylist.sakura.ne.jp/index.htm?pages=%(n)01d'%{'n':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(0, page):
+        ret.append('http://proxylist.sakura.ne.jp/index.htm?pages=%(n)01d' % {'n': i})
+    return ret
+
 
 def parse_page_9(html=''):
-    matches=re.findall(r'''
+    matches = re.findall(r'''
         (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})        #ip
         \:(\d{2,5})                                 #port
         <\/TD>[\s\r\n]*
         <TD>([^<]+)</TD>                            #area
         [\s\r\n]*
         <TD>([^<]+)</TD>                            #type
-    ''',html,re.VERBOSE)	
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=match[3]         
-		area=match[2]
-        if (type=='Anonymous'):
-            type=1
+    ''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = match[3]
+        area = match[2]
+        if (type == 'Anonymous'):
+            type = 1
         else:
-            type=-1
-		ret.append([ip,port,type,area])
-        if indebug:print '9',ip,port,type,area
-	return ret
+            type = -1
+        ret.append([ip, port, type, area])
+        if indebug: print ('9', ip, port, type, area)
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
 
 
 def build_list_urls_10(page=5):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://www.publicproxyservers.com/page%(n)01d.html'%{'n':i})		
-	return ret
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://www.publicproxyservers.com/page%(n)01d.html' % {'n': i})
+    return ret
+
 
 def parse_page_10(html=''):
-    matches=re.findall(r'''
+    matches = re.findall(r'''
         (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})    #ip
         <\/td>[\s\r\n]*
         <td[^>]+>(\d{2,5})<\/td>                #port
@@ -653,85 +646,85 @@ def parse_page_10(html=''):
         <td>([^<]+)<\/td>                       #type
         [\s\r\n]*
         <td>([^<]+)<\/td>                       #area
-        ''',html,re.VERBOSE)
-	ret=[]
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		type=match[2]         
-		area=match[3]
-        if (type=='high anonymity'):
-            type=2
-        elif (type=='anonymous'):
-            type=1
-        elif (type=='transparent'):
-            type=0
+        ''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        type = match[2]
+        area = match[3]
+        if (type == 'high anonymity'):
+            type = 2
+        elif (type == 'anonymous'):
+            type = 1
+        elif (type == 'transparent'):
+            type = 0
         else:
-            type=-1
-		ret.append([ip,port,type,area])
-        if indebug:print '10',ip,port,type,area
-	return ret
+            type = -1
+        ret.append([ip, port, type, area])
+        if indebug: print ('10', ip, port, type, area)
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
-
 
 
 def build_list_urls_11(page=10):
-	page=page+1
-	ret=[]
-	for i in range(1,page):
-		ret.append('http://www.my-proxy.com/list/proxy.php?list=%(n)01d'%{'n':i})
+    page = page + 1
+    ret = []
+    for i in range(1, page):
+        ret.append('http://www.my-proxy.com/list/proxy.php?list=%(n)01d' % {'n': i})
 
-    ret.append('http://www.my-proxy.com/list/proxy.php?list=s1')	
-    ret.append('http://www.my-proxy.com/list/proxy.php?list=s2')	
-    ret.append('http://www.my-proxy.com/list/proxy.php?list=s3')	    
-	return ret
+    ret.append('http://www.my-proxy.com/list/proxy.php?list=s1')
+    ret.append('http://www.my-proxy.com/list/proxy.php?list=s2')
+    ret.append('http://www.my-proxy.com/list/proxy.php?list=s3')
+    return ret
+
 
 def parse_page_11(html=''):
-    matches=re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{2,5})',html)	
-	ret=[]    
+    matches = re.findall(r'(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\:(\d{2,5})', html)
+    ret = []
 
-    if (html.find('(Level 1)')>0):
-        type=2
-    elif (html.find('(Level 2)')>0):
-        type=1
-    elif (html.find('(Level 3)')>0):
-        type=0
+    if (html.find('(Level 1)') > 0):
+        type = 2
+    elif (html.find('(Level 2)') > 0):
+        type = 1
+    elif (html.find('(Level 3)') > 0):
+        type = 0
     else:
-        type=-1
+        type = -1
 
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		area='--'        
-		ret.append([ip,port,type,area])
-        if indebug:print '11',ip,port,type,area
-	return ret
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        area = '--'
+        ret.append([ip, port, type, area])
+        if indebug: print ('11', ip, port, type, area)
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
-
 
 
 def build_list_urls_12(page=4):
-	ret=[]
+    ret = []
     ret.append('http://www.cybersyndrome.net/plr4.html')
     ret.append('http://www.cybersyndrome.net/pla4.html')
     ret.append('http://www.cybersyndrome.net/pld4.html')
     ret.append('http://www.cybersyndrome.net/pls4.html')
-	return ret
+    return ret
+
 
 def parse_page_12(html=''):
-    matches=re.findall(r'''
+    matches = re.findall(r'''
         onMouseOver\=
         "s\(\'(\w\w)\'\)"                           #area
         \sonMouseOut\="d\(\)"\s?c?l?a?s?s?\=?"?
@@ -739,259 +732,264 @@ def parse_page_12(html=''):
         "?>
         (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})        #ip
         \:(\d{2,5})                                 #port
-        ''',html,re.VERBOSE)	
-	ret=[]    
-	for match in matches:
-		ip=match[2]
-		port=match[3]
-		area=match[0]
-        type=match[1]
-        if (type=='A'):
-            type=2
-        elif (type=='B'):
-            type=1
+        ''', html, re.VERBOSE)
+    ret = []
+    for match in matches:
+        ip = match[2]
+        port = match[3]
+        area = match[0]
+        type = match[1]
+        if (type == 'A'):
+            type = 2
+        elif (type == 'B'):
+            type = 1
         else:
-            type=0
-		ret.append([ip,port,type,area])
-        if indebug:print '12',ip,port,type,area
-	return ret
+            type = 0
+        ret.append([ip, port, type, area])
+        if indebug: print ('12', ip, port, type, area)
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
-
 
 
 def build_list_urls_13(page=3):
-    url='http://www.checkedproxylists.com/'
-    html=get_html(url)    
-    matchs=re.findall(r"""
+    url = 'http://www.checkedproxylists.com/'
+    html = get_html(url)
+    matchs = re.findall(r"""
         href\='([^']+)'>(?:high_anonymous|anonymous|transparent)
-        \sproxy\slist<\/a>""",html,re.VERBOSE)    
-	return map(lambda x: url+x, matchs)
+        \sproxy\slist<\/a>""", html, re.VERBOSE)
+    return map(lambda x: url + x, matchs)
+
 
 def parse_page_13(html=''):
-    html_matches=re.findall(r"eval\(unescape\('([^']+)'\)",html)	
-    if (len(html_matches)>0):
-        conent=urllib.unquote(html_matches[0])
-    matches=re.findall(r"""<td>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<\/td>
-            <td>(\d{2,5})<\/td><\/tr>""",conent,re.VERBOSE)        
-    ret=[]
-    if   (html.find('<title>Checked Proxy Lists - proxylist_high_anonymous_')>0):
-        type=2
-    elif (html.find('<title>Checked Proxy Lists - proxylist_anonymous_')>0):                     
-        type=1
-    elif (html.find('<title>Checked Proxy Lists - proxylist_transparent_')>0):
-        type=0
+    html_matches = re.findall(r"eval\(unescape\('([^']+)'\)", html)
+    if (len(html_matches) > 0):
+        conent = urllib.unquote(html_matches[0])
+    matches = re.findall(r"""<td>(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})<\/td>
+            <td>(\d{2,5})<\/td><\/tr>""", conent, re.VERBOSE)
+    ret = []
+    if (html.find('<title>Checked Proxy Lists - proxylist_high_anonymous_') > 0):
+        type = 2
+    elif (html.find('<title>Checked Proxy Lists - proxylist_anonymous_') > 0):
+        type = 1
+    elif (html.find('<title>Checked Proxy Lists - proxylist_transparent_') > 0):
+        type = 0
     else:
-        type=-1
+        type = -1
 
-	for match in matches:
-		ip=match[0]
-		port=match[1]
-		area='--'
-    	ret.append([ip,port,type,area])
-        if indebug:print '13',ip,port,type,area
-	return ret
+    for match in matches:
+        ip = match[0]
+        port = match[1]
+        area = '--'
+        ret.append([ip, port, type, area])
+        if indebug: print ('13', ip, port, type, area)
+    return ret
+
 
 ################################################################################
 #
-##        by Go_Rush(°¢Ë´) from http://ashun.cnblogs.com/
+##        by Go_Rush(é˜¿èˆœ) from http://ashun.cnblogs.com/
 #
 ################################################################################
 
 
-
-
-#Ïß³ÌÀà
+# çº¿ç¨‹ç±»
 
 class TEST(threading.Thread):
-    def __init__(self,action,index=None,checklist=None):
+    def __init__(self, action, index=None, checklist=None):
         threading.Thread.__init__(self)
-        self.index =index
-        self.action=action
-        self.checklist=checklist
+        self.index = index
+        self.action = action
+        self.checklist = checklist
 
     def run(self):
-        if (self.action=='getproxy'):
+        if (self.action == 'getproxy'):
             get_proxy_one_website(self.index)
         else:
-            check_proxy(self.index,self.checklist)
+            check_proxy(self.index, self.checklist)
 
 
-def check_proxy(index,checklist=[]):
+def check_proxy(index, checklist=[]):
     for item in checklist:
-        check_one_proxy(item[0],item[1])
+        check_one_proxy(item[0], item[1])
 
 
-def patch_check_proxy(threadCount,action=''):
-    global check_in_one_call,skip_check_in_hour,conn
-    threads=[]
-    if   (action=='checknew'):        #¼ì²éËùÓĞĞÂ¼ÓÈë£¬²¢ÇÒ´ÓÎ´±»¼ì²é¹ıµÄ
-        orderby=' `time_added` desc '
-        strwhere=' `active` is null '
-    elif (action=='checkok'):         #ÔÙ´Î¼ì²é ÒÔÇ°ÒÑ¾­ÑéÖ¤³É¹¦µÄ ´úÀí
-        orderby=' `time_checked` asc '
-        strwhere=' `active`=1 '
-    elif (action=='checkfail'):       #ÔÙ´Î¼ì²éÒÔÇ°ÑéÖ¤Ê§°ÜµÄ´úÀí
-        orderby=' `time_checked` asc '
-        strwhere=' `active`=0 '           
-    else:                            #¼ì²éËùÓĞµÄ 
-        orderby=' `time_checked` asc '
-        strwhere=' 1=1 '           
-    sql="""
+def patch_check_proxy(threadCount, action=''):
+    global check_in_one_call, skip_check_in_hour, conn
+    threads = []
+    if (action == 'checknew'):  # æ£€æŸ¥æ‰€æœ‰æ–°åŠ å…¥ï¼Œå¹¶ä¸”ä»æœªè¢«æ£€æŸ¥è¿‡çš„
+        orderby = ' `time_added` desc '
+        strwhere = ' `active` is null '
+    elif (action == 'checkok'):  # å†æ¬¡æ£€æŸ¥ ä»¥å‰å·²ç»éªŒè¯æˆåŠŸçš„ ä»£ç†
+        orderby = ' `time_checked` asc '
+        strwhere = ' `active`=1 '
+    elif (action == 'checkfail'):  # å†æ¬¡æ£€æŸ¥ä»¥å‰éªŒè¯å¤±è´¥çš„ä»£ç†
+        orderby = ' `time_checked` asc '
+        strwhere = ' `active`=0 '
+    else:  # æ£€æŸ¥æ‰€æœ‰çš„
+        orderby = ' `time_checked` asc '
+        strwhere = ' 1=1 '
+    sql = """
            select `ip`,`port` FROM `proxier` where
                  `time_checked` < (unix_timestamp()-%(skip_time)01s) 
                  and %(strwhere)01s 
-            	 order by %(order)01s 
-            	 limit %(num)01d
-        """%{     'num':check_in_one_call,
-             'strwhere':strwhere,
-                'order':orderby,
-            'skip_time':skip_check_in_hour*3600}
+                 order by %(order)01s 
+                 limit %(num)01d
+        """ % {'num': check_in_one_call,
+               'strwhere': strwhere,
+               'order': orderby,
+               'skip_time': skip_check_in_hour * 3600}
     conn.execute(sql)
-    rows = conn.fetchall()   
+    rows = conn.fetchall()
 
-    check_in_one_call=len(rows)
-    
-    #¼ÆËãÃ¿¸öÏß³Ì½«Òª¼ì²éµÄ´úÀí¸öÊı
-    if len(rows)>=threadCount:
-        num_in_one_thread=len(rows)/threadCount   
+    check_in_one_call = len(rows)
+
+    # è®¡ç®—æ¯ä¸ªçº¿ç¨‹å°†è¦æ£€æŸ¥çš„ä»£ç†ä¸ªæ•°
+    if len(rows) >= threadCount:
+        num_in_one_thread = len(rows) / threadCount
     else:
-        num_in_one_thread=1
+        num_in_one_thread = 1
 
-    threadCount=threadCount+1
-    print "ÏÖÔÚ¿ªÊ¼ÑéÖ¤ÒÔÏÂ´úÀí·şÎñÆ÷....."
-    for index in range(1,threadCount):        
-     #·ÖÅäÃ¿¸öÏß³ÌÒª¼ì²éµÄchecklist,²¢°ÑÄÇĞ©Ê£ÓàÈÎÎñÁô¸ø×îºóÒ»¸öÏß³Ì               
-        checklist=rows[(index-1)*num_in_one_thread:index*num_in_one_thread]     
-        if (index+1==threadCount):              
-            checklist=rows[(index-1)*num_in_one_thread:]
+    threadCount = threadCount + 1
+    print ("ç°åœ¨å¼€å§‹éªŒè¯ä»¥ä¸‹ä»£ç†æœåŠ¡å™¨.....")
+    for index in range(1, threadCount):
+        # åˆ†é…æ¯ä¸ªçº¿ç¨‹è¦æ£€æŸ¥çš„checklist,å¹¶æŠŠé‚£äº›å‰©ä½™ä»»åŠ¡ç•™ç»™æœ€åä¸€ä¸ªçº¿ç¨‹
+        checklist = rows[(index - 1) * num_in_one_thread:index * num_in_one_thread]
+        if (index + 1 == threadCount):
+            checklist = rows[(index - 1) * num_in_one_thread:]
 
-        t=TEST(action,index,checklist)
+        t = TEST(action, index, checklist)
         t.setDaemon(True)
         t.start()
         threads.append((t))
     for thread in threads:
-        thread.join(60)        
-    update_proxies()            #°ÑËùÓĞµÄ¼ì²é½á¹û¸üĞÂµ½Êı¾İ¿â
-    
+        thread.join(60)
+    update_proxies()  # æŠŠæ‰€æœ‰çš„æ£€æŸ¥ç»“æœæ›´æ–°åˆ°æ•°æ®åº“
+
 
 def get_proxy_one_website(index):
     global proxy_array
-    func='build_list_urls_'+str(index)
-    parse_func=eval('parse_page_'+str(index))
-    urls=eval(func+'()')
+    func = 'build_list_urls_' + str(index)
+    parse_func = eval('parse_page_' + str(index))
+    urls = eval(func + '()')
     for url in urls:
-        html=get_html(url)
-        print url
-        proxylist=parse_func(html)
+        html = get_html(url)
+        print (url)
+        proxylist = parse_func(html)
         for proxy in proxylist:
-            ip=string.strip(proxy[0])
-            port=string.strip(proxy[1])
+            ip = string.strip(proxy[0])
+            port = string.strip(proxy[1])
             if (re.compile("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$").search(ip)):
-                type=str(proxy[2])
-                area=string.strip(proxy[3])
-                proxy_array.append([ip,port,type,area])
+                type = str(proxy[2])
+                area = string.strip(proxy[3])
+                proxy_array.append([ip, port, type, area])
 
 
 def get_all_proxies():
-    global web_site_count,conn,skip_get_in_hour
+    global web_site_count, conn, skip_get_in_hour
 
-    #¼ì²é×î½üÌí¼Ó´úÀíÊÇÊ²Ã´Ê±ºò£¬±ÜÃâ¶ÌÊ±¼äÄÚ¶à´Î×¥È¡
-    rs=conn.execute("select max(`time_added`) from `proxier` limit 1")
-    last_add=rs.fetchone()[0]
-    if (last_add and my_unix_timestamp()-last_add<skip_get_in_hour*3600):   
-        print """
- ·ÅÆú×¥È¡´úÀíÁĞ±í!
- ÒòÎª×î½üÒ»´Î×¥È¡´úÀíµÄÊ±¼äÊÇ: %(t)1s
- Õâ¸öÊ±¼ä¾àÀëÏÖÔÚµÄÊ±¼äĞ¡ÓÚ×¥È¡´úÀíµÄ×îĞ¡Ê±¼ä¼ä¸ô: %(n)1d Ğ¡Ê±
- Èç¹ûÒ»¶¨ÒªÏÖÔÚ×¥È¡´úÀí£¬ÇëĞŞ¸ÄÈ«¾Ö±äÁ¿: skip_get_in_hour µÄÖµ
-            """%{'t':formattime(last_add),'n':skip_get_in_hour}
+    # æ£€æŸ¥æœ€è¿‘æ·»åŠ ä»£ç†æ˜¯ä»€ä¹ˆæ—¶å€™ï¼Œé¿å…çŸ­æ—¶é—´å†…å¤šæ¬¡æŠ“å–
+    rs = conn.execute("select max(`time_added`) from `proxier` limit 1")
+    last_add = rs.fetchone()[0]
+    if (last_add and my_unix_timestamp() - last_add < skip_get_in_hour * 3600):
+        print ("""
+ æ”¾å¼ƒæŠ“å–ä»£ç†åˆ—è¡¨!
+ å› ä¸ºæœ€è¿‘ä¸€æ¬¡æŠ“å–ä»£ç†çš„æ—¶é—´æ˜¯: %(t)1s
+ è¿™ä¸ªæ—¶é—´è·ç¦»ç°åœ¨çš„æ—¶é—´å°äºæŠ“å–ä»£ç†çš„æœ€å°æ—¶é—´é—´éš”: %(n)1d å°æ—¶
+ å¦‚æœä¸€å®šè¦ç°åœ¨æŠ“å–ä»£ç†ï¼Œè¯·ä¿®æ”¹å…¨å±€å˜é‡: skip_get_in_hour çš„å€¼
+            """ % {'t': formattime(last_add), 'n': skip_get_in_hour})
         return
-    
-    print "ÏÖÔÚ¿ªÊ¼´ÓÒÔÏÂ"+str(web_site_count)+"¸öÍøÕ¾×¥È¡´úÀíÁĞ±í...."
-    threads=[]
-    count=web_site_count+1
-    for index in range(1,count):
-        t=TEST('getproxy',index)
+
+    print ("ç°åœ¨å¼€å§‹ä»ä»¥ä¸‹" + str(web_site_count) + "ä¸ªç½‘ç«™æŠ“å–ä»£ç†åˆ—è¡¨....")
+    threads = []
+    count = web_site_count + 1
+    for index in range(1, count):
+        t = TEST('getproxy', index)
         t.setDaemon(True)
         t.start()
         threads.append((t))
     for thread in threads:
-        thread.join(60)         
+        thread.join(60)
     add_proxies_to_db()
+
 
 def add_proxies_to_db():
     global proxy_array
-    count=len(proxy_array)
+    count = len(proxy_array)
     for i in range(count):
-        item=proxy_array[i]
-        sql="""insert into `proxier` (`ip`,`port`,`type`,`time_added`,`area`) values
-        ('"""+item[0]+"',"+item[1]+","+item[2]+",unix_timestamp(),'"+clean_string(item[3])+"')"        
+        item = proxy_array[i]
+        sql = """insert into `proxier` (`ip`,`port`,`type`,`time_added`,`area`) values
+        ('""" + item[0] + "'," + item[1] + "," + item[2] + ",unix_timestamp(),'" + clean_string(item[3]) + "')"
         try:
             conn.execute(sql)
-            print "%(num)2.1f\%\t"%{'num':100*(i+1)/count},item[0],":",item[1]
+            print ("%(num)2.1f\%\t" % {'num': 100 * (i + 1) / count}, item[0], ":", item[1])
         except:
-            pass 
+            pass
 
 
 def update_proxies():
     global update_array
     for item in update_array:
-        sql='''
+        sql = '''
              update `proxier` set `time_checked`=unix_timestamp(), 
                 `active`=%(active)01d, 
                  `speed`=%(speed)02.3f                 
                  where `ip`='%(ip)01s' and `port`=%(port)01d                            
-            '''%{'active':item[2],'speed':item[3],'ip':item[0],'port':item[1]}
+            ''' % {'active': item[2], 'speed': item[3], 'ip': item[0], 'port': item[1]}
         try:
-            conn.execute(sql)    
+            conn.execute(sql)
         except:
-            pass 
+            pass
 
-#sqlite ²»Ö§³Ö unix_timestampÕâ¸öº¯Êı,ËùÒÔÎÒÃÇÒª×Ô¼ºÊµÏÖ
+        # sqlite ä¸æ”¯æŒ unix_timestampè¿™ä¸ªå‡½æ•°,æ‰€ä»¥æˆ‘ä»¬è¦è‡ªå·±å®ç°
+
+
 def my_unix_timestamp():
     return int(time.time())
 
+
 def clean_string(s):
-    tmp=re.sub(r"['\,\s\\\/]", ' ', s)
+    tmp = re.sub(r"['\,\s\\\/]", ' ', s)
     return re.sub(r"\s+", ' ', tmp)
 
+
 def formattime(t):
-    return time.strftime('%c',time.gmtime(t+8*3600))
+    return time.strftime('%c', time.gmtime(t + 8 * 3600))
 
 
 def open_database():
-    global db,conn,day_keep,dbfile    
-    
+    global db, conn, day_keep, dbfile
+
     try:
-        from pysqlite2 import dbapi2 as sqlite
+        from sqlite3 import dbapi2 as sqlite
     except:
-        print """
-        ±¾³ÌĞòÊ¹ÓÃ sqlite ×öÊı¾İ¿âÀ´±£´æÊı¾İ£¬ÔËĞĞ±¾³ÌĞòĞèÒª pysqliteµÄÖ§³Ö
-        python ·ÃÎÊ sqlite ĞèÒªµ½ÏÂÃæµØÖ·ÏÂÔØÕâ¸öÄ£¿é pysqlite,  272kb
+        print ("""
+        æœ¬ç¨‹åºä½¿ç”¨ sqlite åšæ•°æ®åº“æ¥ä¿å­˜æ•°æ®ï¼Œè¿è¡Œæœ¬ç¨‹åºéœ€è¦ pysqliteçš„æ”¯æŒ
+        python è®¿é—® sqlite éœ€è¦åˆ°ä¸‹é¢åœ°å€ä¸‹è½½è¿™ä¸ªæ¨¡å— pysqlite,  272kb
         http://initd.org/tracker/pysqlite/wiki/pysqlite#Downloads
-        ÏÂÔØ(Windows binaries for Python 2.x)
-        """
+        ä¸‹è½½(Windows binaries for Python 2.x)
+        """)
         raise SystemExit
 
     try:
-        db = sqlite.connect(dbfile,isolation_level=None)    
-        db.create_function("unix_timestamp", 0, my_unix_timestamp)  
-        conn  = db.cursor()
+        db = sqlite.connect(dbfile, isolation_level=None)
+        db.create_function("unix_timestamp", 0, my_unix_timestamp)
+        conn = db.cursor()
     except:
-        print "²Ù×÷sqliteÊı¾İ¿âÊ§°Ü£¬ÇëÈ·±£½Å±¾ËùÔÚÄ¿Â¼¾ßÓĞĞ´È¨ÏŞ"
+        print ("æ“ä½œsqliteæ•°æ®åº“å¤±è´¥ï¼Œè¯·ç¡®ä¿è„šæœ¬æ‰€åœ¨ç›®å½•å…·æœ‰å†™æƒé™")
         raise SystemExit
 
-    sql="""
-       /* ip:     Ö»Òª´¿ipµØÖ·(xxx.xxx.xxx.xxx)µÄ´úÀí */
-       /* type:   ´úÀíÀàĞÍ 2:¸ßÄä 1:ÆÕÄä 0:Í¸Ã÷ -1: Î´Öª */
-       /* status: Õâ¸ö×Ö¶Î±¾³ÌĞò»¹Ã»ÓĞÓÃµ½£¬ÁôÔÚÕâÀï×÷ÒÔºóÀ©Õ¹*/ 
-       /* active: ´úÀíÊÇ·ñ¿ÉÓÃ  1:¿ÉÓÃ  0:²»¿ÉÓÃ  */ 
-       /* speed:  ÇëÇóÏàÓ¦Ê±¼ä£¬speedÔ½Ğ¡ËµÃ÷ËÙ¶ÈÔ½¿ì */ 
+    sql = """
+       /* ip:     åªè¦çº¯ipåœ°å€(xxx.xxx.xxx.xxx)çš„ä»£ç† */
+       /* type:   ä»£ç†ç±»å‹ 2:é«˜åŒ¿ 1:æ™®åŒ¿ 0:é€æ˜ -1: æœªçŸ¥ */
+       /* status: è¿™ä¸ªå­—æ®µæœ¬ç¨‹åºè¿˜æ²¡æœ‰ç”¨åˆ°ï¼Œç•™åœ¨è¿™é‡Œä½œä»¥åæ‰©å±•*/ 
+       /* active: ä»£ç†æ˜¯å¦å¯ç”¨  1:å¯ç”¨  0:ä¸å¯ç”¨  */ 
+       /* speed:  è¯·æ±‚ç›¸åº”æ—¶é—´ï¼Œspeedè¶Šå°è¯´æ˜é€Ÿåº¦è¶Šå¿« */ 
 
         CREATE TABLE IF NOT EXISTS  `proxier` (
           `ip` varchar(15) NOT NULL default '',    
@@ -1003,7 +1001,7 @@ def open_database():
           `time_checked` int(11) default '0',      
           `time_used` int(11)  default '0',            
           `speed` float default NULL,             
-          `area` varchar(120) default '--',      /*  ´úÀí·şÎñÆ÷ËùÔÚÎ»ÖÃ */
+          `area` varchar(120) default '--',      /*  ä»£ç†æœåŠ¡å™¨æ‰€åœ¨ä½ç½® */
           PRIMARY KEY (`ip`) 
         );
         /*
@@ -1012,52 +1010,52 @@ def open_database():
         CREATE INDEX IF NOT EXISTS `speed`       ON proxier(`speed`);
         CREATE INDEX IF NOT EXISTS `active`      ON proxier(`active`);
         */
-        PRAGMA encoding = "utf-8";      /* Êı¾İ¿âÓÃ utf-8±àÂë±£´æ */
+        PRAGMA encoding = "utf-8";      /* æ•°æ®åº“ç”¨ utf-8ç¼–ç ä¿å­˜ */
     """
     conn.executescript(sql)
     conn.execute("""DELETE FROM `proxier`
                         where `time_added`< (unix_timestamp()-?) 
-                        and `active`=0""",(day_keep*86400,))      
+                        and `active`=0""", (day_keep * 86400,))
 
     conn.execute("select count(`ip`) from `proxier`")
-    m1=conn.fetchone()[0]
-    if m1 is None:return
+    m1 = conn.fetchone()[0]
+    if m1 is None: return
 
     conn.execute("""select count(`time_checked`) 
                         from `proxier` where `time_checked`>0""")
-    m2=conn.fetchone()[0]
-    
-    if m2==0:
-        m3,m4,m5=0,"ÉĞÎ´¼ì²é","ÉĞÎ´¼ì²é"
+    m2 = conn.fetchone()[0]
+
+    if m2 == 0:
+        m3, m4, m5 = 0, "å°šæœªæ£€æŸ¥", "å°šæœªæ£€æŸ¥"
     else:
         conn.execute("select count(`active`) from `proxier` where `active`=1")
-        m3=conn.fetchone()[0]
+        m3 = conn.fetchone()[0]
         conn.execute("""select max(`time_checked`), min(`time_checked`) 
                              from `proxier` where `time_checked`>0 limit 1""")
-        rs=conn.fetchone()
-        m4,m5=rs[0],rs[1]
-        m4=formattime(m4)
-        m5=formattime(m5)
-    print """
-    ¹²%(m1)1dÌõ´úÀí£¬ÆäÖĞ%(m2)1d¸ö´úÀí±»ÑéÖ¤¹ı£¬%(m3)1d¸ö´úÀíÑéÖ¤ÓĞĞ§¡£
-            ×î½üÒ»´Î¼ì²éÊ±¼äÊÇ£º%(m4)1s
-            ×îÔ¶Ò»´Î¼ì²éÊ±¼äÊÇ: %(m5)1s
-    ÌáÊ¾£º¶ÔÓÚ¼ì²éÊ±¼ä³¬¹ı24Ğ¡Ê±µÄ´úÀí£¬Ó¦¸ÃÖØĞÂ¼ì²éÆäÓĞĞ§ĞÔ
-    """%{'m1':m1,'m2':m2,'m3':m3,'m4':m4,'m5':m5}
-
+        rs = conn.fetchone()
+        m4, m5 = rs[0], rs[1]
+        m4 = formattime(m4)
+        m5 = formattime(m5)
+    print ("""
+    å…±%(m1)1dæ¡ä»£ç†ï¼Œå…¶ä¸­%(m2)1dä¸ªä»£ç†è¢«éªŒè¯è¿‡ï¼Œ%(m3)1dä¸ªä»£ç†éªŒè¯æœ‰æ•ˆã€‚
+            æœ€è¿‘ä¸€æ¬¡æ£€æŸ¥æ—¶é—´æ˜¯ï¼š%(m4)1s
+            æœ€è¿œä¸€æ¬¡æ£€æŸ¥æ—¶é—´æ˜¯: %(m5)1s
+    æç¤ºï¼šå¯¹äºæ£€æŸ¥æ—¶é—´è¶…è¿‡24å°æ—¶çš„ä»£ç†ï¼Œåº”è¯¥é‡æ–°æ£€æŸ¥å…¶æœ‰æ•ˆæ€§
+    """ % {'m1': m1, 'm2': m2, 'm3': m3, 'm4': m4, 'm5': m5})
 
 
 def close_database():
-    global db,conn
+    global db, conn
     conn.close()
     db.close()
-    conn=None
-    db=None
+    conn = None
+    db = None
+
 
 if __name__ == '__main__':
     open_database()
     get_all_proxies()
     patch_check_proxy(thread_num)
-    output_file() 
+    output_file()
     close_database()
-    print "ËùÓĞ¹¤×÷ÒÑ¾­Íê³É"
+    print ("æ‰€æœ‰å·¥ä½œå·²ç»å®Œæˆ")

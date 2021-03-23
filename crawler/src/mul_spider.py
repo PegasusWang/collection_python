@@ -9,6 +9,7 @@ from tornado import httpclient, gen, ioloop, queues
 
 class AsySpider(object):
     """A simple class of asynchronous spider."""
+
     def __init__(self, urls, concurrency):
         urls.reverse()
         self.urls = urls
@@ -18,7 +19,7 @@ class AsySpider(object):
         self._fetched = set()
 
     def handle_page(self, url, html):
-        #print(url, html)
+        # print(url, html)
         print(url)
 
     @gen.coroutine
@@ -85,21 +86,21 @@ def main():
     _st = time.time()
     p = Pool()
     all_num = 73000
-    num = 4    # number of cpu cores
+    num = 4  # number of cpu cores
     per_num, left = divmod(all_num, num)
     s = range(0, all_num, per_num)
     res = []
-    for i in range(len(s)-1):
-        res.append((s[i], s[i+1]))
-    res.append((s[len(s)-1], all_num))
-    print res
+    for i in range(len(s) - 1):
+        res.append((s[i], s[i + 1]))
+    res.append((s[len(s) - 1], all_num))
+    print(res)
 
     for i in res:
         p.apply_async(run_spider, args=(i[0], i[1],))
     p.close()
     p.join()
 
-    print time.time()-_st
+    print(time.time() - _st)
 
 
 if __name__ == '__main__':
