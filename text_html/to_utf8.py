@@ -32,7 +32,7 @@ def to_utf8(filename):
             lines[i] = line.replace('charset=gbk', 'charset=utf-8')
 
     txt = '\n'.join(lines)
-    content = txt.decode('gb18030').encode('utf-8')
+    content = txt.encode('gb18030').decode('utf-8')
     filename += 'l'
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
