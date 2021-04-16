@@ -19,4 +19,4 @@ def exe_command(cmd, timeout=300):
 
 
 if __name__ == '__main__':
-    print(exe_command('ipconfig'))
+    print(exe_command('ifconfig'))
