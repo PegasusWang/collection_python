@@ -15,7 +15,7 @@ def ping(ping_url, site_name, site_host, post_url, rss_url):
     result = rpc_server.weblogUpdates.extendedPing(
         site_name, site_host, "http://"+post_url, "http://"+rss_url
     )
-    print result
+    print(result)
 
 
 def ping_all(*args, **kwds):
@@ -24,7 +24,7 @@ def ping_all(*args, **kwds):
         'http://rpc.pingomatic.com/',
         'http://blogsearch.google.com/ping/RPC2',
     ]
-    print args
+    print(args)
     for url in ping_url_list:
         ping(url, *args, **kwds)
 
@@ -34,9 +34,9 @@ def main():
     client = redis.pubsub()
     client.subscribe(['ping'])
     while True:
-        print "."
+        print(".")
         for item in client.listen():
-            print item
+            print(item)
             if item['type'] == 'message':
                 msg = item['data']
                 if msg:
