@@ -32,18 +32,15 @@ print(df.dtypes)
 df["销售日期"] = pd.to_datetime(df["销售日期"])
 
 # 每日的数据情况
-gb_date_sold = df.groupby(df["销售日期"].dt.to_period('m')).sum()[["销售数量", '总收入(美元)', '总成本(美元)', "总利润(美元)"]]
+gb_date_sold = df.groupby(
+    df["销售日期"].dt.to_period('m')).sum()[["销售数量", '总收入(美元)', '总成本(美元)', "总利润(美元)"]]
 gb_date_sold.index = gb_date_sold.index.to_series().astype(str)
 print(gb_date_sold)
 
 # 总收入前8的日期数据
-gb_top_revenue = (df.groupby(df["销售日期"])
-    .sum()
-    .sort_values('总收入(美元)', ascending=False)
-    .head(8)
-    )[["销售数量", '总收入(美元)', '总成本(美元)', "总利润(美元)"]]
+gb_top_revenue = (df.groupby(df["销售日期"]).sum().sort_values(
+    '总收入(美元)', ascending=False).head(8))[["销售数量", '总收入(美元)', '总成本(美元)', "总利润(美元)"]]
 print(gb_top_revenue)
-
 
 # 创建展示表
 wb.sheets.add('Dashboard')
@@ -99,10 +96,12 @@ def create_formatted_summary(header_cell, title, df_summary, color):
     """
 
     # 可选择的表格填充色
-    colors = {"purple": [(112, 48, 160), (161, 98, 208)],
-              "blue": [(0, 112, 192), (155, 194, 230)],
-              "green": [(0, 176, 80), (169, 208, 142)],
-              "yellow": [(255, 192, 0), (255, 217, 102)]}
+    colors = {
+        "purple": [(112, 48, 160), (161, 98, 208)],
+        "blue": [(0, 112, 192), (155, 194, 230)],
+        "green": [(0, 176, 80), (169, 208, 142)],
+        "yellow": [(255, 192, 0), (255, 217, 102)]
+    }
 
     # 设置表格标题的列宽
     sht_dashboard.range(header_cell).column_width = 1.5
@@ -119,8 +118,9 @@ def create_formatted_summary(header_cell, title, df_summary, color):
     summary_title_range.api.VerticalAlignment = xw.constants.HAlign.xlHAlignCenter
     summary_title_range.api.Font.Color = 0xFFFFFF
     summary_title_range.api.Font.Bold = True
-    sht_dashboard.range((row, col),
-                        (row, col + len(df_summary.columns) + 1)).color = colors[color][0]  # Darker color
+    sht_dashboard.range(
+        (row, col),
+        (row, col + len(df_summary.columns) + 1)).color = colors[color][0]  # Darker color
 
     # 设置表格内容、起始单元格、数据填充、字体大小、粗体、颜色填充
     summary_header_range = sht_dashboard.range(row + 1, col + 1)
@@ -128,8 +128,9 @@ def create_formatted_summary(header_cell, title, df_summary, color):
     summary_header_range = summary_header_range.expand('right')
     summary_header_range.api.Font.Size = 11
     summary_header_range.api.Font.Bold = True
-    sht_dashboard.range((row + 1, col),
-                        (row + 1, col + len(df_summary.columns) + 1)).color = colors[color][1]  # Darker color
+    sht_dashboard.range(
+        (row + 1, col),
+        (row + 1, col + len(df_summary.columns) + 1)).color = colors[color][1]  # Darker color
     sht_dashboard.range((row + 1, col + 1),
                         (row + len(df_summary), col + len(df_summary.columns) + 1)).autofit()
 
@@ -143,7 +144,8 @@ def create_formatted_summary(header_cell, title, df_summary, color):
 
     # 给表格左边添加带颜色的边框
     sht_dashboard.range(side_border_range).api.Borders(7).Weight = 3
-    sht_dashboard.range(side_border_range).api.Borders(7).Color = xw.utils.rgb_to_int(colors[color][1])
+    sht_dashboard.range(side_border_range).api.Borders(7).Color = xw.utils.rgb_to_int(
+        colors[color][1])
     sht_dashboard.range(side_border_range).api.Borders(7).LineStyle = -4115
 
 
@@ -153,16 +155,16 @@ create_formatted_summary('B17', '每种产品的售出情况', pv_quantity_sold,
 create_formatted_summary('F17', '每月的销售情况', gb_date_sold, 'blue')
 create_formatted_summary('F5', '每日总收入排名Top8 ', gb_top_revenue, 'yellow')
 
-
 # 中文显示
-plt.rcParams['font.sans-serif']=['SimHei']
+plt.rcParams['font.sans-serif'] = ['SimHei']
 
 # 使用Matplotlib绘制可视化图表, 饼图
 fig, ax = plt.subplots(figsize=(6, 3))
 pv_total_profit.plot(color='g', kind='bar', ax=ax)
 
 # 添加图表到Excel
-sht_dashboard.pictures.add(fig, name='ItemsChart',
+sht_dashboard.pictures.add(fig,
+                           name='ItemsChart',
                            left=sht_dashboard.range("M5").left,
                            top=sht_dashboard.range("M5").top,
                            update=True)
@@ -181,4 +183,3 @@ time.sleep(3)
 # 保存Excel文件
 wb.save(rf"水果蔬菜销售报表.xlsx")
 wb.close()
-
