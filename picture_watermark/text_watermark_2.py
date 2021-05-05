@@ -58,8 +58,8 @@ def all_path(dirname, filters):
 if __name__ == '__main__':
 
     filters = [".jpg", ".jpeg", ".png"]  # 设置过滤后的文件类型
-    path = all_path(r"C:\Users\liming\Downloads\mytest", filters)
+    paths = all_path(r"C:\Users\liming\Downloads\mytest", filters)
     text = input('输入你的水印文字:\n')
-    for name in path:
-        watermark(text, name, r"D:\watermark")
+    for path in paths:
+        watermark(text, path, r"D:\watermark")
     print('Done!')
