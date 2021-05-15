@@ -47,7 +47,8 @@ for root, dirs, files in walk(getcwd(), topdown=False):
         def if_match(func):
             if i.match(j):
                 func(join(root, j))
-                print join(root, j)
+                print(join(root, j))
+
 
         for j in dirs:
             if_match(del_dir)
