@@ -5,11 +5,12 @@ from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
 
 """
 教程：
+- https://bookfere.com/tools#calibre
 - https://www.jianshu.com/p/0bcb92509309
 - https://snowdreams1006.github.io/myGitbook/advance/export.html
-- https://bookfere.com/tools#calibre
+
 命令：
-ebook-convert draveness.recipe draveness.mobi --output-profile kindle
+ebook-convert draveness.recipe draveness.mobi --output-profile=kindle
 """
 
 

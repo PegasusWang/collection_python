@@ -10,5 +10,6 @@
 
 参考：
 
+- https://bookfere.com/tools#calibre
 - https://www.jianshu.com/p/0bcb92509309
 - https://snowdreams1006.github.io/myGitbook/advance/export.html
