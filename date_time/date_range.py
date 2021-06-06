@@ -12,10 +12,15 @@ def get_month_range(start_date=None):
     return start_date, end_date
 
 
+def date_range(start, stop, step):
+    while start < stop:
+        yield start
+        start += step
+
+
 if __name__ == '__main__':
     a_day = timedelta(days=1)
     now = datetime(2012, 4, 5).replace(day=1)
     first_day, last_day = get_month_range(now)
-    while first_day < last_day:
-        print(first_day)
-        first_day += a_day
+    for d in date_range(first_day, last_day, a_day):
+        print(d)
