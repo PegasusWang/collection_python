@@ -18,11 +18,11 @@ def threaded(target):
 
     def run_target():
         while True:
-            item = messages.get()  # A thread loop forever.pulling items out of
+            item = messages.get()  # A threads loop forever.pulling items out of
             # the message queue and sending to the
             # target
 
-            if item is GeneratorExit:  # handle close so that thread shuts down correctly
+            if item is GeneratorExit:  # handle close so that threads shuts down correctly
                 target.close()
                 return
             else:
@@ -32,7 +32,7 @@ def threaded(target):
         try:
             while True:
                 item = yield  # receive items and pass them into the
-                # thread (via the queue)
+                # threads (via the queue)
                 messages.put(item)
         except GeneratorExit:
             messages.put(GeneratorExit)

@@ -11,11 +11,11 @@ import schedule
 不过你可以通过多线程的形式来运行每个作业以解决此限制：
 """
 def job1():
-    print("I'm running on thread %s" % threading.current_thread())
+    print("I'm running on threads %s" % threading.current_thread())
 def job2():
-    print("I'm running on thread %s" % threading.current_thread())
+    print("I'm running on threads %s" % threading.current_thread())
 def job3():
-    print("I'm running on thread %s" % threading.current_thread())
+    print("I'm running on threads %s" % threading.current_thread())
 
 def run_threaded(job_func):
     job_thread = threading.Thread(target=job_func)
