@@ -6,7 +6,14 @@ import time
 import yagmail
 from imbox import Imbox
 from PIL import ImageGrab
+"""
+需要安装的包
+pip install imbox
+pip install yagmail
+pip install pillow
+pip install keyring
 
+"""
 
 def send_mail(sender, to, contents):
     smtp = yagmail.SMTP(user=sender, host='smtp.qq.com')
