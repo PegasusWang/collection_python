@@ -11,3 +11,4 @@ _templates/*
 __pycache__/
 .cache
 .python-version
+venv/*

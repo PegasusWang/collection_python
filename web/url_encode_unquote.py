@@ -12,12 +12,12 @@ data = {
     'b': 2
 }
 
-print urlencode(data)    # 对dict encode
+print(urlencode(data))  # 对dict encode
 s = '呵呵'
-print quote(s)    # 对字符串encode
+print(quote(s))  # 对字符串encode
 
-print unquote(urlencode(data))
-print unquote(s)
+print(unquote(urlencode(data)))
+print(unquote(s))
 
 # tornado send post
 post_data = { 'data': 'test data' } #A dictionary of your post data

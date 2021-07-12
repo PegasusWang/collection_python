@@ -57,7 +57,7 @@ def days_from_now(timestamp):
     s = 1456415452
     print(datestr_from_stamp(s))
     date = datetime_from_timestamp(s)
-    print(now-date).days
+    print((now-date).days)
 
 
 def main():
@@ -66,6 +66,7 @@ def main():
     except:
         timestamp = time.time()
     print(datetime_from_timestamp(timestamp))
+    days_from_now(timestamp)
 
 
 if __name__ == '__main__':
