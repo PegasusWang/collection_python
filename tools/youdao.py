@@ -31,6 +31,7 @@ def fetch(query_str=''):
 
 def parse(html):
     d = json.loads(html)
+    print(d)
     try:
         if d.get('errorCode') == 0:
             if d.get('translation'):

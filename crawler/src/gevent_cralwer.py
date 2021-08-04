@@ -129,7 +129,7 @@ class Crawler(object):
 
     def worker(self, job, logger=logging.getLogger(__name__ + '.worker')):
         """A simple worker that fetches urls based on jobs and puts the
-        ammended jobs on the outq for processing in the pipeline thread.
+        ammended jobs on the outq for processing in the pipeline threads.
         After each job is fetched, but before the worker sets the finished
         event, the spider's preprocess method will be called on the job. This
         is its opportunity to add urls to the job queue.  Heavy processing
