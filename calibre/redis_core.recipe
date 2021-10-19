@@ -34,7 +34,8 @@ class DravenessBlog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
     no_stylesheets = True  # 去除 CSS 样式
     remove_javascript = True  # 去除 JavaScript 脚本
     auto_cleanup = True  # 自动清理 HTML 代码
-    delay = 5  # 抓取页面间隔秒数
+    # 抓取页面间隔秒数。默认并发 simultaneous_downloads=5，开启delay禁止并发
+    delay = 5
     max_articles_per_feed = 100  # 抓取文章数量
     timeout = 10
 
