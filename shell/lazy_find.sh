@@ -25,23 +25,23 @@ SEARCH="."
 ## parse options
 
 while [ True ]; do
-if [ "$1" = "--help" -o "$1" = "-h" ]; then
-    helpu
-elif [ "$1" = "--match-case" -o "$1" = "-m" ]; then
-    MATCH="-name"
-    shift 1
-elif [ "$1" = "--path" -o "$1" = "-p" ]; then
-    SEARCH="${2}"
-    shift 2
-else
-    break
-fi
+    if [ "$1" = "--help" -o "$1" = "-h" ]; then
+        helpu
+    elif [ "$1" = "--match-case" -o "$1" = "-m" ]; then
+        MATCH="-name"
+        shift 1
+    elif [ "$1" = "--path" -o "$1" = "-p" ]; then
+        SEARCH="${2}"
+        shift 2
+    else
+        break
+    fi
 done
 
 ## sanitize input filenames
 ## create array, retain spaces
 
-ARG=( "${@}" )
+ARG=("${@}")
 set -e
 
 ## catch obvious input error
