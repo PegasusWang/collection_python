@@ -1,4 +1,6 @@
 """
+schedule 是一个定时任务调度库，不用 crontab 也可以实现定时任务了
+
 pip install schedule
 https://schedule.readthedocs.io/en/stable/examples.html
 """
