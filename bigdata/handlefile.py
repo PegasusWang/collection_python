@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
 """
-大数据处理，用来生成文件，分解文件等
+大数据处理，用来生成文件，分解文件等做测试。
 
-分解文件有一个库：
+1. 分解文件有一个库：
 
 https://github.com/ram-jayapalan/filesplit
 
 https://www.bswen.com/2018/04/python-How-to-generate-random-large-file-using-python.html
 
+
+2. linux 文件命令 split 拆分文件
+
 """
 import os
+import itertools
 import time
 import random
 import string
@@ -84,6 +88,16 @@ def generate_big_random_sentences(filename, linecount):
             f.writelines([' '.join([random.choice(i) for i in all]), '\n'])
 
 
+def generate_big_incr_digits(filename, start, step, size):
+    i = itertools.count(start, step)
+    nums = '\n'.join(
+        (str(next(i)) for _ in range(size))
+    )  # 1
+
+    with open(filename, 'w') as f:
+        f.write(nums)
+
+
 def generate_big_random_digits(filename, start, end, size):
     nums = '\n'.join(
         (str(random.randint(start, end)) for _ in range(size))
@@ -106,10 +120,39 @@ def split(filename):
         fout.close()
 
 
+"""
+# TODO 如何合并大文件
+
+1. cat 命令合并:
+cat file1 file2 file3 > bigfile
+cat file1 file2 file3 | sqlite database
+
+2. 使用 python 块读取然后追加写入
+
+https://stackoverflow.com/questions/5509872/python-append-multiple-files-in-given-order-to-one-big-file
+
+def append_file_to_file(_from, _to):
+    block_size = 1024*1024
+    with open(_to, "ab") as outfile, open(_from, "rb") as infile:
+        while True:
+            input_block = infile.read(block_size)
+            if not input_block:
+                break
+            outfile.write(input_block)
+# Given this building block, you can use:
+
+for filename in ['a.bin','b.bin','c.bin']:
+    append_file_to_file(filename, 'outfile.bin')
+
+3. use dask. https://rcpedia.stanford.edu/topicGuides/merging_data_sets_dask.html
+"""
+
+
 def main():
     # 生成一个大文件
     filename = "nums.txt"
-    generate_big_random_digits(filename, 1, 1000, 1024 * 1024)
+    # generate_big_random_digits(filename, 1, 1000, 1024 * 1024)
+    generate_big_incr_digits(filename, 1, 1, 1024 * 1024)
     # 分割大文件，用于一些比较大数据处理的问题
     split(filename)
 
