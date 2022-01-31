@@ -1,0 +1,353 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert programmercarl.recipe programmercarl.mobi --output-profile=kindle
+ebook-convert programmercarl.recipe programmercarl.pdf
+ebook-convert programmercarl.recipe programmercarl.epub
+"""
+
+urls = [
+ {'title': '时间复杂度分析',
+  'url': 'https://programmercarl.com/前序/关于时间复杂度，你不知道的都在这里！.html'},
+ {'title': '算法为什么会超时',
+  'url': 'https://programmercarl.com/前序/On的算法居然超时了，此时的n究竟是多大？.html'},
+ {'title': '递归算法的时间复杂度',
+  'url': 'https://programmercarl.com/前序/通过一道面试题目，讲一讲递归算法的时间复杂度！.html'},
+ {'title': '算法性能分析系列一',
+  'url': 'https://programmercarl.com/周总结/20201210复杂度分析周末总结.html'},
+ {'title': '空间复杂度分析',
+  'url': 'https://programmercarl.com/前序/关于空间复杂度，可能有几个疑问？.html'},
+ {'title': '递归算法的性能分析',
+  'url': 'https://programmercarl.com/前序/递归算法的时间与空间复杂度分析.html'},
+ {'title': '代码的内存消耗',
+  'url': 'https://programmercarl.com/前序/刷了这么多题，你了解自己代码的内存消耗么？.html'},
+ {'title': '1.数组理论基础', 'url': 'https://programmercarl.com/数组理论基础.html'},
+ {'title': '2.二分查找', 'url': 'https://programmercarl.com/0704.二分查找.html'},
+ {'title': '3.移除元素', 'url': 'https://programmercarl.com/0027.移除元素.html'},
+ {'title': '4.有序数组的平方', 'url': 'https://programmercarl.com/0977.有序数组的平方.html'},
+ {'title': '5.长度最小的子数组',
+  'url': 'https://programmercarl.com/0209.长度最小的子数组.html'},
+ {'title': '6.螺旋矩阵II', 'url': 'https://programmercarl.com/0059.螺旋矩阵II.html'},
+ {'title': '7.总结篇', 'url': 'https://programmercarl.com/数组总结篇.html'},
+ {'title': '1.链表理论基础', 'url': 'https://programmercarl.com/链表理论基础.html'},
+ {'title': '2.移除链表元素', 'url': 'https://programmercarl.com/0203.移除链表元素.html'},
+ {'title': '3.设计链表', 'url': 'https://programmercarl.com/0707.设计链表.html'},
+ {'title': '4.翻转链表', 'url': 'https://programmercarl.com/0206.翻转链表.html'},
+ {'title': '5.两两交换链表中的节点',
+  'url': 'https://programmercarl.com/0024.两两交换链表中的节点.html'},
+ {'title': '6.删除链表的倒数第N个节点',
+  'url': 'https://programmercarl.com/0019.删除链表的倒数第N个节点.html'},
+ {'title': '7.链表相交', 'url': 'https://programmercarl.com/面试题02.07.链表相交.html'},
+ {'title': '8.环形链表II', 'url': 'https://programmercarl.com/0142.环形链表II.html'},
+ {'title': '9.总结篇', 'url': 'https://programmercarl.com/链表总结篇.html'},
+ {'title': '1.哈希表理论基础', 'url': 'https://programmercarl.com/哈希表理论基础.html'},
+ {'title': '2.有效的字母异位词',
+  'url': 'https://programmercarl.com/0242.有效的字母异位词.html'},
+ {'title': '3.两个数组的交集', 'url': 'https://programmercarl.com/0349.两个数组的交集.html'},
+ {'title': '4.快乐数', 'url': 'https://programmercarl.com/0202.快乐数.html'},
+ {'title': '5.两数之和', 'url': 'https://programmercarl.com/0001.两数之和.html'},
+ {'title': '6.四数相加II', 'url': 'https://programmercarl.com/0454.四数相加II.html'},
+ {'title': '7.赎金信', 'url': 'https://programmercarl.com/0383.赎金信.html'},
+ {'title': '8.三数之和', 'url': 'https://programmercarl.com/0015.三数之和.html'},
+ {'title': '9.四数之和', 'url': 'https://programmercarl.com/0018.四数之和.html'},
+ {'title': '10.总结篇', 'url': 'https://programmercarl.com/哈希表总结.html'},
+ {'title': '1.反转字符串', 'url': 'https://programmercarl.com/0344.反转字符串.html'},
+ {'title': '2.反转字符串II', 'url': 'https://programmercarl.com/0541.反转字符串II.html'},
+ {'title': '3.替换空格', 'url': 'https://programmercarl.com/剑指Offer05.替换空格.html'},
+ {'title': '4.翻转字符串里的单词',
+  'url': 'https://programmercarl.com/0151.翻转字符串里的单词.html'},
+ {'title': '5.左旋转字符串',
+  'url': 'https://programmercarl.com/剑指Offer58-II.左旋转字符串.html'},
+ {'title': '6.实现strStr())',
+  'url': 'https://programmercarl.com/0028.实现strStr.html'},
+ {'title': '7.重复的子字符串', 'url': 'https://programmercarl.com/0459.重复的子字符串.html'},
+ {'title': '8.总结篇', 'url': 'https://programmercarl.com/字符串总结.html'},
+ {'title': '1.移除元素', 'url': 'https://programmercarl.com/0027.移除元素.html'},
+ {'title': '2.反转字符串', 'url': 'https://programmercarl.com/0344.反转字符串.html'},
+ {'title': '3.替换空格', 'url': 'https://programmercarl.com/剑指Offer05.替换空格.html'},
+ {'title': '4.翻转字符串里的单词',
+  'url': 'https://programmercarl.com/0151.翻转字符串里的单词.html'},
+ {'title': '5.翻转链表', 'url': 'https://programmercarl.com/0206.翻转链表.html'},
+ {'title': '6.删除链表的倒数第N个节点',
+  'url': 'https://programmercarl.com/0019.删除链表的倒数第N个节点.html'},
+ {'title': '7.链表相交', 'url': 'https://programmercarl.com/面试题02.07.链表相交.html'},
+ {'title': '8.环形链表II', 'url': 'https://programmercarl.com/0142.环形链表II.html'},
+ {'title': '9.三数之和', 'url': 'https://programmercarl.com/0015.三数之和.html'},
+ {'title': '10.四数之和', 'url': 'https://programmercarl.com/0018.四数之和.html'},
+ {'title': '11.双指针总结', 'url': 'https://programmercarl.com/双指针总结.html'},
+ {'title': '1.栈与队列理论基础', 'url': 'https://programmercarl.com/栈与队列理论基础.html'},
+ {'title': '2.用栈实现队列', 'url': 'https://programmercarl.com/0232.用栈实现队列.html'},
+ {'title': '3.用队列实现栈', 'url': 'https://programmercarl.com/0225.用队列实现栈.html'},
+ {'title': '4.有效的括号', 'url': 'https://programmercarl.com/0020.有效的括号.html'},
+ {'title': '5.删除字符串中的所有相邻重复项',
+  'url': 'https://programmercarl.com/1047.删除字符串中的所有相邻重复项.html'},
+ {'title': '6.逆波兰表达式求值',
+  'url': 'https://programmercarl.com/0150.逆波兰表达式求值.html'},
+ {'title': '7.滑动窗口最大值', 'url': 'https://programmercarl.com/0239.滑动窗口最大值.html'},
+ {'title': '8.前K个高频元素', 'url': 'https://programmercarl.com/0347.前K个高频元素.html'},
+ {'title': '9.栈与队列总结', 'url': 'https://programmercarl.com/栈与队列总结.html'},
+ {'title': '1.二叉树理论基础', 'url': 'https://programmercarl.com/二叉树理论基础.html'},
+ {'title': '2.二叉树的递归遍历', 'url': 'https://programmercarl.com/二叉树的递归遍历.html'},
+ {'title': '3.二叉树的迭代遍历', 'url': 'https://programmercarl.com/二叉树的迭代遍历.html'},
+ {'title': '4.二叉树的统一迭代法', 'url': 'https://programmercarl.com/二叉树的统一迭代法.html'},
+ {'title': '5.二叉树的层序遍历',
+  'url': 'https://programmercarl.com/0102.二叉树的层序遍历.html'},
+ {'title': '6.翻转二叉树', 'url': 'https://programmercarl.com/0226.翻转二叉树.html'},
+ {'title': '7.二叉树周末总结',
+  'url': 'https://programmercarl.com/周总结/20200927二叉树周末总结.html'},
+ {'title': '8.对称二叉树', 'url': 'https://programmercarl.com/0101.对称二叉树.html'},
+ {'title': '9.二叉树的最大深度',
+  'url': 'https://programmercarl.com/0104.二叉树的最大深度.html'},
+ {'title': '10.二叉树的最小深度',
+  'url': 'https://programmercarl.com/0111.二叉树的最小深度.html'},
+ {'title': '11.完全二叉树的节点个数',
+  'url': 'https://programmercarl.com/0222.完全二叉树的节点个数.html'},
+ {'title': '12.平衡二叉树', 'url': 'https://programmercarl.com/0110.平衡二叉树.html'},
+ {'title': '13.二叉树的所有路径',
+  'url': 'https://programmercarl.com/0257.二叉树的所有路径.html'},
+ {'title': '14.二叉树周末总结',
+  'url': 'https://programmercarl.com/周总结/20201003二叉树周末总结.html'},
+ {'title': '15.二叉树中递归带着回溯',
+  'url': 'https://programmercarl.com/二叉树中递归带着回溯.html'},
+ {'title': '16.左叶子之和', 'url': 'https://programmercarl.com/0404.左叶子之和.html'},
+ {'title': '17.找树左下角的值', 'url': 'https://programmercarl.com/0513.找树左下角的值.html'},
+ {'title': '18.路径总和', 'url': 'https://programmercarl.com/0112.路径总和.html'},
+ {'title': '19.从中序与后序遍历序列构造二叉树',
+  'url': 'https://programmercarl.com/0106.从中序与后序遍历序列构造二叉树.html'},
+ {'title': '20.最大二叉树', 'url': 'https://programmercarl.com/0654.最大二叉树.html'},
+ {'title': '21.二叉树周末总结',
+  'url': 'https://programmercarl.com/周总结/20201010二叉树周末总结.html'},
+ {'title': '22.合并二叉树', 'url': 'https://programmercarl.com/0617.合并二叉树.html'},
+ {'title': '23.二叉搜索树中的搜索',
+  'url': 'https://programmercarl.com/0700.二叉搜索树中的搜索.html'},
+ {'title': '24.验证二叉搜索树', 'url': 'https://programmercarl.com/0098.验证二叉搜索树.html'},
+ {'title': '25.二叉搜索树的最小绝对差',
+  'url': 'https://programmercarl.com/0530.二叉搜索树的最小绝对差.html'},
+ {'title': '26.二叉搜索树中的众数',
+  'url': 'https://programmercarl.com/0501.二叉搜索树中的众数.html'},
+ {'title': '27.二叉树的最近公共祖先',
+  'url': 'https://programmercarl.com/0236.二叉树的最近公共祖先.html'},
+ {'title': '28.二叉树周末总结',
+  'url': 'https://programmercarl.com/周总结/20201017二叉树周末总结.html'},
+ {'title': '29.二叉搜索树的最近公共祖先',
+  'url': 'https://programmercarl.com/0235.二叉搜索树的最近公共祖先.html'},
+ {'title': '30.二叉搜索树中的插入操作',
+  'url': 'https://programmercarl.com/0701.二叉搜索树中的插入操作.html'},
+ {'title': '31.删除二叉搜索树中的节点',
+  'url': 'https://programmercarl.com/0450.删除二叉搜索树中的节点.html'},
+ {'title': '32.修剪二叉搜索树', 'url': 'https://programmercarl.com/0669.修剪二叉搜索树.html'},
+ {'title': '33.将有序数组转换为二叉搜索树',
+  'url': 'https://programmercarl.com/0108.将有序数组转换为二叉搜索树.html'},
+ {'title': '34.把二叉搜索树转换为累加树',
+  'url': 'https://programmercarl.com/0538.把二叉搜索树转换为累加树.html'},
+ {'title': '35.二叉树总结篇', 'url': 'https://programmercarl.com/二叉树总结篇.html'},
+ {'title': '1.回溯算法理论基础', 'url': 'https://programmercarl.com/回溯算法理论基础.html'},
+ {'title': '2.组合问题', 'url': 'https://programmercarl.com/0077.组合.html'},
+ {'title': '3.组合（优化）', 'url': 'https://programmercarl.com/0077.组合优化.html'},
+ {'title': '4.组合总和III', 'url': 'https://programmercarl.com/0216.组合总和III.html'},
+ {'title': '5.电话号码的字母组合',
+  'url': 'https://programmercarl.com/0017.电话号码的字母组合.html'},
+ {'title': '6.回溯周末总结',
+  'url': 'https://programmercarl.com/周总结/20201030回溯周末总结.html'},
+ {'title': '7.组合总和', 'url': 'https://programmercarl.com/0039.组合总和.html'},
+ {'title': '8.组合总和II', 'url': 'https://programmercarl.com/0040.组合总和II.html'},
+ {'title': '9.分割回文串', 'url': 'https://programmercarl.com/0131.分割回文串.html'},
+ {'title': '10.复原IP地址', 'url': 'https://programmercarl.com/0093.复原IP地址.html'},
+ {'title': '11.子集问题', 'url': 'https://programmercarl.com/0078.子集.html'},
+ {'title': '12.回溯周末总结',
+  'url': 'https://programmercarl.com/周总结/20201107回溯周末总结.html'},
+ {'title': '13.子集II', 'url': 'https://programmercarl.com/0090.子集II.html'},
+ {'title': '14.递增子序列', 'url': 'https://programmercarl.com/0491.递增子序列.html'},
+ {'title': '15.全排列', 'url': 'https://programmercarl.com/0046.全排列.html'},
+ {'title': '16.全排列II', 'url': 'https://programmercarl.com/0047.全排列II.html'},
+ {'title': '17.回溯周末总结',
+  'url': 'https://programmercarl.com/周总结/20201112回溯周末总结.html'},
+ {'title': '18.回溯算法去重问题的另一种写法',
+  'url': 'https://programmercarl.com/回溯算法去重问题的另一种写法.html'},
+ {'title': '19.重新安排行程', 'url': 'https://programmercarl.com/0332.重新安排行程.html'},
+ {'title': '20.N皇后', 'url': 'https://programmercarl.com/0051.N皇后.html'},
+ {'title': '21.解数独', 'url': 'https://programmercarl.com/0037.解数独.html'},
+ {'title': '22.回溯法总结篇', 'url': 'https://programmercarl.com/回溯总结.html'},
+ {'title': '1.贪心算法理论基础', 'url': 'https://programmercarl.com/贪心算法理论基础.html'},
+ {'title': '2.分发饼干', 'url': 'https://programmercarl.com/0455.分发饼干.html'},
+ {'title': '3.摆动序列', 'url': 'https://programmercarl.com/0376.摆动序列.html'},
+ {'title': '4.最大子序和', 'url': 'https://programmercarl.com/0053.最大子序和.html'},
+ {'title': '5.贪心周总结',
+  'url': 'https://programmercarl.com/周总结/20201126贪心周末总结.html'},
+ {'title': '6.买卖股票的最佳时机II',
+  'url': 'https://programmercarl.com/0122.买卖股票的最佳时机II.html'},
+ {'title': '7.跳跃游戏', 'url': 'https://programmercarl.com/0055.跳跃游戏.html'},
+ {'title': '8.跳跃游戏II', 'url': 'https://programmercarl.com/0045.跳跃游戏II.html'},
+ {'title': '9.K次取反后最大化的数组和',
+  'url': 'https://programmercarl.com/1005.K次取反后最大化的数组和.html'},
+ {'title': '10.贪心周总结',
+  'url': 'https://programmercarl.com/周总结/20201203贪心周末总结.html'},
+ {'title': '11.加油站', 'url': 'https://programmercarl.com/0134.加油站.html'},
+ {'title': '12.分发糖果', 'url': 'https://programmercarl.com/0135.分发糖果.html'},
+ {'title': '13.柠檬水找零', 'url': 'https://programmercarl.com/0860.柠檬水找零.html'},
+ {'title': '14.根据身高重建队列',
+  'url': 'https://programmercarl.com/0406.根据身高重建队列.html'},
+ {'title': '15.贪心周总结',
+  'url': 'https://programmercarl.com/周总结/20201217贪心周末总结.html'},
+ {'title': '16.根据身高重建队列（vector原理讲解）',
+  'url': 'https://programmercarl.com/根据身高重建队列（vector原理讲解）.html'},
+ {'title': '17.用最少数量的箭引爆气球',
+  'url': 'https://programmercarl.com/0452.用最少数量的箭引爆气球.html'},
+ {'title': '18.无重叠区间', 'url': 'https://programmercarl.com/0435.无重叠区间.html'},
+ {'title': '19.划分字母区间', 'url': 'https://programmercarl.com/0763.划分字母区间.html'},
+ {'title': '20.合并区间', 'url': 'https://programmercarl.com/0056.合并区间.html'},
+ {'title': '21.贪心周总结',
+  'url': 'https://programmercarl.com/周总结/20201224贪心周末总结.html'},
+ {'title': '22.单调递增的数字', 'url': 'https://programmercarl.com/0738.单调递增的数字.html'},
+ {'title': '23.买卖股票的最佳时机含手续费',
+  'url': 'https://programmercarl.com/0714.买卖股票的最佳时机含手续费.html'},
+ {'title': '24.监控二叉树', 'url': 'https://programmercarl.com/0968.监控二叉树.html'},
+ {'title': '25.贪心算法总结篇', 'url': 'https://programmercarl.com/贪心算法总结篇.html'},
+ {'title': '1.动态规划理论基础', 'url': 'https://programmercarl.com/动态规划理论基础.html'},
+ {'title': '2.斐波那契数', 'url': 'https://programmercarl.com/0509.斐波那契数.html'},
+ {'title': '3.爬楼梯', 'url': 'https://programmercarl.com/0070.爬楼梯.html'},
+ {'title': '4.使用最小花费爬楼梯',
+  'url': 'https://programmercarl.com/0746.使用最小花费爬楼梯.html'},
+ {'title': '5.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210107动规周末总结.html'},
+ {'title': '6.不同路径', 'url': 'https://programmercarl.com/0062.不同路径.html'},
+ {'title': '7.不同路径II', 'url': 'https://programmercarl.com/0063.不同路径II.html'},
+ {'title': '8.整数拆分', 'url': 'https://programmercarl.com/0343.整数拆分.html'},
+ {'title': '9.不同的二叉搜索树',
+  'url': 'https://programmercarl.com/0096.不同的二叉搜索树.html'},
+ {'title': '10.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210114动规周末总结.html'},
+ {'title': '11.0-1背包理论基础（一）',
+  'url': 'https://programmercarl.com/背包理论基础01背包-1.html'},
+ {'title': '12.0-1背包理论基础（二）',
+  'url': 'https://programmercarl.com/背包理论基础01背包-2.html'},
+ {'title': '13.分割等和子集', 'url': 'https://programmercarl.com/0416.分割等和子集.html'},
+ {'title': '14.最后一块石头的重量II',
+  'url': 'https://programmercarl.com/1049.最后一块石头的重量II.html'},
+ {'title': '15.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210121动规周末总结.html'},
+ {'title': '16.目标和', 'url': 'https://programmercarl.com/0494.目标和.html'},
+ {'title': '17.一和零', 'url': 'https://programmercarl.com/0474.一和零.html'},
+ {'title': '18.完全背包理论基础',
+  'url': 'https://programmercarl.com/背包问题理论基础完全背包.html'},
+ {'title': '19.零钱兑换II', 'url': 'https://programmercarl.com/0518.零钱兑换II.html'},
+ {'title': '20.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210128动规周末总结.html'},
+ {'title': '21.组合总和Ⅳ', 'url': 'https://programmercarl.com/0377.组合总和Ⅳ.html'},
+ {'title': '22.爬楼梯（进阶版）',
+  'url': 'https://programmercarl.com/0070.爬楼梯完全背包版本.html'},
+ {'title': '23.零钱兑换', 'url': 'https://programmercarl.com/0322.零钱兑换.html'},
+ {'title': '24.完全平方数', 'url': 'https://programmercarl.com/0279.完全平方数.html'},
+ {'title': '25.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210204动规周末总结.html'},
+ {'title': '26.单词拆分', 'url': 'https://programmercarl.com/0139.单词拆分.html'},
+ {'title': '27.多重背包理论基础',
+  'url': 'https://programmercarl.com/背包问题理论基础多重背包.html'},
+ {'title': '28.背包问题总结篇', 'url': 'https://programmercarl.com/背包总结篇.html'},
+ {'title': '29.打家劫舍', 'url': 'https://programmercarl.com/0198.打家劫舍.html'},
+ {'title': '30.打家劫舍II', 'url': 'https://programmercarl.com/0213.打家劫舍II.html'},
+ {'title': '31.打家劫舍III', 'url': 'https://programmercarl.com/0337.打家劫舍III.html'},
+ {'title': '32.买卖股票的最佳时机',
+  'url': 'https://programmercarl.com/0121.买卖股票的最佳时机.html'},
+ {'title': '33.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210225动规周末总结.html'},
+ {'title': '34.买卖股票的最佳时机II',
+  'url': 'https://programmercarl.com/0122.买卖股票的最佳时机II（动态规划）.html'},
+ {'title': '35.买卖股票的最佳时机III',
+  'url': 'https://programmercarl.com/0123.买卖股票的最佳时机III.html'},
+ {'title': '36.买卖股票的最佳时机IV',
+  'url': 'https://programmercarl.com/0188.买卖股票的最佳时机IV.html'},
+ {'title': '37.最佳买卖股票时机含冷冻期',
+  'url': 'https://programmercarl.com/0309.最佳买卖股票时机含冷冻期.html'},
+ {'title': '38.动规周总结',
+  'url': 'https://programmercarl.com/周总结/20210304动规周末总结.html'},
+ {'title': '39.买卖股票的最佳时机含手续费',
+  'url': 'https://programmercarl.com/0714.买卖股票的最佳时机含手续费（动态规划）.html'},
+ {'title': '40.股票问题总结篇', 'url': 'https://programmercarl.com/动态规划-股票问题总结篇.html'},
+ {'title': '41.最长上升子序列', 'url': 'https://programmercarl.com/0300.最长上升子序列.html'},
+ {'title': '42.最长连续递增序列',
+  'url': 'https://programmercarl.com/0674.最长连续递增序列.html'},
+ {'title': '43.最长重复子数组', 'url': 'https://programmercarl.com/0718.最长重复子数组.html'},
+ {'title': '44.最长公共子序列', 'url': 'https://programmercarl.com/1143.最长公共子序列.html'},
+ {'title': '45.不相交的线', 'url': 'https://programmercarl.com/1035.不相交的线.html'},
+ {'title': '46.最大子序和',
+  'url': 'https://programmercarl.com/0053.最大子序和（动态规划）.html'},
+ {'title': '47.判断子序列', 'url': 'https://programmercarl.com/0392.判断子序列.html'},
+ {'title': '48.不同的子序列', 'url': 'https://programmercarl.com/0115.不同的子序列.html'},
+ {'title': '49.两个字符串的删除操作',
+  'url': 'https://programmercarl.com/0583.两个字符串的删除操作.html'},
+ {'title': '50.编辑距离', 'url': 'https://programmercarl.com/0072.编辑距离.html'},
+ {'title': '51.编辑距离总结篇',
+  'url': 'https://programmercarl.com/为了绝杀编辑距离，卡尔做了三步铺垫.html'},
+ {'title': '52.回文子串', 'url': 'https://programmercarl.com/0647.回文子串.html'},
+ {'title': '53.最长回文子序列', 'url': 'https://programmercarl.com/0516.最长回文子序列.html'},
+ {'title': '54.动态规划总结篇', 'url': 'https://programmercarl.com/动态规划总结篇.html'},
+ {'title': '1.每日温度', 'url': 'https://programmercarl.com/0739.每日温度.html'},
+ {'title': '2.下一个更大元素I',
+  'url': 'https://programmercarl.com/0496.下一个更大元素I.html'},
+ {'title': '3.下一个更大元素II',
+  'url': 'https://programmercarl.com/0503.下一个更大元素II.html'},
+ {'title': '4.接雨水', 'url': 'https://programmercarl.com/0042.接雨水.html'},
+ {'title': '5.柱状图中最大的矩形',
+  'url': 'https://programmercarl.com/0084.柱状图中最大的矩形.html'},
+ {'title': '通关代码随想录', 'url': 'https://programmercarl.com/other/say_feel.html'}]
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "力扣教程"  # 电子书名
+    description = u"programmercarl"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "carl"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    # delay = 2  # 抓取页面间隔秒数
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 10
+
+    # ///////////////////
+    # 页面内容解析方法
+    # ///////////////////
+    def _parse_index(self):
+        # from bs4 import BeautifulSoup
+        site = "https://programmercarl.com"
+        soup = self.index_to_soup(html)
+        # soup = self.index_to_soup(site)  # 解析列表页返回 BeautifulSoup 对象
+
+        articles = []  # 定义空文章资源数组
+        ultags = soup.find_all("ul",{"class": "sidebar-links sidebar-group-items"} )
+        for ultag in ultags:
+            urls = ultag.find_all("li")
+            for litag in urls:
+                text = litag.get_text()
+                title = "".join(text.split())
+                a = litag.find("a")
+                url = site + a["href"]
+                articles.append({"title": title, "url": url})
+
+        ans = [(self.title, articles)]  # 组成最终的数据结构
+        return ans  # 返回可供 Calibre 转换的数据结构
+
+    def parse_index(self):
+        ans = [(self.title, urls)]  # 组成最终的数据结构
+        return ans
