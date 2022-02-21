@@ -1,0 +1,182 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert network全解网络协议.recipe network全解网络协议.mobi --output-profile=kindle
+ebook-convert network全解网络协议.recipe network全解网络协议.pdf
+ebook-convert network全解网络协议.recipe network全解网络协议.epub
+"""
+
+urls = [
+    {
+        "title": "01 我应该站在谁的肩膀上 - OSI vs TCPIP模型.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/01 我应该站在谁的肩膀上 - OSI vs TCPIP模型.md"
+    },
+    {
+        "title": "02 万丈高楼平地起- 物理层 + 数据链路层.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/02 万丈高楼平地起- 物理层 + 数据链路层.md"
+    },
+    {
+        "title": "03 OSI的灵魂就是我 - 网络层.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/03 OSI的灵魂就是我 - 网络层.md"
+    },
+    {
+        "title": "04 要快还是要稳你说好了 - 传输层.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/04 要快还是要稳你说好了 - 传输层.md"
+    },
+    {
+        "title": "05 是时候展现真正的技术了 - 应用层.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/05 是时候展现真正的技术了 - 应用层.md"
+    },
+    {
+        "title": "06 重回小学课堂 - 二进制101.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/06 重回小学课堂 - 二进制101.md"
+    },
+    {
+        "title": "07 1+1 = 2吗？ - 二进制的计算.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/07 1+1 = 2吗？ - 二进制的计算.md"
+    },
+    {
+        "title": "08 16进制又是个什么鬼？ - 16进制的讲解.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/08 16进制又是个什么鬼？ - 16进制的讲解.md"
+    },
+    {
+        "title": "09 我想有个家 - 什么是IP地址.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/09 我想有个家 - 什么是IP地址.md"
+    },
+    {
+        "title": "10 我可是住二环的人 - IP地址的组成和分类.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/10 我可是住二环的人 - IP地址的组成和分类.md"
+    },
+    {
+        "title": "11 我已经没地方住了吗 - IPv6.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/11 我已经没地方住了吗 - IPv6.md"
+    },
+    {
+        "title": "12 向左还是向右 - IP路由.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/12 向左还是向右 - IP路由.md"
+    },
+    {
+        "title": "13 我能给你安全感 - TCP（一）.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/13 我能给你安全感 - TCP（一）.md"
+    },
+    {
+        "title": "14 我那不为人知的秘密是什么 - TCP（二）.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/14 我那不为人知的秘密是什么 - TCP（二）.md"
+    },
+    {
+        "title": "15 不问收没收到，就问快不快 - UDP.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/15 不问收没收到，就问快不快 - UDP.md"
+    },
+    {
+        "title": "16 我为什么与众不同 - TCP高级篇（拥塞模型）.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/16 我为什么与众不同 - TCP高级篇（拥塞模型）.md"
+    },
+    {
+        "title": "17 来，先看看我的家谱 - HTTP的身世.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/17 来，先看看我的家谱 - HTTP的身世.md"
+    },
+    {
+        "title": "18 我都这么成功了，你却说我不行 - HTTP 的特点和缺点.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/18 我都这么成功了，你却说我不行 - HTTP 的特点和缺点.md"
+    },
+    {
+        "title": "19 我老了，让我儿子来吧 - HTTP2.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/19 我老了，让我儿子来吧 - HTTP2.md"
+    },
+    {
+        "title": "20 稳重的大外甥 - HTTPS.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/20 稳重的大外甥 - HTTPS.md"
+    },
+    {
+        "title": "21 HTTP的高级篇 - HTTPClient（Java）.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/21 HTTP的高级篇 - HTTPClient（Java）.md"
+    },
+    {
+        "title": "22 想来我家，你自己查呀 - DNS.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/22 想来我家，你自己查呀 - DNS.md"
+    },
+    {
+        "title": "23 来的早，不如来得巧 - NAT.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/23 来的早，不如来得巧 - NAT.md"
+    },
+    {
+        "title": "24 辛苦的邮政 - SMTP.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/24 辛苦的邮政 - SMTP.md"
+    },
+    {
+        "title": "25 你就是看不见我 - VPN.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/25 你就是看不见我 - VPN.md"
+    },
+    {
+        "title": "26 黑客的好帮手 - SSH.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/26 黑客的好帮手 - SSH.md"
+    },
+    {
+        "title": "27 你可以得到我的心，却得不到我的人 - 物理安全设备.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/27 你可以得到我的心，却得不到我的人 - 物理安全设备.md"
+    },
+    {
+        "title": "28 你怎么证明你就是你 - 身份验证和访问控制.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/28 你怎么证明你就是你 - 身份验证和访问控制.md"
+    },
+    {
+        "title": "29 我要怎么藏好我的考研资料 - 网络攻击（一）.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/29 我要怎么藏好我的考研资料 - 网络攻击（一）.md"
+    },
+    {
+        "title": "30 我要怎么藏好我的考研资料 - 网络攻击（二）.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/30 我要怎么藏好我的考研资料 - 网络攻击（二）.md"
+    },
+    {
+        "title": "31 如何保护我的考研资料 - 网络攻击防范.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/31 如何保护我的考研资料 - 网络攻击防范.md"
+    },
+    {
+        "title": "32 Linux网络安全 - 安全实战.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/32 Linux网络安全 - 安全实战.md"
+    },
+    {
+        "title": "33 结语.md",
+        "url": "http://learn.lianglianglee.com/专栏/全解网络协议/33 结语.md"
+    }
+]
+
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "network全解网络协议"  # 电子书名
+    description = u"network全解网络协议"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    simultaneous_downloads = 2  # 有时候多个同时下载会失败，修改小点或者单线程下载
+    # delay = 2  # 抓取页面间隔秒数
+
+    # 页面内容解析方法
+    def parse_index(self):
+        ans = [(self.title, urls)]
+        return ans  # 返回可供 Calibre 转换的数据结构
