@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #coding:utf-8
 
-
+from __future__ import print_function
 #import sys
 #if sys.getdefaultencoding() == 'ascii':
 #    reload(sys)
@@ -16,4 +16,4 @@
 from zapp.BTC.model._redis import redis
 
 while True:
-    print redis.brpop('DEBUG')[1]
+    print(redis.brpop('DEBUG')[1])

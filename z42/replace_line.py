@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from os.path import abspath, dirname, basename, join, exists
 from os import walk
 
@@ -19,7 +20,8 @@ def replace(from_string, to_string, suffix):
         _replace(from_s.strip(), to_s.strip(), suffix)
 
 
-def _replace(from_string, to_string, suffix=('py', 'htm', 'txt', 'conf', 'css', 'h', 'template', 'js', 'html', 'rst', 'coffee', 'yaml', 'mako', 'sh', 'wsgi')):
+def _replace(from_string, to_string, suffix=(
+'py', 'htm', 'txt', 'conf', 'css', 'h', 'template', 'js', 'html', 'rst', 'coffee', 'yaml', 'mako', 'sh', 'wsgi')):
     from_string = from_string.strip()
     to_string = to_string.strip()
 
@@ -48,7 +50,6 @@ def _replace(from_string, to_string, suffix=('py', 'htm', 'txt', 'conf', 'css', 
             if t != content:
                 with open(path, 'wb') as f:
                     f.write(t)
-
 
 
 replace(

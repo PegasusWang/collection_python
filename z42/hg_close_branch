@@ -1,7 +1,11 @@
 #!/usr/bin/env python
-#coding:utf-8
+# coding:utf-8
+from __future__ import print_function
+
+
 class _Getch:
     """Gets a single character from standard input.  Does not echo to the screen."""
+
     def __init__(self):
         try:
             self.impl = _GetchWindows()
@@ -11,11 +15,14 @@ class _Getch:
             except ImportError:
                 self.impl = _GetchUnix()
 
-    def __call__(self): return self.impl()
+    def __call__(self):
+        return self.impl()
+
 
 class _GetchUnix:
     def __init__(self):
-        import tty, sys, termios # import termios now or else you'll get the Unix version on the Mac
+        import tty, sys, termios  # import termios now or else you'll get the Unix version on the Mac
+
     def __call__(self):
         import sys, tty, termios
         fd = sys.stdin.fileno()
@@ -27,6 +34,7 @@ class _GetchUnix:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
         return ch
 
+
 class _GetchWindows:
     def __init__(self):
         import msvcrt
@@ -35,6 +43,7 @@ class _GetchWindows:
         import msvcrt
         return msvcrt.getch()
 
+
 class _GetchMacCarbon:
     """
     A function which returns the current ASCII key that is down;
@@ -42,13 +51,14 @@ class _GetchMacCarbon:
     page http://www.mactech.com/macintosh-c/chap02-1.html was
     very helpful in figuring out how to do this.
     """
+
     def __init__(self):
         from Carbon import Evt
-        Evt #see if it has this (in Unix, it doesn't)
+        Evt  # see if it has this (in Unix, it doesn't)
 
     def __call__(self):
         from Carbon import Evt
-        if Evt.EventAvail(0x0008)[0] == 0: # 0x0008 is the keyDownMask
+        if Evt.EventAvail(0x0008)[0] == 0:  # 0x0008 is the keyDownMask
             return ''
         else:
             #
@@ -62,8 +72,9 @@ class _GetchMacCarbon:
             #
             (what, msg, when, where, mod) = Evt.GetNextEvent(0x0008)[1]
             return chr(msg & 0x000000FF)
-getch = _Getch()
 
+
+getch = _Getch()
 
 from os.path import join
 from os import getenv
@@ -76,7 +87,7 @@ def main():
     from os.path import dirname, exists, join
     path = os.getcwd()
 
-    #os.chroot(path) 
+    # os.chroot(path)
     sys.argv = sys.argv[:1]
 
     while True:
@@ -88,11 +99,11 @@ def main():
                 name = i.split(' ', 1)
                 if name[0] != 'default':
                     t.append(map(str.strip, name))
-        print '\n'
+        print('\n')
         for pos, i in enumerate(t, 1):
-            print '%s\t%s\t%s'%(str(pos).ljust(3), i[0].ljust(35), i[1])
+            print('%s\t%s\t%s' % (str(pos).ljust(3), i[0].ljust(35), i[1]))
 
-        num_list = raw_input('\nCLOSE BRANCH  : ').strip().split()
+        num_list = input('\nCLOSE BRANCH  : ').strip().split()
 
         branch_list = []
 
@@ -105,7 +116,7 @@ def main():
                     branch = t[num][0]
                     branch_list.append(branch)
 
-        print '\n关闭分支\n%s\n(Y确认,否则取消)'%'\n'.join(branch_list)
+        print('\n关闭分支\n%s\n(Y确认,否则取消)' % '\n'.join(branch_list))
 
         if not getch() in ['y', 'Y']:
             continue
@@ -115,22 +126,18 @@ def main():
 hg update %s
 hg commit --close-branch -m close
 hg update default
-"""%branch
-            line_break = '-'*64
+""" % branch
+            line_break = '-' * 64
             cmd = [i.strip() for i in cmd.split('\n') if i]
-            print line_break
+            print(line_break)
             import os
             success = True
             for i in cmd:
-                print '>>>%s'%i
+                print('>>>%s' % i)
                 if os.system(i) != 0:
                     success = False
                     break
 
 
-
-
-
 if __name__ == '__main__':
     main()
-
