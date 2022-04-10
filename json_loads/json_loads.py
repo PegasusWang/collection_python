@@ -11,7 +11,6 @@ import json
 def json_load_byteified(file_handle):
     """
     It converts all unicode strings in a JSON object to UTF-8 encoded strings
-    
     :param file_handle: The file handle to the JSON file that you want to load
     """
     return _byteify(json.load(file_handle, object_hook=_byteify), ignore_dicts=True)
@@ -20,7 +19,6 @@ def json_load_byteified(file_handle):
 def json_loads_byteified(json_text):
     """
     It converts all unicode strings in a JSON object to UTF-8 encoded strings
-    
     :param json_text: The JSON string that you want to convert to a Python object
     """
     return _byteify(json.loads(json_text, object_hook=_byteify), ignore_dicts=True)
@@ -29,9 +27,9 @@ def json_loads_byteified(json_text):
 def _byteify(data, ignore_dicts=False):
     """
     It converts all unicode strings in a data structure to UTF-8 encoded strings
-    
     :param data: the data to be converted
-    :param ignore_dicts: If this is True, then dictionaries are ignored, defaults to False (optional)
+    :param ignore_dicts: If this is True, then dictionaries are ignored, defaults
+    to False (optional)
     """
     if isinstance(data, str):
         return data
