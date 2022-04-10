@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+"""
+解决Python 2下的json.loads()导致的unicode编码问题
+"""
 from __future__ import print_function
 
 import json

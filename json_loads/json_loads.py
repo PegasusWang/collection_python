@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
+解决Python 2下的json.loads()导致的unicode编码问题
 How to get string objects instead of Unicode from JSON?
 Updated for Python 2.7 and 3.x compatibility.
 https://stackoverflow.com/questions/956867/how-to-get-string-objects-instead-of-unicode-from-json/33571117#33571117
