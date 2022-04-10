@@ -9,17 +9,13 @@ import json
 def unicode_convert(data):
     """
     A recursive function that converts all unicode strings in a dictionary to utf-8 encoded strings.
-    
     :param data: The unicode string to be converted
     """
     if isinstance(data, dict):
         return {unicode_convert(key): unicode_convert(value) for key, value in data.items()}
-    elif isinstance(data, list):
+    if isinstance(data, list):
         return [unicode_convert(element) for element in data]
-    elif str(type(data)) == "<type 'unicode'>":
-        return data.encode('utf-8')
-    else:
-        return data
+    return data.encode('utf-8') if str(type(data)) == "<type 'unicode'>" else data
 
 
 json_text = json.dumps({'dns': None, 'ntp': None})
@@ -27,8 +23,8 @@ print('json_text:', json_text)
 dict_value = json.loads(json_text)
 print(unicode_convert(dict_value))
 
-data = {"foo": "bar", "things": [7, {"qux": "baz", "moo": {"cow": ["milk"]}}]}
-json_text2 = json.dumps(data)
+datas = {"foo": "bar", "things": [7, {"qux": "baz", "moo": {"cow": ["milk"]}}]}
+json_text2 = json.dumps(datas)
 print('json_text2:', json_text2)
 dict_value2 = json.loads(json_text2)
 print('dict_value:', dict_value2)
