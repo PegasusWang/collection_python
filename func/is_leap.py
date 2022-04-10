@@ -10,9 +10,7 @@ def is_leap(year):
     except Exception as err:
         print(err)
     else:
-        is_leap = year % 4 == 0 and year % 100 != 0 or \
-                  year % 400 == 0
-        return is_leap
+        return year % 4 == 0 and year % 100 != 0 or year % 400 == 0
 
 
 if __name__ == '__main__':

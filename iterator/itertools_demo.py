@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from itertools import dropwhile, islice, permutations, combinations
+from itertools import dropwhile, islice, permutations, combinations, chain, zip_longest
 
 with open('demo.txt', 'r', encoding='utf-8') as file:
     # 按照真值函数丢弃掉列表和迭代器前面的元素
@@ -10,6 +10,7 @@ with open('demo.txt', 'r', encoding='utf-8') as file:
 for line in dropwhile(lambda e: e < 5, range(10)):
     print(line, end='')
 print()
+print('--------------------------------')
 
 items = ['a', 'b', 'c', 1, 4, 10, 15]
 # 对迭代器进行切片
@@ -30,3 +31,12 @@ for c in combinations(items, 3):
 
 for c in combinations(items, 2):
     print(c)
+
+# 连接多个列表或者迭代器。
+for c in chain(range(3), range(4), [3, 2, 1]):
+    print(c, end='')
+print()
+print('--------------------------------')
+# 类似于zip，不过已较长的列表和迭代器的长度为准
+for item in zip_longest('ABCD', 'xy'):
+    print(item, end='')
