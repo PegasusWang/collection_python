@@ -13,6 +13,12 @@ weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday',
 
 
 def get_previous_byday(dayname, start_date=None):
+    """
+    Given a day name, return the date of the previous day with that name
+
+    :param dayname: The day of the week that you want to get the previous date for
+    :param start_date: The date to start looking back from. If not provided, the current date is used
+    """
     if start_date is None:
         start_date = datetime.now()
     day_num = start_date.weekday()
@@ -24,6 +30,9 @@ def get_previous_byday(dayname, start_date=None):
 
 
 def last_friday():
+    """
+    It output the date of the last Friday of the month
+    """
     print(datetime.now())
     print(get_previous_byday('Monday'))
     print(get_previous_byday('Tuesday'))
