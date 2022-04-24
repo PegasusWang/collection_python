@@ -207,6 +207,11 @@ class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
     simultaneous_downloads = 2  # 有时候多个同时下载会失败，修改小点或者单线程下载
 
     def parse_index(self):
+        for data in urls: # clone 项目到本地然后用 hugo 本地起一个，抓取更快
+            print(data['url'])
+            old = "http://golang.design/go-questions"
+            new = "http://localhost:1313/go-questions"
+            data['url']= data['url'].replace(old,new)
         ans = [(self.title, urls)]
         return ans  # 返回可供 Calibre 转换的数据结构
 
