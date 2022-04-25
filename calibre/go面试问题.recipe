@@ -204,9 +204,10 @@ class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
     # 抓取页面内容设置
     # ///////////////////
     # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
-    no_stylesheets = True  # 去除 CSS 样式
-    remove_javascript = True  # 去除 JavaScript 脚本
-    auto_cleanup = True  # 自动清理 HTML 代码
+    keep_only_tags = [{'class': 'book-page'}]  # 仅抓取正文内容（去掉左边菜单栏)
+    # no_stylesheets = True  # 去除 CSS 样式
+    # remove_javascript = True  # 去除 JavaScript 脚本
+    # auto_cleanup = True  # 自动清理 HTML 代码
     # delay = 2  # 抓取页面间隔秒数
     max_articles_per_feed = 300  # 抓取文章数量
     timeout = 120.0
