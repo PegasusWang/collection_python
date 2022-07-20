@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
+
 """
-schedule 是一个定时任务调度库，不用 crontab 也可以实现定时任务了
+schedule 是一个定时任务调度库，不用 crontab 也可以实现定时任务了，支持更加灵活的定时或者一次性任务
 
 pip install schedule
+
 https://schedule.readthedocs.io/en/stable/examples.html
 """
 
@@ -28,4 +31,4 @@ schedule.every().day.at("15:33:00").do(notify)
 
 while True:
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(1)  # 防止 cpu 占用太高。https://github.com/dbader/schedule/issues/209
