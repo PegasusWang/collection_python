@@ -12,15 +12,19 @@ import datetime as dt
 import os
 import time
 import schedule
+import logging
 
 
 def notify():
-    now = dt.datetime.now()
-    print('notify:', now)
-    title, text = "放音乐啦", "打开控制电源"
-    os.system(""" osascript -e 'say "家里放点音乐吧"' """)
-    os.system(
-        """ osascript -e 'display notification "{}" with title "{}"' """.format(text, title))
+    try:
+        now = dt.datetime.now()
+        print('notify:', now)
+        title, text = "放音乐啦", "打开控制电源"
+        os.system(""" osascript -e 'say "家里放点音乐吧"' """)
+        os.system(
+            """ osascript -e 'display notification "{}" with title "{}"' """.format(text, title))
+    except Exception as e: # 这里包一层 try/catch 防止定时函数因为异常整个进程退出了
+        logging.exception(e)
 
 
 schedule.every().day.at("11:13:00").do(notify)
