@@ -13,3 +13,11 @@
 - https://bookfere.com/tools#calibre
 - https://www.jianshu.com/p/0bcb92509309
 - https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+# 安装 calibre
+
+在calibre官网下载插件，下载链接：https://calibre-ebook.com/download 下载适合自己系统的版本：
+
+然后在命令行链接环境变量：
+
+`sudo ln -s /Applications/calibre.app/Contents/MacOS/ebook-convert /usr/local/bin`
