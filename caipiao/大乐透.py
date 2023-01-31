@@ -19,9 +19,9 @@ def random_select():
     随机选择一组号码
     """
     red_balls = list(range(1, 36))
-    selected_balls = np.random.choice(red_balls, 5)
+    selected_balls = np.random.choice(red_balls, 5, replace=False)
     selected_balls = sorted(selected_balls)
-    selected_balls.extend(sorted(np.random.choice(range(1, 13), 2)))
+    selected_balls.extend(sorted(np.random.choice(range(1, 13), 2, replace=False)))
     return selected_balls
 
 

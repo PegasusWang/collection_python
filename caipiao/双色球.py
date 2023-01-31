@@ -20,7 +20,7 @@ def random_select():
     随机选择一组号码
     """
     red_balls = list(range(1, 34))
-    selected_balls = np.random.choice(red_balls, 6)
+    selected_balls = np.random.choice(red_balls, 6,replace = False)
     selected_balls = sorted(selected_balls)
     selected_balls.append(np.random.randint(1, 16))
     return selected_balls
