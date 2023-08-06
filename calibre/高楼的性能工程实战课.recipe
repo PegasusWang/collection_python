@@ -34,10 +34,10 @@ class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
     no_stylesheets = True  # 去除 CSS 样式
     remove_javascript = True  # 去除 JavaScript 脚本
     auto_cleanup = True  # 自动清理 HTML 代码
-    delay = 10  # 抓取页面间隔秒数
+    # delay = 10  # 抓取页面间隔秒数
     max_articles_per_feed = 300  # 抓取文章数量
     timeout = 120.0
-    simultaneous_downloads = 2  # 有时候多个同时下载会失败，修改小点或者单线程下载
+    simultaneous_downloads = 1  # 有时候多个同时下载会失败，修改小点或者单线程下载
 
     # 页面内容解析方法
     def parse_index(self):
