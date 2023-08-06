@@ -10,7 +10,7 @@ from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
 - https://snowdreams1006.github.io/myGitbook/advance/export.html
 
 命令：
-ebook-convert 10x程序员工作法.recipe 10x程序员工作法.epub
+ebook-convert 从0开始做增增长.recipe 从0开始做增增长.epub
 """
 
 
@@ -19,8 +19,8 @@ class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
     # ///////////////////
     # 设置电子书元数据
     # ///////////////////
-    title = "10x程序员工作法"  # 电子书名
-    description = u"10x程序员工作法"  # 电子书简介
+    title = "从0开始做增增长"  # 电子书名
+    description = u"从0开始做增增长"  # 电子书简介
     # cover_url = '' # 电子书封面
     # masthead_url = '' # 页头图片
     __author__ = "web"  # 作者
@@ -41,7 +41,7 @@ class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
 
     # 页面内容解析方法
     def parse_index(self):
-        site="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/10x%E7%A8%8B%E5%BA%8F%E5%91%98%E5%B7%A5%E4%BD%9C%E6%B3%95"
+        site="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%81%9A%E5%A2%9E%E9%95%BF"
         soup = self.index_to_soup(site)
         divtag = soup.findAll("div", {"class": "book-post"})[0]
         links = divtag.findAll("li")
