@@ -75,7 +75,6 @@ class MonitorEvent(pyinotify.ProcessEvent):
         文件被创建
         """
         if time.time() - self.flag > 0:
-            get_file_status(event)
             logger.info("%s 被创建！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
@@ -83,8 +82,13 @@ class MonitorEvent(pyinotify.ProcessEvent):
     def process_IN_MODIFY(self, event):
         """文件被修改"""
         if time.time() - self.flag > 3:
-            get_file_status(event)
-            logger.info("%s 被修改！", event.pathname)
+            file_info = os.stat(event.pathname)
+            modified_time = datetime.datetime.fromtimestamp(file_info.st_mtime)
+            modified_user = pwd.getpwuid(file_info.st_uid).pw_name
+            logger.info("文件/目录修改:")
+            logger.info("路径:%s", event.pathname)
+            logger.info("修改时间: %s", modified_time)
+            logger.info("修改用户:%s", modified_user)
             self.flag = time.time()
             # 这里就可以做想做的事情了
             with ThreadPoolExecutor(max_workers=10) as executor:
@@ -96,25 +100,19 @@ class MonitorEvent(pyinotify.ProcessEvent):
             logger.info("%s 被删除！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
+            deleted_time = datetime.datetime.now()
+            deleted_user = pwd.getpwuid(os.getuid()).pw_name
+            logger.info("文件/目录删除:")
+            logger.info("路径:%s", event.pathname)
+            logger.info("修改时间: %s", deleted_time)
+            logger.info("修改用户:%s", deleted_user)
 
     def process_IN_CLOSE_WRITE(self, event):
         """文件写入完毕"""
         if time.time() - self.flag > 0:
-            get_file_status(event)
             logger.info("%s 写入完毕！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
-
-
-def get_file_status(event):
-    """get file status"""
-    file_info = os.stat(event.pathname)
-    modified_time = datetime.datetime.fromtimestamp(file_info.st_mtime)
-    modified_user = pwd.getpwuid(file_info.st_uid).pw_name
-    logger.info("文件/目录修改:")
-    logger.info("路径:%s", event.pathname)
-    logger.info("修改时间: %s", modified_time)
-    logger.info("修改用户:%s", modified_user)
 
 
 def main():
