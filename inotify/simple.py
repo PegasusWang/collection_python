@@ -25,7 +25,13 @@ class EventHandler(pyinotify.ProcessEvent):
         print("delete:", event.pathname)
 
 
-handler = EventHandler()
-wm.add_watch('/tmp', pyinotify.IN_DELETE | pyinotify.IN_CREATE, rec=True)
-notifier = pyinotify.Notifier(wm, handler)
-notifier.loop()
+def main():
+    """Program entrance"""
+    handler = EventHandler()
+    wm.add_watch('/tmp', pyinotify.IN_DELETE | pyinotify.IN_CREATE, rec=True)
+    notifier = pyinotify.Notifier(wm, handler)
+    notifier.loop()
+
+
+if __name__ == '__main__':
+    main()
