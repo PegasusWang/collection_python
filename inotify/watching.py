@@ -9,6 +9,7 @@
 '''
 
 import os
+import pwd
 import shutil
 import time
 import datetime
@@ -74,41 +75,51 @@ class MonitorEvent(pyinotify.ProcessEvent):
         文件被创建
         """
         if time.time() - self.flag > 0:
-            file_full_path = os.path.join(event.path, event.name)
-            logger.info("%s 被创建！", file_full_path)
+            get_file_status(event)
+            logger.info("%s 被创建！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
 
     def process_IN_MODIFY(self, event):
         """文件被修改"""
         if time.time() - self.flag > 3:
-            file_full_path = os.path.join(event.path, event.name)
-            logger.info("%s 被修改！", file_full_path)
+            get_file_status(event)
+            logger.info("%s 被修改！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                executor.submit(self.func, event.pathname)
 
     def process_IN_DELETE(self, event):
         """文件被删除"""
         if time.time() - self.flag > 0:
-            file_full_path = os.path.join(event.path, event.name)
-            logger.info("%s 被删除！", file_full_path)
+            logger.info("%s 被删除！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
 
     def process_IN_CLOSE_WRITE(self, event):
         """文件写入完毕"""
         if time.time() - self.flag > 0:
-            file_full_path = os.path.join(event.path, event.name)
-            logger.info("%s 写入完毕！", file_full_path)
+            get_file_status(event)
+            logger.info("%s 写入完毕！", event.pathname)
             self.flag = time.time()
             # 这里就可以做想做的事情了
-            with ThreadPoolExecutor(max_workers=10) as executor:
-                executor.submit(self.func, file_full_path)
+
+
+def get_file_status(event):
+    """get file status"""
+    file_info = os.stat(event.pathname)
+    modified_time = datetime.datetime.fromtimestamp(file_info.st_mtime)
+    modified_user = pwd.getpwuid(file_info.st_uid).pw_name
+    logger.info("文件/目录修改:")
+    logger.info("路径:%s", event.pathname)
+    logger.info("修改时间: %s", modified_time)
+    logger.info("修改用户:%s", modified_user)
 
 
 def main():
     """main function"""
-    path = '/opt' # 监控目录
+    path = '/opt'  # 监控目录
     watch_manager = pyinotify.WatchManager()
     watch_manager.add_watch(path, pyinotify.ALL_EVENTS, rec=True)
     event = MonitorEvent(func=copy_files)
