@@ -85,10 +85,12 @@ class MonitorEvent(pyinotify.ProcessEvent):
             file_info = os.stat(event.pathname)
             modified_time = datetime.datetime.fromtimestamp(file_info.st_mtime)
             modified_user = pwd.getpwuid(file_info.st_uid).pw_name
-            logger.info("文件/目录修改:")
-            logger.info("路径:%s", event.pathname)
-            logger.info("修改时间: %s", modified_time)
-            logger.info("修改用户:%s", modified_user)
+            logger.info(
+                "文件/目录修改:\n路径:%s, 修改时间: %s, 修改用户:%s",
+                event.pathname,
+                modified_time,
+                modified_user,
+            )
             self.flag = time.time()
             # 这里就可以做想做的事情了
             with ThreadPoolExecutor(max_workers=10) as executor:
@@ -102,10 +104,12 @@ class MonitorEvent(pyinotify.ProcessEvent):
             # 这里就可以做想做的事情了
             deleted_time = datetime.datetime.now()
             deleted_user = pwd.getpwuid(os.getuid()).pw_name
-            logger.info("文件/目录删除:")
-            logger.info("路径:%s", event.pathname)
-            logger.info("修改时间: %s", deleted_time)
-            logger.info("修改用户:%s", deleted_user)
+            logger.info(
+                "文件/目录删除:\n路径:%s, 修改时间: %s, 修改用户:%s",
+                event.pathname,
+                deleted_time,
+                deleted_user,
+            )
 
     def process_IN_CLOSE_WRITE(self, event):
         """文件写入完毕"""
