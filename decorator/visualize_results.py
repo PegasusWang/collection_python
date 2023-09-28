@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 
 def visualize_results(func):
@@ -8,6 +10,7 @@ def visualize_results(func):
         result = func(*args, **kwargs)
         plt.figure()
         # Your visualization code here
+        plt.plot(result)
         plt.show()
         return result
 
@@ -17,7 +20,10 @@ def visualize_results(func):
 @visualize_results
 def analyze_and_visualize(data):
     # Your combined analysis and visualization code here
-    return data
+    data_DataFrame = pd.DataFrame(
+        {"x1": np.random.rand(10), "x2": np.random.rand(10), "x3": np.random.rand(10)}
+    )
+    return data_DataFrame
 
 
 if __name__ == "__main__":
