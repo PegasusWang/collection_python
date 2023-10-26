@@ -1,0 +1,118 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert mysql45.recipe mysql45.mobi --output-profile=kindle
+ebook-convert mysql45.recipe mysql45.pdf
+ebook-convert mysql45.recipe mysql45.epub
+"""
+
+
+urls = [
+    {'title': '00 开篇词  这一次，让我们一起来搞懂MySQL.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/00 开篇词  这一次，让我们一起来搞懂MySQL.md'},
+    {'title': '01  基础架构：一条SQL查询语句是如何执行的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/01  基础架构：一条SQL查询语句是如何执行的？.md'},
+    {'title': '02  日志系统：一条SQL更新语句是如何执行的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/02  日志系统：一条SQL更新语句是如何执行的？.md'},
+    {'title': '03  事务隔离：为什么你改了我还看不见？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/03  事务隔离：为什么你改了我还看不见？.md'},
+    {'title': '04  深入浅出索引（上）.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/04  深入浅出索引（上）.md'},
+    {'title': '05  深入浅出索引（下）.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/05  深入浅出索引（下）.md'},
+    {'title': '06  全局锁和表锁 ：给表加个字段怎么有这么多阻碍？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/06  全局锁和表锁 ：给表加个字段怎么有这么多阻碍？.md'},
+    {'title': '07  行锁功过：怎么减少行锁对性能的影响？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/07  行锁功过：怎么减少行锁对性能的影响？.md'},
+    {'title': '08  事务到底是隔离的还是不隔离的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/08  事务到底是隔离的还是不隔离的？.md'},
+    {'title': '09  普通索引和唯一索引，应该怎么选择？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/09  普通索引和唯一索引，应该怎么选择？.md'},
+    {'title': '10  MySQL为什么有时候会选错索引？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/10  MySQL为什么有时候会选错索引？.md'},
+    {'title': '11  怎么给字符串字段加索引？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/11  怎么给字符串字段加索引？.md'},
+    {'title': '12  为什么我的MySQL会“抖”一下？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/12  为什么我的MySQL会“抖”一下？.md'},
+    {'title': '13  为什么表数据删掉一半，表文件大小不变？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/13  为什么表数据删掉一半，表文件大小不变？.md'},
+    {'title': '14  count()这么慢，我该怎么办？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/14  count()这么慢，我该怎么办？.md'},
+    {'title': '15  答疑文章（一）：日志和索引相关问题.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/15  答疑文章（一）：日志和索引相关问题.md'},
+    {'title': '16  “order by”是怎么工作的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/16  “order by”是怎么工作的？.md'},
+    {'title': '17  如何正确地显示随机消息？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/17  如何正确地显示随机消息？.md'},
+    {'title': '18  为什么这些SQL语句逻辑相同，性能却差异巨大？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/18  为什么这些SQL语句逻辑相同，性能却差异巨大？.md'},
+    {'title': '19  为什么我只查一行的语句，也执行这么慢？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/19  为什么我只查一行的语句，也执行这么慢？.md'},
+    {'title': '20  幻读是什么，幻读有什么问题？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/20  幻读是什么，幻读有什么问题？.md'},
+    {'title': '21  为什么我只改一行的语句，锁这么多？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/21  为什么我只改一行的语句，锁这么多？.md'},
+    {'title': '22  MySQL有哪些“饮鸩止渴”提高性能的方法？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/22  MySQL有哪些“饮鸩止渴”提高性能的方法？.md'},
+    {'title': '23  MySQL是怎么保证数据不丢的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/23  MySQL是怎么保证数据不丢的？.md'},
+    {'title': '24  MySQL是怎么保证主备一致的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/24  MySQL是怎么保证主备一致的？.md'},
+    {'title': '25  MySQL是怎么保证高可用的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/25  MySQL是怎么保证高可用的？.md'},
+    {'title': '26  备库为什么会延迟好几个小时？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/26  备库为什么会延迟好几个小时？.md'},
+    {'title': '27  主库出问题了，从库怎么办？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/27  主库出问题了，从库怎么办？.md'},
+    {'title': '28  读写分离有哪些坑？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/28  读写分离有哪些坑？.md'},
+    {'title': '29  如何判断一个数据库是不是出问题了？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/29  如何判断一个数据库是不是出问题了？.md'},
+    {'title': '30  答疑文章（二）：用动态的观点看加锁.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/30  答疑文章（二）：用动态的观点看加锁.md'},
+    {'title': '31  误删数据后除了跑路，还能怎么办？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/31  误删数据后除了跑路，还能怎么办？.md'},
+    {'title': '32  为什么还有kill不掉的语句？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/32  为什么还有kill不掉的语句？.md'},
+    {'title': '33  我查这么多数据，会不会把数据库内存打爆？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/33  我查这么多数据，会不会把数据库内存打爆？.md'},
+    {'title': '34  到底可不可以使用join？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/34  到底可不可以使用join？.md'},
+    {'title': '35  join语句怎么优化？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/35  join语句怎么优化？.md'},
+    {'title': '36  为什么临时表可以重名？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/36  为什么临时表可以重名？.md'},
+    {'title': '37  什么时候会使用内部临时表？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/37  什么时候会使用内部临时表？.md'},
+    {'title': '38  都说InnoDB好，那还要不要使用Memory引擎？.md',
+        'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/38  都说InnoDB好，那还要不要使用Memory引擎？.md'},
+    {'title': '39  自增主键为什么不是连续的？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/39  自增主键为什么不是连续的？.md'},
+    {'title': '40  insert语句的锁为什么这么多？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/40  insert语句的锁为什么这么多？.md'},
+    {'title': '41  怎么最快地复制一张表？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/41  怎么最快地复制一张表？.md'},
+    {'title': '42  grant之后要跟着flush privileges吗？.md',
+        'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/42  grant之后要跟着flush privileges吗？.md'},
+    {'title': '43  要不要使用分区表？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/43  要不要使用分区表？.md'},
+    {'title': '44  答疑文章（三）：说一说这些好问题.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/44  答疑文章（三）：说一说这些好问题.md'},
+    {'title': '45  自增id用完怎么办？.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/45  自增id用完怎么办？.md'},
+    {'title': '我的MySQL心路历程.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/我的MySQL心路历程.md'},
+    {'title': '结束语  点线网面，一起构建MySQL知识网络.md', 'url': 'http://learn.lianglianglee.com/专栏/MySQL实战45讲/结束语  点线网面，一起构建MySQL知识网络.md'},
+]
+
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "mysql实战45讲"  # 电子书名
+    description = u"mysql实战45讲"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    # delay = 2  # 抓取页面间隔秒数
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120
+
+    # 页面内容解析方法
+    def parse_index(self):
+        ans = [(self.title, urls)]
+        return ans  # 返回可供 Calibre 转换的数据结构
+
+
+def parse_mysql45():
+    import requests
+    from bs4 import BeautifulSoup
+    site = "http://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/MySQL%E5%AE%9E%E6%88%9845%E8%AE%B2"
+    resp = requests.get(site)
+    html_doc = resp.content.decode('utf8')  # requests 检查的编码不对，自己写
+    soup = BeautifulSoup(html_doc, "html.parser")
+    divtag = soup.find_all("div", {"class": "book-post"})[0]
+    links = divtag.find_all("li")
+    articles = []
+    for link in links:
+        title = link.a.contents[0].strip()
+        url = site + link.a.get("href")
+        a = {'title': title, 'url': url}
+        articles.append(a)
+    return articles

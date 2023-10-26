@@ -1,0 +1,58 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert draveness.recipe draveness.mobi --output-profile=kindle
+"""
+
+
+class DravenessBlog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "draveness"  # 电子书名
+    description = u"draveness的博客"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "draveness"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    delay = 5  # 抓取页面间隔秒数
+    max_articles_per_feed = 100  # 抓取文章数量
+    timeout = 10
+
+    # ///////////////////
+    # 页面内容解析方法
+    # ///////////////////
+    def parse_index(self):
+        site = "https://draveness.me/whys-the-design/"
+        soup = self.index_to_soup(site)  # 解析列表页返回 BeautifulSoup 对象
+        articles = []  # 定义空文章资源数组
+        ultag = soup.findAll("ul")[6]
+        urls = ultag.findAll("li")
+        urls.reverse()
+        for link in urls:
+            title = link.a.contents[0].strip()  # 提取文章标题
+            url = link.a.get("href")  # 提取文章链接
+            print(title, url)
+            articles.append({"title": title, "url": url})
+
+        ans = [(self.title, articles)]  # 组成最终的数据结构
+        return ans  # 返回可供 Calibre 转换的数据结构

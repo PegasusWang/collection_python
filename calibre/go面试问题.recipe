@@ -1,0 +1,242 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert go面试问题.recipe go面试问题.epub
+"""
+
+
+urls = [{'title': '数组与切片-数组与切片有什么异同',
+        'url': 'http://golang.design/go-questions/slice/vs-array/'},
+        {'title': '数组与切片-切片的容量是怎样增长的',
+        'url': 'http://golang.design/go-questions/slice/grow/'},
+        {'title': '数组与切片-切片作为函数参数',
+         'url': 'http://golang.design/go-questions/slice/as-func-param/'},
+        {'title': '哈希表-map的实现原理',
+         'url': 'http://golang.design/go-questions/map/principal/'},
+        {'title': '哈希表-如何实现两种get操作',
+         'url': 'http://golang.design/go-questions/map/get/'},
+        {'title': '哈希表-遍历过程', 'url': 'http://golang.design/go-questions/map/range/'},
+        {'title': '哈希表-赋值过程', 'url': 'http://golang.design/go-questions/map/assign/'},
+        {'title': '哈希表-删除过程', 'url': 'http://golang.design/go-questions/map/delete/'},
+        {'title': '哈希表-扩容过程', 'url': 'http://golang.design/go-questions/map/extend/'},
+        {'title': '哈希表-key为什么是无序的',
+         'url': 'http://golang.design/go-questions/map/unordered/'},
+        {'title': '哈希表-float类型可以作为map的key吗',
+         'url': 'http://golang.design/go-questions/map/float-as-key/'},
+        {'title': '哈希表-可以边遍历边删除吗',
+         'url': 'http://golang.design/go-questions/map/delete-on-range/'},
+        {'title': '哈希表-可以对map的元素取地址吗',
+         'url': 'http://golang.design/go-questions/map/element-address/'},
+        {'title': '哈希表-如何比较两个map相等',
+         'url': 'http://golang.design/go-questions/map/compare/'},
+        {'title': '哈希表-map是线程安全的吗',
+         'url': 'http://golang.design/go-questions/map/thread-safety/'},
+        {'title': '接口-Go语言与鸭子类型的关系',
+         'url': 'http://golang.design/go-questions/interface/duck-typing/'},
+        {'title': '接口-值接收者和指针接收者的区别',
+         'url': 'http://golang.design/go-questions/interface/receiver/'},
+        {'title': '接口-iface和eface的区别是什么',
+         'url': 'http://golang.design/go-questions/interface/iface-eface/'},
+        {'title': '接口-接口的动态类型和动态值',
+         'url': 'http://golang.design/go-questions/interface/dynamic-typing/'},
+        {'title': '接口-编译器自动检测类型是否实现接口',
+         'url': 'http://golang.design/go-questions/interface/detect-impl/'},
+        {'title': '接口-接口的构造过程是怎样的',
+         'url': 'http://golang.design/go-questions/interface/construct/'},
+        {'title': '接口-类型转换和断言的区别',
+         'url': 'http://golang.design/go-questions/interface/assert/'},
+        {'title': '接口-接口转换的原理',
+         'url': 'http://golang.design/go-questions/interface/convert/'},
+        {'title': '接口-如何用interface实现多态',
+         'url': 'http://golang.design/go-questions/interface/polymorphism/'},
+        {'title': '接口-Go接口与C++接口有何异同',
+         'url': 'http://golang.design/go-questions/interface/compare-to-cpp/'},
+        {'title': '通道-什么是CSP',
+         'url': 'http://golang.design/go-questions/channel/csp/'},
+        {'title': '通道-channel底层的数据结构是什么',
+         'url': 'http://golang.design/go-questions/channel/struct/'},
+        {'title': '通道-向channel发送数据的过程是怎样的',
+         'url': 'http://golang.design/go-questions/channel/send/'},
+        {'title': '通道-从channel接收数据的过程是怎样的',
+         'url': 'http://golang.design/go-questions/channel/recv/'},
+        {'title': '通道-关闭一个channel的过程是怎样的',
+         'url': 'http://golang.design/go-questions/channel/close/'},
+        {'title': '通道-从一个关闭的channel仍然能读出数据吗',
+         'url': 'http://golang.design/go-questions/channel/read-on-close/'},
+        {'title': '通道-操作channel的情况总结',
+         'url': 'http://golang.design/go-questions/channel/ops/'},
+        {'title': '通道-如何优雅地关闭channel',
+         'url': 'http://golang.design/go-questions/channel/graceful-close/'},
+        {'title': '通道-channel发送和接收元素的本质是什么',
+         'url': 'http://golang.design/go-questions/channel/principal/'},
+        {'title': '通道-channel在什么情况下会引起资源泄漏',
+         'url': 'http://golang.design/go-questions/channel/leak/'},
+        {'title': '通道-关于channel的happened-before有哪些',
+         'url': 'http://golang.design/go-questions/channel/happens-before/'},
+        {'title': '通道-channel有哪些应用',
+         'url': 'http://golang.design/go-questions/channel/application/'},
+        {'title': '标准库-context是什么',
+         'url': 'http://golang.design/go-questions/stdlib/context/what/'},
+        {'title': '标准库-context有什么作用',
+         'url': 'http://golang.design/go-questions/stdlib/context/why/'},
+        {'title': '标准库-context.Value的查找过程是怎样的',
+         'url': 'http://golang.design/go-questions/stdlib/context/find-value/'},
+        {'title': '标准库-context如何被取消',
+         'url': 'http://golang.design/go-questions/stdlib/context/cancel/'},
+        {'title': '标准库-什么是反射',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/what/'},
+        {'title': '标准库-什么情况下需要使用反射',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/why/'},
+        {'title': '标准库-Go语言如何实现反射',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/how/'},
+        {'title': '标准库-Go语言中反射有哪些应用',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/application/'},
+        {'title': '标准库-如何比较两个对象完全相同',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/compare/'},
+        {'title': '标准库-Go指针和unsafe.Pointer有什么区别',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/pointers/'},
+        {'title': '标准库-如何利用unsafe获取slice&map的长度',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/len/'},
+        {'title': '标准库-如何利用unsafe包修改私有成员',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/modify-private/'},
+        {'title': '标准库-如何实现字符串和byte切片的零拷贝转换',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/zero-conv/'},
+        {'title': 'context-context是什么',
+         'url': 'http://golang.design/go-questions/stdlib/context/what/'},
+        {'title': 'context-context有什么作用',
+         'url': 'http://golang.design/go-questions/stdlib/context/why/'},
+        {'title': 'context-context.Value的查找过程是怎样的',
+         'url': 'http://golang.design/go-questions/stdlib/context/find-value/'},
+        {'title': 'context-context如何被取消',
+         'url': 'http://golang.design/go-questions/stdlib/context/cancel/'},
+        {'title': 'reflect-什么是反射',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/what/'},
+        {'title': 'reflect-什么情况下需要使用反射',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/why/'},
+        {'title': 'reflect-Go语言如何实现反射',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/how/'},
+        {'title': 'reflect-Go语言中反射有哪些应用',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/application/'},
+        {'title': 'reflect-如何比较两个对象完全相同',
+         'url': 'http://golang.design/go-questions/stdlib/reflect/compare/'},
+        {'title': 'unsafe-Go指针和unsafe.Pointer有什么区别',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/pointers/'},
+        {'title': 'unsafe-如何利用unsafe获取slice&map的长度',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/len/'},
+        {'title': 'unsafe-如何利用unsafe包修改私有成员',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/modify-private/'},
+        {'title': 'unsafe-如何实现字符串和byte切片的零拷贝转换',
+         'url': 'http://golang.design/go-questions/stdlib/unsafe/zero-conv/'},
+        {'title': '编译-逃逸分析是怎么进行的',
+         'url': 'http://golang.design/go-questions/compile/escape/'},
+        {'title': '编译-GoRoot和GoPath有什么用',
+         'url': 'http://golang.design/go-questions/compile/gopath/'},
+        {'title': '编译-Go编译链接过程概述',
+         'url': 'http://golang.design/go-questions/compile/link-process/'},
+        {'title': '编译-Go编译相关的命令详解',
+         'url': 'http://golang.design/go-questions/compile/cmd/'},
+        {'title': '编译-Go程序启动过程是怎样的',
+         'url': 'http://golang.design/go-questions/compile/booting/'},
+        {'title': '调度器-goroutine和线程的区别',
+         'url': 'http://golang.design/go-questions/sched/goroutine-vs-thread/'},
+        {'title': '调度器-什么是GoScheduler',
+         'url': 'http://golang.design/go-questions/sched/what-is/'},
+        {'title': '调度器-goroutine调度时机有哪些',
+         'url': 'http://golang.design/go-questions/sched/when/'},
+        {'title': '调度器-什么是M:N模型',
+         'url': 'http://golang.design/go-questions/sched/mn-model/'},
+        {'title': '调度器-什么是工作窃取',
+         'url': 'http://golang.design/go-questions/sched/work-steal/'},
+        {'title': '调度器-GPM是什么', 'url': 'http://golang.design/go-questions/sched/gpm/'},
+        {'title': '调度器-描述scheduler的初始化过程',
+         'url': 'http://golang.design/go-questions/sched/init/'},
+        {'title': '调度器-主goroutine如何创建',
+         'url': 'http://golang.design/go-questions/sched/main-goroutine/'},
+        {'title': '调度器-g0栈何用户栈如何切换',
+         'url': 'http://golang.design/go-questions/sched/g0-stack/'},
+        {'title': '调度器-schedule循环如何启动',
+         'url': 'http://golang.design/go-questions/sched/sched-loop-boot/'},
+        {'title': '调度器-goroutine如何退出',
+         'url': 'http://golang.design/go-questions/sched/goroutine-exit/'},
+        {'title': '调度器-schedule循环如何运转',
+         'url': 'http://golang.design/go-questions/sched/sched-loop-exec/'},
+        {'title': '调度器-M如何找工作',
+         'url': 'http://golang.design/go-questions/sched/m-worker/'},
+        {'title': '调度器-sysmon后台监控线程做了什么',
+         'url': 'http://golang.design/go-questions/sched/sysmon/'},
+        {'title': '调度器-一个调度相关的陷阱',
+         'url': 'http://golang.design/go-questions/sched/sched-trap/'},
+        {'title': '垃圾回收器-垃圾回收的认识',
+         'url': 'http://golang.design/go-questions/memgc/principal/'},
+        {'title': '垃圾回收器-垃圾回收机制的实现',
+         'url': 'http://golang.design/go-questions/memgc/impl/'},
+        {'title': '垃圾回收器-垃圾回收的优化问题',
+         'url': 'http://golang.design/go-questions/memgc/optimize/'},
+        {'title': '垃圾回收器-历史及演进',
+         'url': 'http://golang.design/go-questions/memgc/history/'},
+        {'title': '垃圾回收器-总结',
+         'url': 'http://golang.design/go-questions/memgc/summary/'}]
+
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "go面试问题"  # 电子书名
+    description = u"go面试问题"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    keep_only_tags = [{'class': 'book-page'}]  # 仅抓取正文内容（去掉左边菜单栏)
+    # no_stylesheets = True  # 去除 CSS 样式
+    # remove_javascript = True  # 去除 JavaScript 脚本
+    # auto_cleanup = True  # 自动清理 HTML 代码
+    # delay = 2  # 抓取页面间隔秒数
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    simultaneous_downloads = 2  # 有时候多个同时下载会失败，修改小点或者单线程下载
+
+    def parse_index(self):
+        for data in urls:  # clone 项目到本地然后用 hugo 本地起一个，抓取更快
+            old = "http://golang.design/go-questions"
+            new = "http://localhost:1313/go-questions"
+            data['url'] = data['url'].replace(old, new)
+        ans = [(self.title, urls)]
+        return ans  # 返回可供 Calibre 转换的数据结构
+
+
+def parse_go_question():
+    import requests
+    from bs4 import BeautifulSoup  # py3
+    url = "https://golang.design/go-questions/"
+    html_doc = requests.get(url).text
+    soup = BeautifulSoup(html_doc, "html.parser")
+    links = soup.findAll("li", {"class": "book-section-flat"})  # 获取所有文章链接
+    articles = []
+    for linktag in links:
+        atags = linktag.find_all("a")
+        section = atags[0].get_text()
+        for link in atags[1:]:
+            url = link.get('href')
+            text = link.get_text()
+            text = ''.join(text.split())
+            if url:
+                articles.append({'title': section + "-" + text, 'url': url})
+    __import__('pprint').pprint(articles)

@@ -1,0 +1,254 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert os重学操作系统.recipe os重学操作系统.mobi --output-profile=kindle
+ebook-convert os重学操作系统.recipe os重学操作系统.pdf
+ebook-convert os重学操作系统.recipe os重学操作系统.epub
+"""
+
+urls = [
+    {
+        "title": "00 开篇词  为什么大厂面试必考操作系统？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/00 开篇词  为什么大厂面试必考操作系统？.md"
+    },
+    {
+        "title": "00 课前必读  构建知识体系，可以这样做！.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/00 课前必读  构建知识体系，可以这样做！.md"
+    },
+    {
+        "title": "01  计算机是什么：“如何把程序写好”这个问题是可计算的吗？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/01  计算机是什么：“如何把程序写好”这个问题是可计算的吗？.md"
+    },
+    {
+        "title": "02  程序的执行：相比 32 位，64 位的优势是什么？（上）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/02  程序的执行：相比 32 位，64 位的优势是什么？（上）.md"
+    },
+    {
+        "title": "03  程序的执行：相比 32 位，64 位的优势是什么？（下）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/03  程序的执行：相比 32 位，64 位的优势是什么？（下）.md"
+    },
+    {
+        "title": "04  构造复杂的程序：将一个递归函数转成非递归函数的通用方法.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/04  构造复杂的程序：将一个递归函数转成非递归函数的通用方法.md"
+    },
+    {
+        "title": "05  存储器分级：L1 Cache 比内存和 SSD 快多少倍？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/05  存储器分级：L1 Cache 比内存和 SSD 快多少倍？.md"
+    },
+    {
+        "title": "05 (1) 加餐  练习题详解（一）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/05 (1) 加餐  练习题详解（一）.md"
+    },
+    {
+        "title": "06  目录结构和文件管理指令：rm  -rf 指令的作用是？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/06  目录结构和文件管理指令：rm  -rf 指令的作用是？.md"
+    },
+    {
+        "title": "07  进程、重定向和管道指令：xargs 指令的作用是？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/07  进程、重定向和管道指令：xargs 指令的作用是？.md"
+    },
+    {
+        "title": "08  用户和权限管理指令： 请简述 Linux 权限划分的原则？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/08  用户和权限管理指令： 请简述 Linux 权限划分的原则？.md"
+    },
+    {
+        "title": "09  Linux 中的网络指令：如何查看一个域名有哪些 NS 记录？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/09  Linux 中的网络指令：如何查看一个域名有哪些 NS 记录？.md"
+    },
+    {
+        "title": "10  软件的安装： 编译安装和包管理器安装有什么优势和劣势？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/10  软件的安装： 编译安装和包管理器安装有什么优势和劣势？.md"
+    },
+    {
+        "title": "11  高级技巧之日志分析：利用 Linux 指令分析 Web 日志.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/11  高级技巧之日志分析：利用 Linux 指令分析 Web 日志.md"
+    },
+    {
+        "title": "12  高级技巧之集群部署：利用 Linux 指令同时在多台机器部署程序.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/12  高级技巧之集群部署：利用 Linux 指令同时在多台机器部署程序.md"
+    },
+    {
+        "title": "12 (1)加餐  练习题详解（二）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/12 (1)加餐  练习题详解（二）.md"
+    },
+    {
+        "title": "13  操作系统内核：Linux 内核和 Windows 内核有什么区别？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/13  操作系统内核：Linux 内核和 Windows 内核有什么区别？.md"
+    },
+    {
+        "title": "14  用户态和内核态：用户态线程和内核态线程有什么区别？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/14  用户态和内核态：用户态线程和内核态线程有什么区别？.md"
+    },
+    {
+        "title": "15  中断和中断向量：Javajs 等语言为什么可以捕获到键盘输入？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/15  中断和中断向量：Javajs 等语言为什么可以捕获到键盘输入？.md"
+    },
+    {
+        "title": "16  WinMacUnixLinux 的区别和联系：为什么 Debian 漏洞排名第一还这么多人用？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/16  WinMacUnixLinux 的区别和联系：为什么 Debian 漏洞排名第一还这么多人用？.md"
+    },
+    {
+        "title": "16 (1)加餐  练习题详解（三）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/16 (1)加餐  练习题详解（三）.md"
+    },
+    {
+        "title": "17  进程和线程：进程的开销比线程大在了哪里？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/17  进程和线程：进程的开销比线程大在了哪里？.md"
+    },
+    {
+        "title": "18  锁、信号量和分布式锁：如何控制同一时间只有 2 个线程运行？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/18  锁、信号量和分布式锁：如何控制同一时间只有 2 个线程运行？.md"
+    },
+    {
+        "title": "19  乐观锁、区块链：除了上锁还有哪些并发控制方法？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/19  乐观锁、区块链：除了上锁还有哪些并发控制方法？.md"
+    },
+    {
+        "title": "20  线程的调度：线程调度都有哪些方法？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/20  线程的调度：线程调度都有哪些方法？.md"
+    },
+    {
+        "title": "21  哲学家就餐问题：什么情况下会触发饥饿和死锁？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/21  哲学家就餐问题：什么情况下会触发饥饿和死锁？.md"
+    },
+    {
+        "title": "22  进程间通信： 进程间通信都有哪些方法？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/22  进程间通信： 进程间通信都有哪些方法？.md"
+    },
+    {
+        "title": "23  分析服务的特性：我的服务应该开多少个进程、多少个线程？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/23  分析服务的特性：我的服务应该开多少个进程、多少个线程？.md"
+    },
+    {
+        "title": "23 (1)加餐  练习题详解（四）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/23 (1)加餐  练习题详解（四）.md"
+    },
+    {
+        "title": "24  虚拟内存 ：一个程序最多能使用多少内存？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/24  虚拟内存 ：一个程序最多能使用多少内存？.md"
+    },
+    {
+        "title": "25  内存管理单元： 什么情况下使用大内存分页？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/25  内存管理单元： 什么情况下使用大内存分页？.md"
+    },
+    {
+        "title": "26  缓存置换算法： LRU 用什么数据结构实现更合理？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/26  缓存置换算法： LRU 用什么数据结构实现更合理？.md"
+    },
+    {
+        "title": "27  内存回收上篇：如何解决内存的循环引用问题？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/27  内存回收上篇：如何解决内存的循环引用问题？.md"
+    },
+    {
+        "title": "28  内存回收下篇：三色标记-清除算法是怎么回事？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/28  内存回收下篇：三色标记-清除算法是怎么回事？.md"
+    },
+    {
+        "title": "28 (1)加餐  练习题详解（五）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/28 (1)加餐  练习题详解（五）.md"
+    },
+    {
+        "title": "29  Linux 下的各个目录有什么作用？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/29  Linux 下的各个目录有什么作用？.md"
+    },
+    {
+        "title": "30  文件系统的底层实现：FAT、NTFS 和 Ext3 有什么区别？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/30  文件系统的底层实现：FAT、NTFS 和 Ext3 有什么区别？.md"
+    },
+    {
+        "title": "31  数据库文件系统实例：MySQL 中 B 树和 B+ 树有什么区别？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/31  数据库文件系统实例：MySQL 中 B 树和 B+ 树有什么区别？.md"
+    },
+    {
+        "title": "32  HDFS 介绍：分布式文件系统是怎么回事？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/32  HDFS 介绍：分布式文件系统是怎么回事？.md"
+    },
+    {
+        "title": "32 (1)加餐  练习题详解（六）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/32 (1)加餐  练习题详解（六）.md"
+    },
+    {
+        "title": "33  互联网协议群（TCPIP）：多路复用是怎么回事？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/33  互联网协议群（TCPIP）：多路复用是怎么回事？.md"
+    },
+    {
+        "title": "34  UDP 协议：UDP 和 TCP 相比快在哪里？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/34  UDP 协议：UDP 和 TCP 相比快在哪里？.md"
+    },
+    {
+        "title": "35  Linux 的 IO 模式：selectpollepoll 有什么区别？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/35  Linux 的 IO 模式：selectpollepoll 有什么区别？.md"
+    },
+    {
+        "title": "36  公私钥体系和网络安全：什么是中间人攻击？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/36  公私钥体系和网络安全：什么是中间人攻击？.md"
+    },
+    {
+        "title": "36 (1)加餐  练习题详解（七）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/36 (1)加餐  练习题详解（七）.md"
+    },
+    {
+        "title": "37  虚拟化技术介绍：VMware 和 Docker 的区别？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/37  虚拟化技术介绍：VMware 和 Docker 的区别？.md"
+    },
+    {
+        "title": "38  容器编排技术：如何利用 K8s 和 Docker Swarm 管理微服务？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/38  容器编排技术：如何利用 K8s 和 Docker Swarm 管理微服务？.md"
+    },
+    {
+        "title": "39  Linux 架构优秀在哪里.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/39  Linux 架构优秀在哪里.md"
+    },
+    {
+        "title": "40  商业操作系统：电商操作系统是不是一个噱头？.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/40  商业操作系统：电商操作系统是不是一个噱头？.md"
+    },
+    {
+        "title": "40 (1)加餐  练习题详解（八）.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/40 (1)加餐  练习题详解（八）.md"
+    },
+    {
+        "title": "41 结束语  论程序员的发展——信仰、选择和博弈.md",
+        "url": "http://learn.lianglianglee.com/专栏/重学操作系统-完/41 结束语  论程序员的发展——信仰、选择和博弈.md"
+    }
+]
+
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "os重学操作系统"  # 电子书名
+    description = u"os重学操作系统"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    simultaneous_downloads = 2  # 有时候多个同时下载会失败，修改小点或者单线程下载
+    # delay = 2  # 抓取页面间隔秒数
+
+    # 页面内容解析方法
+    def parse_index(self):
+        ans = [(self.title, urls)]
+        return ans  # 返回可供 Calibre 转换的数据结构

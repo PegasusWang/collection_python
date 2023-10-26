@@ -1,0 +1,230 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert kafka核心技术与实战.recipe kafka核心技术与实战.mobi --output-profile=kindle
+ebook-convert kafka核心技术与实战.recipe kafka核心技术与实战.pdf
+ebook-convert kafka核心技术与实战.recipe kafka核心技术与实战.epub
+"""
+
+urls = [
+    {
+        "title": "00 开篇词  为什么要学习Kafka？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/00 开篇词  为什么要学习Kafka？.md"
+    },
+    {
+        "title": "01  消息引擎系统ABC.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/01  消息引擎系统ABC.md"
+    },
+    {
+        "title": "02  一篇文章带你快速搞定Kafka术语.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/02  一篇文章带你快速搞定Kafka术语.md"
+    },
+    {
+        "title": "03  Kafka只是消息引擎系统吗？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/03  Kafka只是消息引擎系统吗？.md"
+    },
+    {
+        "title": "04  我应该选择哪种Kafka？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/04  我应该选择哪种Kafka？.md"
+    },
+    {
+        "title": "05  聊聊Kafka的版本号.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/05  聊聊Kafka的版本号.md"
+    },
+    {
+        "title": "06  Kafka线上集群部署方案怎么做？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/06  Kafka线上集群部署方案怎么做？.md"
+    },
+    {
+        "title": "07  最最最重要的集群参数配置（上）.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/07  最最最重要的集群参数配置（上）.md"
+    },
+    {
+        "title": "08  最最最重要的集群参数配置（下）.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/08  最最最重要的集群参数配置（下）.md"
+    },
+    {
+        "title": "09  生产者消息分区机制原理剖析.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/09  生产者消息分区机制原理剖析.md"
+    },
+    {
+        "title": "10  生产者压缩算法面面观.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/10  生产者压缩算法面面观.md"
+    },
+    {
+        "title": "11  无消息丢失配置怎么实现？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/11  无消息丢失配置怎么实现？.md"
+    },
+    {
+        "title": "12  客户端都有哪些不常见但是很高级的功能？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/12  客户端都有哪些不常见但是很高级的功能？.md"
+    },
+    {
+        "title": "13  Java生产者是如何管理TCP连接的？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/13  Java生产者是如何管理TCP连接的？.md"
+    },
+    {
+        "title": "14  幂等生产者和事务生产者是一回事吗？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/14  幂等生产者和事务生产者是一回事吗？.md"
+    },
+    {
+        "title": "15  消费者组到底是什么？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/15  消费者组到底是什么？.md"
+    },
+    {
+        "title": "16  揭开神秘的“位移主题”面纱.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/16  揭开神秘的“位移主题”面纱.md"
+    },
+    {
+        "title": "17  消费者组重平衡能避免吗？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/17  消费者组重平衡能避免吗？.md"
+    },
+    {
+        "title": "18  Kafka中位移提交那些事儿.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/18  Kafka中位移提交那些事儿.md"
+    },
+    {
+        "title": "19  CommitFailedException异常怎么处理？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/19  CommitFailedException异常怎么处理？.md"
+    },
+    {
+        "title": "20  多线程开发消费者实例.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/20  多线程开发消费者实例.md"
+    },
+    {
+        "title": "21  Java 消费者是如何管理TCP连接的.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/21  Java 消费者是如何管理TCP连接的.md"
+    },
+    {
+        "title": "22  消费者组消费进度监控都怎么实现？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/22  消费者组消费进度监控都怎么实现？.md"
+    },
+    {
+        "title": "23  Kafka副本机制详解.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/23  Kafka副本机制详解.md"
+    },
+    {
+        "title": "24  请求是怎么被处理的？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/24  请求是怎么被处理的？.md"
+    },
+    {
+        "title": "25  消费者组重平衡全流程解析.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/25  消费者组重平衡全流程解析.md"
+    },
+    {
+        "title": "26  你一定不能错过的Kafka控制器.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/26  你一定不能错过的Kafka控制器.md"
+    },
+    {
+        "title": "27  关于高水位和Leader Epoch的讨论.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/27  关于高水位和Leader Epoch的讨论.md"
+    },
+    {
+        "title": "28  主题管理知多少.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/28  主题管理知多少.md"
+    },
+    {
+        "title": "29  Kafka动态配置了解下？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/29  Kafka动态配置了解下？.md"
+    },
+    {
+        "title": "30  怎么重设消费者组位移？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/30  怎么重设消费者组位移？.md"
+    },
+    {
+        "title": "31  常见工具脚本大汇总.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/31  常见工具脚本大汇总.md"
+    },
+    {
+        "title": "32  KafkaAdminClient：Kafka的运维利器.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/32  KafkaAdminClient：Kafka的运维利器.md"
+    },
+    {
+        "title": "33  Kafka认证机制用哪家？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/33  Kafka认证机制用哪家？.md"
+    },
+    {
+        "title": "34  云环境下的授权该怎么做？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/34  云环境下的授权该怎么做？.md"
+    },
+    {
+        "title": "35  跨集群备份解决方案MirrorMaker.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/35  跨集群备份解决方案MirrorMaker.md"
+    },
+    {
+        "title": "36  你应该怎么监控Kafka？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/36  你应该怎么监控Kafka？.md"
+    },
+    {
+        "title": "37  主流的Kafka监控框架.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/37  主流的Kafka监控框架.md"
+    },
+    {
+        "title": "38  调优Kafka，你做到了吗？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/38  调优Kafka，你做到了吗？.md"
+    },
+    {
+        "title": "39  从0搭建基于Kafka的企业级实时日志流处理平台.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/39  从0搭建基于Kafka的企业级实时日志流处理平台.md"
+    },
+    {
+        "title": "40  Kafka Streams与其他流处理平台的差异在哪里？.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/40  Kafka Streams与其他流处理平台的差异在哪里？.md"
+    },
+    {
+        "title": "41  Kafka Streams DSL开发实例.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/41  Kafka Streams DSL开发实例.md"
+    },
+    {
+        "title": "42  Kafka Streams在金融领域的应用.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/42  Kafka Streams在金融领域的应用.md"
+    },
+    {
+        "title": "加餐  搭建开发环境、阅读源码方法、经典学习资料大揭秘.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/加餐  搭建开发环境、阅读源码方法、经典学习资料大揭秘.md"
+    },
+    {
+        "title": "结束语  以梦为马，莫负韶华！.md",
+        "url": "http://learn.lianglianglee.com/专栏/Kafka核心技术与实战/结束语  以梦为马，莫负韶华！.md"
+    }
+]
+
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "kafka核心技术与实战"  # 电子书名
+    description = u"kafka核心技术与实战"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    simultaneous_downloads = 2 # 有时候多个同时下载会失败，修改小点或者单线程下载
+    # delay = 2  # 抓取页面间隔秒数
+
+    # 页面内容解析方法
+    def parse_index(self):
+        ans = [(self.title, urls)]
+        return ans  # 返回可供 Calibre 转换的数据结构

@@ -1,0 +1,57 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert 从0开始学微服务.recipe 从0开始学微服务.epub
+"""
+
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "从0开始学微服务"  # 电子书名
+    description = u"从0开始学微服务"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    delay = 5  # 抓取页面间隔秒数
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    # simultaneous_downloads = 2  # 有时候多个同时下载会失败，修改小点或者单线程下载
+
+    # 页面内容解析方法
+    def parse_index(self):
+        site="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E4%BB%8E0%E5%BC%80%E5%A7%8B%E5%AD%A6%E5%BE%AE%E6%9C%8D%E5%8A%A1"
+        soup = self.index_to_soup(site)
+        divtag = soup.findAll("div", {"class": "book-post"})[0]
+        links = divtag.findAll("li")
+        articles = []
+        base = "http://learn.lianglianglee.com"
+        for link in links:
+            title = link.a.contents[0].strip()
+            url = base + '/' + link.a.get("href").lstrip('/')
+            print(url)
+            a = {'title': title, 'url': url}
+            articles.append(a)
+        ans = [(self.title, articles)]
+        return ans  # 返回可供 Calibre 转换的数据结构
