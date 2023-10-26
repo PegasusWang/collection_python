@@ -1,0 +1,60 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert system_design.recipe system_design.mobi --output-profile=kindle
+"""
+
+
+class DravenessBlog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "架构设计面试精讲"  # 电子书名
+    description = u"架构设计面试精讲"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "internet"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    # 抓取页面间隔秒数。默认并发 simultaneous_downloads=5，开启delay禁止并发
+    # delay = 5
+    max_articles_per_feed = 100  # 抓取文章数量
+    timeout = 10
+
+    # ///////////////////
+    # 页面内容解析方法
+    # ///////////////////
+    def parse_index(self):
+        domain = "http://learn.lianglianglee.com"
+        site = "http://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E9%9D%A2%E8%AF%95%E7%B2%BE%E8%AE%B2"
+        soup = self.index_to_soup(site)  # 解析列表页返回 BeautifulSoup 对象
+        articles = []  # 定义空文章资源数组
+        ultag = soup.findAll("ul")[2] # 还是老版本的 bs4
+        urls = ultag.findAll("a")
+        for link in urls:
+            title = link.string
+            path = link.get("href")  # 提取文章链接
+            url = domain + path
+            print(title, url)
+            articles.append({"title": title, "url": url})
+
+        ans = [(self.title, articles)]  # 组成最终的数据结构
+        return ans  # 返回可供 Calibre 转换的数据结构
