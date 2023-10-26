@@ -1,4 +1,5 @@
-#！/bin/bash
+#!/bin/bash
+
 [ $UID -ne 0 ] && echo "please use root run" && exit 22
 [ -f /etc/init.d/functions ] && . /etc/init.d/functions
 vip=10.0.0.90
