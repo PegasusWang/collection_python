@@ -10,5 +10,12 @@ def ip_to_num(ip):
     return seg0 | seg1 | seg2 | seg3
 
 
+def ip2num(ip):
+    "将点分十进制IP地址转换成十进制整数"
+    items = [int(x) for x in ip.split(".")]
+    return sum([items[i] << [24, 16, 8, 0][i] for i in range(4)])
+
+
 if __name__ == "__main__":
     print(ip_to_num('192.168.0.1'))
+    print(ip2num('192.168.0.1'))
