@@ -9,7 +9,21 @@ Faker.seed(0)
 
 
 def get_data():
-    key_list = ["姓名", "详细地址", "所在省份", "手机号", "身份证号", "出生年月", "邮箱"]
+    """
+    Generates fake data for a person.
+
+    Returns:
+        dict: A dictionary containing fake data for a person.
+    """
+    key_list = [
+        "姓名",
+        "详细地址",
+        "所在省份",
+        "手机号",
+        "身份证号",
+        "出生年月",
+        "邮箱",
+    ]
     name = fake.name()
     address = fake.address()
     province = address[:3]
@@ -21,7 +35,9 @@ def get_data():
     return dict(zip(key_list, info_list))
 
 
-df = pd.DataFrame(columns=["姓名", "详细地址", "所在省份", "手机号", "身份证号", "出生年月", "邮箱"])
+df = pd.DataFrame(
+    columns=["姓名", "详细地址", "所在省份", "手机号", "身份证号", "出生年月", "邮箱"]
+)
 for _ in range(10000):
     person_info = [get_data()]
     df1 = pd.DataFrame(person_info)
