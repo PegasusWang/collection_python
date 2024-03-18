@@ -17,7 +17,7 @@ def convert_encoding(data, new_coding='UTF-8'):
     """未知编码转成utf8"""
     encoding = chardet.detect(data)['encoding']
     if new_coding.upper() != encoding.upper():
-        data = data.decode(encoding, data).encode(new_coding)
+        data = data.decode(encoding).encode(new_coding)
     return data
 
 
@@ -32,7 +32,7 @@ def detect_html_encoding(url):
 
 
 if __name__ == '__main__':
-    print detect_html_encoding('http://www.baidu.com')
-    convert_encoding('hehe', new_coding='UTF-8')
-    to_unicode('hehe')
-    print get_encoding('hehe')
+    print(detect_html_encoding('http://www.baidu.com'))
+    convert_encoding('hehe'.encode('utf-8'), new_coding='UTF-8')
+    print(to_unicode('hehe'.encode('utf-8')))
+    print(get_encoding('hehe'.encode('utf-8')))

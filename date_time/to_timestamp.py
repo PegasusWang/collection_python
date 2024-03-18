@@ -23,7 +23,7 @@ def parse(date_str):
 
 def test():
     s = "2015-10-18 00:00:00"
-    print to_timestamp(s)
+    print(to_timestamp(s))
 
 
 

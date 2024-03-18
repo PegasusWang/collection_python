@@ -22,7 +22,7 @@ def main():
     url = "https://weread.qq.com/"
     url = "https://weread.qq.com/web/reader/b253292071697fe1b25cd24"
 
-    c = webdriver.Chrome()
+    c = webdriver.Chrome(executable_path='driver\chromedriver.exe')
     c.get(url)
     time.sleep(10)  # 登陆一下
 

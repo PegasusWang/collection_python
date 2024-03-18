@@ -2,8 +2,10 @@
 # -*- coding:utf-8 -*-
 
 import time
+
+from crawler.src.req import AsyncSpider
 from extract import *
-from async_spider import AsyncSpider
+# from async_spider import AsyncSpider
 from sync_spider import SyncSpider
 
 

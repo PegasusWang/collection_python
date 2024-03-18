@@ -75,16 +75,16 @@ class Validator(object):
 
 if __name__ == '__main__':
     number = "+49 176 1234 5678"
-    print validate_phone(number)
+    print(validate_phone(number))
     number = "+86 18810564550"
-    print validate_phone(number)
+    print(validate_phone(number))
     number = "18810564550"
-    print validate_phone(number)
+    print(validate_phone(number))
     number = "49 176 1234 5678"
-    print validate_phone(number)
+    print(validate_phone(number))
     number = "86 18810564550"
-    print validate_phone(number)
+    print(validate_phone(number))
     number = "+86-18810564550"
-    print validate_phone(number)
+    print(validate_phone(number))
     number = "+86-188 1056 4550"
-    print validate_phone(number)
+    print(validate_phone(number))

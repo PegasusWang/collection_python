@@ -82,7 +82,7 @@ def refresh_browser():
 
 
 def start_browser():
-    # Browser is launched via a daemon thread.
+    # Browser is launched via a daemon threads.
     # It will terminate the browser when you close the python script.
     thread = threading.Thread(target=open_browser, kwargs={'url': 'http://localhost:8000'})
     thread.daemon = True
