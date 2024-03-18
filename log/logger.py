@@ -34,7 +34,7 @@ class Logger:
         log_dir = path_join(dirname(__file__), 'logs')
         # log_dir 目录，如果不存在则创建
         self.__check_dirs(log_dir)
-        filename = filename or basename(__file__)
+        filename = filename or basename(__name__)
         self.filename = self.__check_log_suffix(filename)
         # log 文件绝对路径
         self.log_file_path = path_join(log_dir, self.filename)
