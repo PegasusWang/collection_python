@@ -3,8 +3,9 @@
 import time
 import shutil
 import os
-
+import random
 import psutil
+import glob
 from psutil._common import bytes2human
 from loguru import logger
 
@@ -20,29 +21,37 @@ def get_disk_space(path='C:'):
     space_used_percent = float(bytes2human(usage.percent)[:-1]) / 100
     logger.info(
         '{0:.2%} : {1}/{2}, remaining capacity {3}',
-        space_used_percent, space_used, space_total, space_free
+        space_used_percent,
+        space_used,
+        space_total,
+        space_free,
     )
     return space_used_percent
 
 
-def copy_file():
+def copy_file(old_path, new_path):
     """copy file"""
-    base_path = r'C:\Users\liming\Downloads\Video'
-    to_path = r'E:\新建文件夹'
-    file_list = [file for file in os.listdir(base_path) if file.endswith('.mp4')]
-    file = file_list.pop()
-    old_path = os.path.join(base_path, file)
-    new_path = os.path.join(to_path, file)
     try:
+        logger.info(f'start copy file {old_path} to {new_path}')
         shutil.move(old_path, new_path)
-        logger.info(f'copy file {old_path} to {new_path}')
+        logger.info(f'copy file {old_path} to {new_path} finished')
     except Exception as e:
         logger.error(e)
 
 
+def main():
+    """Main function"""
+    to_path = r'E:\新建文件夹'
+    file_list = glob.glob(r'C:\Users\82718\Downloads\Video\*.ts')
+    if file_list:
+        filepath = random.choice(file_list)
+        copy_file(filepath, to_path)
+    else:
+        logger.warning('Could not find file')
+
+
 if __name__ == '__main__':
     while True:
-        time.sleep(60)
-        space_used_percent = get_disk_space()
-        if space_used_percent > 0.7:
-            copy_file()
+        time.sleep(10)
+        if get_disk_space() > 0.2:
+            main()
