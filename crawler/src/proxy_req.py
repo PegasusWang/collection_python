@@ -19,39 +19,38 @@ def use_lantern():
 
 
 def user_socks5():
-	# requests from version 2.10.0 support socks proxy
-	# pip install -U requests[socks]
-	proxies = {'http': "socks5://myproxy:9191"}
-	requests.get('http://example.org', proxies=proxies)
+    # requests from version 2.10.0 support socks proxy
+    # pip install -U requests[socks]
+    proxies = {'http': "socks5://myproxy:9191"}
+    requests.get('http://example.org', proxies=proxies)
 
-	# tornado proxy demo
-	# sudo apt-get install libcurl-dev librtmp-dev
-	# pip install tornado pycurl
+    # tornado proxy demo
+    # sudo apt-get install libcurl-dev librtmp-dev
+    # pip install tornado pycurl
 
 
 def tornado_proxy():
-	from tornado import httpclient, ioloop
+    from tornado import httpclient, ioloop
 
-	config = {
-		'proxy_host': 'YOUR_PROXY_HOSTNAME_OR_IP_ADDRESS',
-		'proxy_port': 3128
-	}
+    config = {
+        'proxy_host': 'YOUR_PROXY_HOSTNAME_OR_IP_ADDRESS',
+        'proxy_port': 3128
+    }
 
-	httpclient.AsyncHTTPClient.configure(
-		"tornado.curl_httpclient.CurlAsyncHTTPClient")
+    httpclient.AsyncHTTPClient.configure(
+        "tornado.curl_httpclient.CurlAsyncHTTPClient")
 
 
-	def handle_request(response):
-		if response.error:
-			print("Error:", response.error)
-		else:
-			print(response.body)
-		ioloop.IOLoop.instance().stop()
+    def handle_request(response):
+        if response.error:
+            print("Error:", response.error)
+        else:
+            print(response.body)
+        ioloop.IOLoop.instance().stop()
 
-	http_client = httpclient.AsyncHTTPClient()
-	http_client.fetch("http://twitter.com/",
-		handle_request, **config)
-	ioloop.IOLoop.instance().start()
+    http_client = httpclient.AsyncHTTPClient()
+    http_client.fetch("http://twitter.com/",handle_request, **config)
+    ioloop.IOLoop.instance().start()
 
 
 def get_proxy_dict(ip, port, proxy_type='http' or 'socks5'):

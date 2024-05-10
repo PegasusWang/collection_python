@@ -173,7 +173,8 @@ class CRC64(object):
                                                0xffffffffffffffff)
 
     def fini(self):
-        return self.crc ^0L
+        # https://stackoverflow.com/questions/9549226/small-python-syntax-error
+        return self.crc ^ 0
 
 
 def crc64(buffer):
@@ -185,4 +186,4 @@ def crc64(buffer):
 
 if __name__ == "__main__":
     #  print(file_md5('./common.txt'))
-	print(crc64(open('t.py').read()))
+	print(crc64(open('t.py',encoding='utf-8').read()))

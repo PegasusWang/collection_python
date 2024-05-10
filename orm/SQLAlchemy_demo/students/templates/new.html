@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<form action="{{ request.path }}" method="post">
+    <label for="name">姓名</label><br>
+    <label>
+        <input type=text name=name placeholder="Name">
+    </label><br>
+    <label for="city">城市</label><br>
+    <label>
+        <input type=text name=city placeholder="city">
+    </label><br>
+    <label for="addr">地址</label><br>
+    <label>
+        <textarea name=addr placeholder="addr">{{request.form.addr}}</textarea>
+    </label><br>
+    <label for="PIN">邮编</label><br>
+    <label>
+        <input type=text name=pin placeholder="pin">
+    </label><br>
+    <input type=submit value="提交" />
+</form>
+{% endblock %}

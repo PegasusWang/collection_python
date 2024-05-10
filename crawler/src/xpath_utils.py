@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import time
-from urlparse import urljoin
+import sys
+if sys.version_info[0]==2:
+    from urlparse import urljoin
+else:
+    from urllib.parse import urljoin
+
 import concurrent.futures
 from lxml import etree
 from crawler_utils import (logged_class, retry_get_html, retry_get,

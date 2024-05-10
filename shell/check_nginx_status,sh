@@ -1,0 +1,24 @@
+#!/bin/bash
+
+html_file=/var/www/html/status.html
+array=(
+  192.168.0.104
+)
+
+check() {
+  array[0]=$(netstat -anptl | grep "httpd" | wc -l)
+}
+
+output() {
+  if [ ${array[0]} -eq 0 ]; then
+    echo '<td align="center" bgcolor="green"><font size="15">OK!</font></td>' >$html_file
+  elif [ ${array[0]} -eq 1 ]; then
+    echo '<td align="center" bgcolor="green"><font size="15">OK!</font></td>' >$html_file
+  fi
+}
+
+while true; do
+  check
+  output
+  sleep 20
+done
