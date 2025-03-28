@@ -2,8 +2,8 @@
 # -*- coding:utf-8 -*-
 
 """
-清理 go mod 缓存的旧版本。
-使用命令 go clean --modcache  可以清理所有的 go mod 拉下来的包，但是这里指向清理旧版本。
+清理 go mod 下载的旧版本。
+使用命令 go clean --modcache  可以清理所有的 go mod 拉下来的包，但是这里只想清理旧版本。
 
 实现：列举所有的 dir，然后 sort 一下，保留最新的版本，旧版本删除。
 需要使用 sudo 权限执行。切到一个特定的 go mod 目录下执行即可
@@ -11,6 +11,8 @@
 
 import os
 import sys
+import stat
+import time
 import shutil
 import functools
 from pkg_resources import parse_version as version
@@ -18,20 +20,31 @@ from pkg_resources import parse_version as version
 
 def remove(path, real_remove=False):  # 删除文件夹或者文件
     """ param <path> could either be relative or absolute. """
+    createtime = time.ctime(get_dir_create_time_unix(path))
     if os.path.isfile(path) or os.path.islink(path):
         if real_remove:
             os.remove(path)  # remove the file
-            print("remove", path)
+            print("remove", path, createtime)
         else:
             print("to remove", path)
     elif os.path.isdir(path):
         if real_remove:
             shutil.rmtree(path)  # remove dir and all contains
-            print("rmtree", path)
+            print("rmtree", path, createtime)
         else:
             print("to rmtree", path)
     else:
         raise ValueError("file {} is not a file or dir.".format(path))
+
+
+def get_all_different_package():
+    dirs = [f for f in os.listdir("./") if os.path.isdir(f)]
+    packages = set()
+    for d in dirs:
+        packagename = d.split("@")[0]
+        packages.add(packagename)  # commonbiz@v1.1.10 获取包名  -> commonbiz
+
+    return packages
 
 
 def get_all_sub_dir():
@@ -51,9 +64,10 @@ def get_all_sub_dir():
     return package_maxversion
 
 
-def remove_packagename_old_version(to_remove_package_name):
+def remove_packagename_old_version_single(to_remove_package_name):
     dirs = [f for f in os.listdir("./") if os.path.isdir(f)]
-    dirs.sort(key=functools.cmp_to_key(cmp_version))  # 排序后每个包只保留最后一个版本
+    # dirs.sort(key=functools.cmp_to_key(cmp_version))  # 排序后每个包只保留最后一个版本
+    dirs.sort(key=functools.cmp_to_key(cmp_create_timestamp))  # 排序后每个包只保留最后一个版本
     packages = set()
     for d in dirs:
         packagename = d.split("@")[0]
@@ -64,10 +78,20 @@ def remove_packagename_old_version(to_remove_package_name):
         packagename = d.split("@")[0]
         if packagename == to_remove_package_name:
             package_dirs.append(d)
-    to_remove_dirs = package_dirs[0:len(package_dirs)-1]  # 最后一个包是最新的，之前的都清理掉
-    for remove_dir in to_remove_dirs:
-        remove(remove_dir, True)
 
+    if len(package_dirs) > 1:  # 只有一个不清理
+        to_remove_dirs = package_dirs[0:len(
+            package_dirs)-1]  # 最后一个包是最新的，之前的都清理掉
+        for remove_dir in to_remove_dirs:
+            remove(remove_dir, True)
+
+def remove_packagename_old_version(to_remove_package_name):
+    if to_remove_package_name == 'all':
+        packages = get_all_different_package()
+        for package_name in packages:
+            remove_packagename_old_version_single(package_name)
+    else:
+        remove_packagename_old_version_single(to_remove_package_name)
 
 def cmp_version(dir1, dir2):
     """
@@ -100,6 +124,26 @@ def cmp_version(dir1, dir2):
         return 0
     else:
         return 1
+
+
+def cmp_create_timestamp(dir1, dir2):
+    t1 = get_dir_create_time_unix(dir1)
+    t2 = get_dir_create_time_unix(dir2)
+    if t1 < t2:
+        return -1
+    elif t1 == t2:
+        return 0
+    else:
+        return 1
+
+
+def get_dir_create_time_unix(directory):  # 返回时间戳
+    stat_info = os.stat(directory)
+    if hasattr(stat, 'ST_CTIME'):
+        create_time = stat_info[stat.ST_CTIME]
+        return create_time
+    else:
+        raise Exception("get_dir_create_time_unix error")
 
 
 def version_test():
