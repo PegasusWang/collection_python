@@ -1,0 +1,113 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert easy_vibe_middle.recipe easy_vibe_middle.epub
+"""
+
+"""
+用 happy claw 抓取的，可以用 AI 直接帮你抓取
+提示词：
+
+抓取这个页面 https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+
+抓取这个页面 https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+
+抓取这个页面 https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+"""
+easy_vibe_links = [
+    {"title": "学习地图", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"},
+    {"title": "AI 时代，会说话就会编程", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.2-ai-capabilities-through-games/"},
+    {"title": "学会 AI 编程工具", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.1-introduction-to-ai-ide/"},
+    {"title": "找到好点子", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.0-finding-great-idea/"},
+    {"title": "搭建产品原型", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.2-building-prototype/"},
+    {"title": "接入 AI 能力", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.3-integrating-ai-capabilities/"},
+    {"title": "完整项目实战", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.4-complete-project-practice/"},
+    {"title": "产品思维与方案设计", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-a-product-thinking/"},
+    {"title": "AI 行业应用场景参考 (B端)", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-industry-scenarios/"},
+    {"title": "AI 消费场景灵感参考 (C端)", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-c-consumer-scenarios/"},
+    {"title": "从哪里找点子：3 种最适合新手的参考来源", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-idea-sources/"},
+    {"title": "双钻模型：先做对的事，再把事做对", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-double-diamond/"},
+    {"title": "用 Jobs to Be Done 找到用户真正想完成的事", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-jobs-to-be-done/"},
+    {"title": "The Mom Test 用户访谈法", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-mom-test/"},
+    {"title": "写代码时遇到错误怎么办", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-b-common-errors/"},
+    {"title": "七款 AI 编程工具对比", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-articles/example0-1/vibe-coding-tools-snake-game-tutorial.html"},
+    {"title": "用设计和编程 Agent 设计网站", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-articles/example0-2/vibe-coding-tools-build-website-with-ai-coding-and-design-agents.html"},
+]
+
+easy_vibe_stage2_links = [
+    # 前端开发
+    {"title": "使用 NanoBanana 生产素材", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.0-lovart-assets/"},
+    {"title": "Figma 与 MasterGo 入门", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.1-figma-mastergo/"},
+    {"title": "参考 UI 设计规范设计页面和按钮", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.3-multi-product-ui/"},
+    {"title": "用 LLM 和 Skills 让界面变好看", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.4-llm-skills-beautiful/"},
+    {"title": "从设计原型到项目代码", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.6-design-to-code/"},
+    {"title": "使用现代组件库更新你的界面", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.7-modern-component-library/"},
+    # 后端开发
+    {"title": "从数据库到 Supabase", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.2-database-supabase/"},
+    {"title": "大模型辅助编写接口代码与接口文档", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.3-ai-interface-code/"},
+    {"title": "Git 工作流", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.4-git-workflow/"},
+    {"title": "如何部署 Web 应用", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.5-zeabur-deployment/"},
+    {"title": "现代 CLI 开发工具", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.6-modern-cli/"},
+    {"title": "如何集成 Stripe 等收费系统", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.7-stripe-payment/"},
+    # AI 能力附录
+    {"title": "Dify 入门与知识库集成", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/"},
+    # 综合项目
+    {"title": "一起做霍格沃茨画像", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/"},
+    {"title": "大作业 1：第一个 SaaS 全栈应用——文案生成网站", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/assignments/copywriting-platform-supabase/"},
+    {"title": "大作业 2：在线考试与管理系统", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/assignments/exam-management-express/"},
+]
+
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "easy_vibe_middle"  # 电子书名
+    description = u"easy vibe中级开发"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    delay = 5  # 抓取页面间隔秒数
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    simultaneous_downloads = 1  # 有时候多个同时下载会失败，修改小点或者单线程下载
+
+    # 页面内容解析方法
+    def parse_index(self):
+        # site="https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"
+        # soup = self.index_to_soup(site)
+        # divtag = soup.findAll("div", {"class": "book-post"})[0]
+        # links = divtag.findAll("li")
+        # articles = []
+        # base = "http://learn.lianglianglee.com"
+        # for link in links:
+        #     title = link.a.contents[0].strip()
+        #     url = base + '/' + link.a.get("href").lstrip('/')
+        #     print(url)
+        #     a = {'title': title, 'url': url}
+        #     articles.append(a)
+        # ans = [(self.title, articles)]
+        ans = [(self.title, easy_vibe_stage2_links)]
+        return ans  # 返回可供 Calibre 转换的数据结构
