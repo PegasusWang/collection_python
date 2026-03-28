@@ -1,0 +1,340 @@
+#!/usr/bin/python
+# encoding: utf-8
+
+from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
+
+"""
+教程：
+- https://bookfere.com/tools#calibre
+- https://www.jianshu.com/p/0bcb92509309
+- https://snowdreams1006.github.io/myGitbook/advance/export.html
+
+命令：
+ebook-convert easy_vibe_appendix.recipe easy_vibe_appendix.epub
+"""
+
+"""
+用 happy claw 抓取的，可以用 AI 直接帮你抓取
+提示词：
+
+抓取这个页面 https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+
+抓取这个页面 https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+
+抓取这个页面 https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+
+
+抓取这个页面 http://localhost:4173/easy-vibe/zh-cn/appendix/ 所有左边侧边栏的目录地址，
+抓取后的结果 标题和链接 使用 python list 对象格式返回，示例： [{"title": "学习地图" , "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"}]
+
+抓取慢的问题：
+尝试 git clone https://github.com/datawhalechina/easy-vibe 项目，本次让 ai 帮你启动，换成抓取本地的地址。
+
+注意：
+项目先执行一下 npm run build ，先把静态文件构建出来，否则抓取不到具体内容
+"""
+easy_vibe_links = [
+    {"title": "学习地图", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.1-learning-map/"},
+    {"title": "AI 时代，会说话就会编程",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-0/0.2-ai-capabilities-through-games/"},
+    {"title": "学会 AI 编程工具", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.1-introduction-to-ai-ide/"},
+    {"title": "找到好点子", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.0-finding-great-idea/"},
+    {"title": "搭建产品原型", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.2-building-prototype/"},
+    {"title": "接入 AI 能力", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.3-integrating-ai-capabilities/"},
+    {"title": "完整项目实战", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/1.4-complete-project-practice/"},
+    {"title": "产品思维与方案设计", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-a-product-thinking/"},
+    {"title": "AI 行业应用场景参考 (B端)",
+     "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-industry-scenarios/"},
+    {"title": "AI 消费场景灵感参考 (C端)",
+     "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-c-consumer-scenarios/"},
+    {"title": "从哪里找点子：3 种最适合新手的参考来源",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-idea-sources/"},
+    {"title": "双钻模型：先做对的事，再把事做对",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-double-diamond/"},
+    {"title": "用 Jobs to Be Done 找到用户真正想完成的事",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-jobs-to-be-done/"},
+    {"title": "The Mom Test 用户访谈法",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-mom-test/"},
+    {"title": "写代码时遇到错误怎么办",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-b-common-errors/"},
+    {"title": "七款 AI 编程工具对比", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-articles/example0-1/vibe-coding-tools-snake-game-tutorial.html"},
+    {"title": "用设计和编程 Agent 设计网站", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-1/appendix-articles/example0-2/vibe-coding-tools-build-website-with-ai-coding-and-design-agents.html"},
+]
+
+easy_vibe_stage2_links = [
+    # 前端开发
+    {"title": "使用 NanoBanana 生产素材",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.0-lovart-assets/"},
+    {"title": "Figma 与 MasterGo 入门",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.1-figma-mastergo/"},
+    {"title": "参考 UI 设计规范设计页面和按钮",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.3-multi-product-ui/"},
+    {"title": "用 LLM 和 Skills 让界面变好看",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.4-llm-skills-beautiful/"},
+    {"title": "从设计原型到项目代码", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.6-design-to-code/"},
+    {"title": "使用现代组件库更新你的界面",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.7-modern-component-library/"},
+    # 后端开发
+    {"title": "从数据库到 Supabase",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.2-database-supabase/"},
+    {"title": "大模型辅助编写接口代码与接口文档",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.3-ai-interface-code/"},
+    {"title": "Git 工作流", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.4-git-workflow/"},
+    {"title": "如何部署 Web 应用",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.5-zeabur-deployment/"},
+    {"title": "现代 CLI 开发工具",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.6-modern-cli/"},
+    {"title": "如何集成 Stripe 等收费系统",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/backend/2.7-stripe-payment/"},
+    # AI 能力附录
+    {"title": "Dify 入门与知识库集成",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/ai-capabilities/2.1-dify-knowledge-base/"},
+    # 综合项目
+    {"title": "一起做霍格沃茨画像", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/frontend/2.5-hogwarts-portraits/"},
+    {"title": "大作业 1：第一个 SaaS 全栈应用——文案生成网站",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/assignments/copywriting-platform-supabase/"},
+    {"title": "大作业 2：在线考试与管理系统",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-2/assignments/exam-management-express/"},
+]
+
+easy_vibe_stage3_links = [
+    # Claude Code 深入浅出
+    {"title": "Claude Code 快速上手核心指南",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/basics/"},
+    {"title": "Claude Code MCP 完全指南",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/mcp/"},
+    {"title": "Claude Code Skills 完全指南",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/skills/"},
+    {"title": "如何让 Coding Tools 长时间工作",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/long-running-tasks/"},
+    {"title": "Claude Agent Teams 完全指南",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/agent-teams/"},
+    {"title": "Claude Code Superpowers 工程级开发",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/superpowers/"},
+    {"title": "Claude Code 工作流最佳实践",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/workflow/"},
+    {"title": "Claude Code 手机远程开发",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/mobile-development/"},
+    {"title": "Claude Agent SDK 完全指南",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/claude-agent-sdk/"},
+    {"title": "从 Vibe Coding 到 Spec Coding",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/core-skills/spec-coding/"},
+    # 多平台开发
+    {"title": "如何选择你的应用该开发的平台",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.1-choose-platform/"},
+    {"title": "如何构建微信小程序", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.3-wechat-miniprogram/"},
+    {"title": "如何构建微信小程序（包含后端）",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.4-wechat-miniprogram-backend/"},
+    {"title": "如何构建安卓程序-compose 原生开发",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.5-android-app/"},
+    {"title": "如何构建 iOS 程序-swiftUI原生开发",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.6-ios-app/"},
+    {"title": "如何开发 PWA 本地应用",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.8-pwa-local-app/"},
+    {"title": "如何开发浏览器 AI 助手插件",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.9-browser-ai-extension/"},
+    {"title": "如何开发跨平台 Electron 桌面程序",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.10-electron-voice-to-text/"},
+    {"title": "如何快速开发并铸造 NFT",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.11-nft-minting/"},
+    {"title": "如何开发 VS Code 插件",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.12-vscode-extension/"},
+    {"title": "如何开发工业级 Qt 桌面应用",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/cross-platform/3.13-qt-industrial-hmi/"},
+    {"title": "如何构建属于自己的个人网页与学术博客",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/personal-brand/3.7-personal-website-blog/"},
+    # AI 能力强化
+    {"title": "什么是 RAG 以及它如何工作",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/ai-advanced/3.a1-rag-introduction/"},
+    {"title": "中高级 RAG 与工作流编排 - 以 LangGraph 为例",
+        "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/stage-3/ai-advanced/3.a2-langgraph-advanced-rag/"},
+]
+
+
+easy_vibe_appendix_links = [
+    # 一、计算机是怎么回事
+    {"title": "Vibe Coding 时代下的全栈开发", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/vibe-coding-fullstack.html"},
+    {"title": "从按下电源到访问网站发生了什么", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/power-on-to-web.html"},
+    {"title": "从晶体管到 CPU", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/transistor-to-cpu.html"},
+    {"title": "计算机组成原理", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/computer-organization.html"},
+    {"title": "操作系统（进程 / 内存 / 文件系统）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/operating-systems.html"},
+    {"title": "数据的编码、存储与传输", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/data-encoding-storage.html"},
+    {"title": "网络：从输入网址到返回结果的过程", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/computer-networks.html"},
+    {"title": "数据结构", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/data-structures.html"},
+    {"title": "算法思维入门", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/algorithm-thinking.html"},
+    {"title": "编程语言图谱", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/programming-languages.html"},
+    {"title": "编译原理入门", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/compilers.html"},
+    {"title": "类型系统入门", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/1-computer-fundamentals/type-systems.html"},
+
+    # 二、开发环境与工具
+    {"title": "集成开发环境 (IDE) 基础", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/ide-basics.html"},
+    {"title": "命令行与 Shell 脚本", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/command-line-shell.html"},
+    {"title": "Git：代码的时光机", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/git-version-control.html"},
+    {"title": "环境变量与 PATH", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/environment-path.html"},
+    {"title": "端口与 localhost", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/ports-localhost.html"},
+    {"title": "SSH 与密钥认证", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/ssh-authentication.html"},
+    {"title": "包管理器（npm / pip / cargo）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/package-managers.html"},
+    {"title": "调试的艺术", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/debugging-art/"},
+    {"title": "正则表达式", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/2-development-tools/regex.html"},
+
+    # 三、浏览器与前端
+    {"title": "JavaScript 语言深入", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/javascript-deep-dive.html"},
+    {"title": "TypeScript：给 JS 加上类型系统", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/typescript.html"},
+    {"title": "前端框架对比（React / Vue / Svelte / Angular）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/frontend-frameworks.html"},
+    {"title": "浏览器是一个操作系统", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/browser-as-os.html"},
+    {"title": "浏览器渲染管道", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/browser-as-os-rendering.html"},
+    {"title": "HTML / CSS 布局体系", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/html-css-layout.html"},
+    {"title": "JavaScript 运行时", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/javascript-runtime.html"},
+    {"title": "前端框架的本质", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/frontend-framework-nature.html"},
+    {"title": "状态管理哲学", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/state-management.html"},
+    {"title": "路由与导航", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/routing-navigation.html"},
+    {"title": "图形与动画（Canvas / SVG / WebGL）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/graphics-animation.html"},
+    {"title": "实时通信（WebSocket / SSE）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/realtime-communication.html"},
+    {"title": "网页性能的度量与优化", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/web-performance.html"},
+    {"title": "前端工程化全貌", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/frontend-engineering.html"},
+    {"title": "前端项目文件目录设计", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/frontend-project-architecture.html"},
+    {"title": "无障碍与国际化", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/3-browser-and-frontend/a11n-i18n.html"},
+
+    # 四、服务器与后端
+    {"title": "后端语言对比（Node.js / Go / Java / Rust）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/backend-languages.html"},
+    {"title": "客户端语言对比（Swift / Kotlin / Dart）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/client-languages.html"},
+    {"title": "跨平台方案对比", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/cross-platform.html"},
+    {"title": "HTTP 协议", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/http-protocol.html"},
+    {"title": "一个请求的完整旅程", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/request-journey.html"},
+    {"title": "Web 框架的本质", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/web-frameworks.html"},
+    {"title": "API 入门", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/api-intro.html"},
+    {"title": "API 设计哲学（REST / GraphQL / gRPC）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/api-design.html"},
+    {"title": "序列化与数据格式", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/serialization.html"},
+    {"title": "认证与授权体系", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/auth-authorization.html"},
+    {"title": "并发、异步与多线程", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/concurrency-async.html"},
+    {"title": "缓存的层次与策略", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/caching.html"},
+    {"title": "消息队列与事件驱动", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/message-queues.html"},
+    {"title": "异步任务队列与生产消费模型", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/async-task-queues.html"},
+    {"title": "限流与背压控制", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/rate-limiting-backpressure.html"},
+    {"title": "搜索引擎原理", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/search-engines.html"},
+    {"title": "文件存储与对象存储", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/file-storage.html"},
+    {"title": "后端分层架构", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/backend-layered-architecture.html"},
+    {"title": "后端项目文件目录设计", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/backend-project-architecture.html"},
+    {"title": "领域特定语言（DSL）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/4-server-and-backend/domain-specific-languages.html"},
+
+    # 五、数据
+    {"title": "数据库原理（索引 / 事务 / 查询优化）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/database-fundamentals.html"},
+    {"title": "数据模型全景（文档 / 图 / 时序 / 向量）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-models.html"},
+    {"title": "数据埋点与用户行为采集", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-tracking.html"},
+    {"title": "数据分析基础（统计 / 指标 / 漏斗）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-analysis.html"},
+    {"title": "A/B 测试与实验驱动", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/ab-testing.html"},
+    {"title": "数据可视化与仪表盘", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-visualization.html"},
+    {"title": "数据治理与数据质量", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/5-data/data-governance.html"},
+
+    # 六、架构与系统设计
+    {"title": "从单体到微服务的演进", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/6-architecture-system-design/monolith-to-microservices.html"},
+    {"title": "分布式系统的挑战", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/6-architecture-system-design/distributed-systems.html"},
+    {"title": "高可用与容灾", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/6-architecture-system-design/high-availability.html"},
+    {"title": "系统设计方法论", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/6-architecture-system-design/system-design-methodology.html"},
+
+    # 七、基础设施与运维
+    {"title": "Linux 基础", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/linux-basics.html"},
+    {"title": "Docker 容器化", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/docker.html"},
+    {"title": "Kubernetes 编排", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/kubernetes.html"},
+    {"title": "CI / CD 自动化", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/cicd.html"},
+    {"title": "域名、DNS 与 HTTPS", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/dns-https.html"},
+    {"title": "负载均衡与网关", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/load-balancing.html"},
+    {"title": "网关与反向代理", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/gateways.html"},
+    {"title": "云平台实战", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/cloud-platforms.html"},
+    {"title": "IAM 权限管理", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/iam.html"},
+    {"title": "对象存储与 CDN", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/object-storage-cdn.html"},
+    {"title": "基础设施即代码", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/infrastructure-as-code.html"},
+    {"title": "监控、日志与告警", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/monitoring-logging.html"},
+    {"title": "故障排查与应急响应", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/7-infrastructure/incident-response.html"},
+
+    # 八、人工智能
+    {"title": "AI 简史与核心概念", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/ai-history.html"},
+    {"title": "神经网络与深度学习", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/neural-networks.html"},
+    {"title": "Transformer 与注意力机制", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/transformer.html"},
+    {"title": "大语言模型的工作原理", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/llm-principles.html"},
+    {"title": "提示词工程", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/prompt-engineering.html"},
+    {"title": "上下文工程", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/context-engineering.html"},
+    {"title": "多模态模型（视觉 / 音频 / 视频）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/multimodal.html"},
+    {"title": "图像生成原理", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/image-generation.html"},
+    {"title": "语音合成与识别", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/speech-recognition-synthesis.html"},
+    {"title": "Embedding 与向量检索", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/embedding-vector-search.html"},
+    {"title": "RAG 架构", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/rag-architecture.html"},
+    {"title": "AI Agent 与工具调用", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/ai-agents.html"},
+    {"title": "AI 协议（MCP & A2A）", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/mcp-a2a.html"},
+    {"title": "模型微调与部署", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/model-fine-tuning.html"},
+    {"title": "AI 原生应用设计", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/ai-native-app-design.html"},
+    {"title": "AI 能力词典", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/8-ai/ai-capability-dictionary.html"},
+
+    # 九、工程素养
+    {"title": "代码质量与重构", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/clean-code-refactoring.html"},
+    {"title": "测试策略", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/testing-strategies.html"},
+    {"title": "设计模式", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/design-patterns.html"},
+    {"title": "安全思维与攻防基础", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/security-basics.html"},
+    {"title": "技术文档写作", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/technical-writing.html"},
+    {"title": "开源协作", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/open-source.html"},
+    {"title": "技术选型方法论", "url": "https://datawhalechina.github.io/easy-vibe/zh-cn/appendix/9-engineering/tech-selection.html"},
+]
+
+def get_local_links(urls):
+    local = "http://localhost:4173/easy-vibe"
+    ori = "https://datawhalechina.github.io/easy-vibe"
+    res = []
+    for o in urls:
+        url = o["url"]
+        url = url.replace(ori, local)
+        new_url  = {
+            "title": o["title"],
+            "url": url
+        }
+        res.append(new_url)
+    return res
+
+
+
+def get_local_links(urls):
+    local = "http://localhost:4173/easy-vibe"
+    ori = "https://datawhalechina.github.io/easy-vibe"
+    res = []
+    for o in urls:
+        url = o["url"]
+        url = url.replace(ori, local)
+        new_url  = {
+            "title": o["title"],
+            "url": url
+        }
+        res.append(new_url)
+    return res
+class Blog(BasicNewsRecipe):  # 继承 BasicNewsRecipe 类的新类名
+
+    # ///////////////////
+    # 设置电子书元数据
+    # ///////////////////
+    title = "easy_vibe_appendix"  # 电子书名
+    description = u"easy vibe附录知识库"  # 电子书简介
+    # cover_url = '' # 电子书封面
+    # masthead_url = '' # 页头图片
+    __author__ = "web"  # 作者
+    language = "zh"  # 语言
+    encoding = "utf-8"  # 编码
+
+    # ///////////////////
+    # 抓取页面内容设置
+    # ///////////////////
+    # keep_only_tags = [{ 'class': 'example' }] # 仅保留指定选择器包含的内容
+    # no_stylesheets = True  # 去除 CSS 样式
+    remove_javascript = True  # 去除 JavaScript 脚本
+    auto_cleanup = True  # 自动清理 HTML 代码
+    delay = 5  # 抓取页面间隔秒数
+    max_articles_per_feed = 300  # 抓取文章数量
+    timeout = 120.0
+    simultaneous_downloads = 5  # 有时候多个同时下载会失败，修改小点或者单线程下载
+
+    # 页面内容解析方法
+    def parse_index(self):
+        local_links = get_local_links(easy_vibe_appendix_links)
+        print(local_links)
+        ans = [(self.title, local_links)]
+        return ans  # 返回可供 Calibre 转换的数据结构
