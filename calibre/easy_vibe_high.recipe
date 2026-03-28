@@ -10,7 +10,7 @@ from calibre.web.feeds.recipes import BasicNewsRecipe  # 引入 Recipe 基础类
 - https://snowdreams1006.github.io/myGitbook/advance/export.html
 
 命令：
-ebook-convert easy_vibe_middle.recipe easy_vibe_middle.epub
+ebook-convert easy_vibe_high.recipe easy_vibe_high.epub
 """
 
 """
