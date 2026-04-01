@@ -6,7 +6,7 @@ chrome有个功能，对于请求可以直接右键copy as curl，然后在命�
 模拟发送请求。现在需要把此curl字符串处理成requests库可以传入的参数格式，
 http://stackoverflow.com/questions/23118249/whats-the-difference-between-request-payload-vs-form-data-as-seen-in-chrome
 """
-
+import os
 import re
 import traceback
 import requests

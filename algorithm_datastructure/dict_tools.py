@@ -4,6 +4,7 @@
 
 class ObjectDict(dict):
     """from tornado.util.ObjectDict, access dict by dot"""
+
     def __getattr__(self, key):
         try:
             return self[key]
@@ -15,7 +16,6 @@ class ObjectDict(dict):
 
 
 import collections
-
 
 class TransformedDict(collections.MutableMapping):
     """A dictionary that applies an arbitrary key-altering
@@ -43,10 +43,12 @@ class TransformedDict(collections.MutableMapping):
     def __keytransform__(self, key):
         return key
 
+
 # pip install fronzendict
 
 class FronzenDict(TransformedDict):
     """immutable dict, init by a dict"""
+
     def __init__(self, d):
         self.store = d
 
@@ -57,4 +59,7 @@ class FronzenDict(TransformedDict):
 
 # since python3.3, you can use immutable dict
 import types
-d_proxy = types.MappingProxyType(d)    # can add new key/value by assignment but can not assign key alrady exists
+
+d = {1: 'hello', 2: 'world'}
+d_proxy = types.MappingProxyType(d)  # can add new key/value by assignment but can not assign key alrady exists
+print(d_proxy)

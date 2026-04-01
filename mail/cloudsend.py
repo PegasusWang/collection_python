@@ -17,4 +17,4 @@ params = {
 }
 
 r = requests.post(url, files={}, data=params)
-print r.text
+print(r.text)

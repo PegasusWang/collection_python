@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import base64
+import datetime
+from io import StringIO
+
+import pandas as pd
 
 
 def draw():
@@ -31,7 +36,7 @@ def draw():
     fig = plot.get_figure()
     io = StringIO()
     fig.savefig(io, format='png')
-    img_data = base64.encodestring(io.getvalue())
+    img_data = base64.encodebytes(bytes(io.getvalue()))
     return u'<img src="data:image/png;base64,{}" />'.format(img_data)
 
 if __name__ == '__main__':

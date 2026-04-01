@@ -33,7 +33,7 @@ class LeanCloudApi(object):
     def get_skip_obj_list(self, skip_num=0, limit_num=30):
         query = self._query
         query.descending('ID')
-        query.skip(skip_num*limit_num)
+        query.skip(skip_num * limit_num)
         query.limit(limit_num)
         try:
             res = query.find()
@@ -93,15 +93,15 @@ class LeanCloudApi(object):
 
         callback(obj_list)
 
-        if nums > (skip_total+limit_num):
+        if nums > (skip_total + limit_num):
             time.sleep(1)
-            self.solve_nums_class_obj(callback, nums, skip_num+1, limit_num)
+            self.solve_nums_class_obj(callback, nums, skip_num + 1, limit_num)
 
     def solve_all_class_obj(self, callback, skip_num=0, limit_num=500):
         """callback is a function that solve list of class object"""
         query = self._query
         query.descending('ID')
-        query.skip(skip_num*limit_num)
+        query.skip(skip_num * limit_num)
         query.limit(limit_num)
         try:
             obj_list = query.find()
@@ -114,7 +114,7 @@ class LeanCloudApi(object):
 
         if len(obj_list) >= limit_num:
             time.sleep(1)
-            self.solve_all_class_obj(callback, skip_num+1, limit_num)
+            self.solve_all_class_obj(callback, skip_num + 1, limit_num)
 
     def get_obj_by_ID(self, obj_ID):
         query = self._query
@@ -153,11 +153,11 @@ class LeanCloudApi(object):
         """filename have suffix, judge by filename, maybe other field"""
         query = self._query
         query.equal_to('filename', filename)
-        try:    # finded
+        try:  # finded
             obj = query.first()
-            print filename, '----existed----'
+            print(filename, '----existed----')
             return True
-        except:    # not find
+        except:  # not find
             return False
 
     @staticmethod
@@ -166,11 +166,11 @@ class LeanCloudApi(object):
             data = requests.get(url, timeout=5)
         except:
             if retries > 0:
-                print 'fetch...', retries, url
+                print('fetch...', retries, url)
                 time.sleep(3)
-                return LeanCloudApi.fetch_data(url, retries-1)
+                return LeanCloudApi.fetch_data(url, retries - 1)
             else:
-                print 'fetch failed', url
+                print('fetch failed', url)
                 data = None
                 return data
         return data
@@ -189,30 +189,30 @@ class LeanCloudApi(object):
             img_file.set('tag_list', tag_list)
         try:
             img_file.save()
-            print filename, '----uploaded----'
-            self.add_img_info(img_file.id)    # save img_info after save
+            print(filename, '----uploaded----')
+            self.add_img_info(img_file.id)  # save img_info after save
         except:
-            print 'save file failed', url
+            print('save file failed', url)
             time.sleep(5)
             return
 
     def upload_file(self, file_abspath):
-        filename = os.path.basename(file_abspath)    # filename have suffix
+        filename = os.path.basename(file_abspath)  # filename have suffix
         with open(file_abspath, 'r') as f:
             upload_file = File(filename, f)
             upload_file.save()
-            print 'uploaded', file_abspath
+            print('uploaded', file_abspath)
             img_file = self._class()
             img_file.set('File', upload_file)
             img_file.set('filename', filename)
             tag_list = LeanCloudApi.get_tag_list(filename)
             img_file.set('tag_list', tag_list)
             img_file.save()
-            self.add_img_info(img_file.id)    # save img_info after save
+            self.add_img_info(img_file.id)  # save img_info after save
 
     @staticmethod
     def is_img_file(filename):
-        suffix = filename.split('.')[-1].lower()    # note: remember ingore case
+        suffix = filename.split('.')[-1].lower()  # note: remember ingore case
         img_types = set(['jpg', 'png', 'gif', 'jpeg', 'bmp'])
         return suffix in img_types
 
@@ -222,4 +222,3 @@ class LeanCloudApi(object):
         jieba.setLogLevel(60)
         seg_list = jieba.cut(txt)
         return [i for i in seg_list if len(i) >= 2]
-

@@ -2,6 +2,7 @@ import time
 import threading
 from functools import wraps
 
+
 def rate_limited(max_per_second, mode='wait', delay_first_call=False):
     """
     Decorator that make functions not be called faster than
@@ -13,8 +14,10 @@ def rate_limited(max_per_second, mode='wait', delay_first_call=False):
     """
     lock = threading.Lock()
     min_interval = 1.0 / float(max_per_second)
+
     def decorate(func):
         last_time_called = [0.0]
+
         @wraps(func)
         def rate_limited_function(*args, **kwargs):
             def run_func():
@@ -22,6 +25,7 @@ def rate_limited(max_per_second, mode='wait', delay_first_call=False):
                 ret = func(*args, **kwargs)
                 last_time_called[0] = time.perf_counter()
                 return ret
+
             lock.acquire()
             elapsed = time.perf_counter() - last_time_called[0]
             left_to_wait = min_interval - elapsed
@@ -46,40 +50,71 @@ def rate_limited(max_per_second, mode='wait', delay_first_call=False):
                     elif mode == 'kill':
                         lock.release()
                         return
+
         return rate_limited_function
+
     return decorate
+
 
 @rate_limited(2, mode='wait')
 def print_num_wait(num):
-    print (num )
-
-@rate_limited(1/2, mode='kill')
-def print_num_kill(num):
+    """
+    It prints the number and waits for the user to press enter.
+    :param num: the number to print
+    """
     print(num)
+
+
+@rate_limited(1 / 2, mode='kill')
+def print_num_kill(num):
+    """
+    It prints the number of kills.
+    :param num: the number of kills
+    """
+    print(num)
+
 
 @rate_limited(2, mode='kill', delay_first_call=True)
 def print_num_kill_delay(num):
+    """
+    It prints the number of seconds to wait before killing a process
+    :param num: the number of times to run the test
+    """
     print(num)
 
-@rate_limited(1/3, mode='wait', delay_first_call=True)
+
+@rate_limited(1 / 3, mode='wait', delay_first_call=True)
 def print_num_wait_delay(num):
+    """
+    It prints the number and waits for a second.
+    :param num: The number to print
+    """
     print(num)
 
-@rate_limited(1/3, mode='refresh_timer')
+
+@rate_limited(1 / 3, mode='refresh_timer')
 def print_num_wait_refresh(num):
+    """
+    This function prints the number passed to it, waits for the 
+    user to press enter, and then clears the
+    screen. 
+    :param num: The number to print
+    """
     print(num)
+
+
 if __name__ == "__main__":
     print('Rate limited at 2 per second at most')
     print()
     print("Mode is Kill")
     print("1 000 000 print requests sent to decorated function")
-    for i in range(1,1000000):
+    for i in range(1, 1000000):
         print_num_kill(i)
 
     print()
     print('Mode is Wait - default')
     print("10 print requests sent to decorated function")
-    for i in range(1,11):
+    for i in range(1, 11):
         print_num_wait(i)
 
     print()

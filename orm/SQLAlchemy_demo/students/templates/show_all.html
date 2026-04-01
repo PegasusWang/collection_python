@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<h3>学生 (<a href="{{ url_for('new') }}">添加
+   </a>)</h3>
+
+<table>
+   <thead>
+      <tr>
+         <th>姓名</th>
+         <th>城市</th>
+         <th>地址</th>
+         <th>Pin</th>
+      </tr>
+   </thead>
+
+   <tbody>
+      {% for student in students %}
+      <tr>
+         <td>{{ student.name }}</td>
+         <td>{{ student.city }}</td>
+         <td>{{ student.addr }}</td>
+         <td>{{ student.pin }}</td>
+      </tr>
+      {% endfor %}
+   </tbody>
+</table>
+{% endblock %}

@@ -4,6 +4,8 @@
 import time
 from datetime import timedelta
 import traceback
+
+from crawler.src.req import MySpider
 from extract import extract
 from requests import get
 
